@@ -1,6 +1,13 @@
 *
+
 !.gitignore
 !.gitconfig
 !.tmux.conf
 !.tmux.conf.local
 !.zshrc
+
+!.config/
+!.config/*
+.config/*
+!.config/redshift/
+!.config/redshift/*
