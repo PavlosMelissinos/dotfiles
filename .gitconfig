@@ -1,0 +1,7 @@
+[user]
+	name = Pavlos Melissinos
+	email = pmelissi@gmail.com
+[core]
+	autocrlf = false
+[alias]
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
