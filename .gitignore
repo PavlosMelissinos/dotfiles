@@ -5,6 +5,7 @@
 !.tmux.conf
 !.tmux.conf.local
 !.zshrc
+!.antigen.zsh
 
 !.config/
 !.config/*
