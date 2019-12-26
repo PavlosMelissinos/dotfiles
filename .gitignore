@@ -6,6 +6,7 @@
 !.tmux.conf.local
 !.zshrc
 !.antigen.zsh
+!README.md
 
 !.config/
 !.config/*
