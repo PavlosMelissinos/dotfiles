@@ -102,7 +102,7 @@ antigen bundle git
 antigen bundle pip
 antigen bundle command-not-found
 antigen bundle docker
-antigen bundle zsh-interactive-cd
+#antigen bundle zsh-interactive-cd
 
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
