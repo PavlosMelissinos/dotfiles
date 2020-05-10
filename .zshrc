@@ -101,6 +101,8 @@ antigen use oh-my-zsh
 antigen bundle git
 antigen bundle pip
 antigen bundle command-not-found
+antigen bundle docker
+antigen bundle zsh-interactive-cd
 
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
@@ -112,6 +114,7 @@ antigen theme agnoster
 # Tell Antigen that you're done.
 antigen apply
 
+export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:$HOME/.poetry/bin"
 
 export PATH="$HOME/.pyenv/bin:$PATH"
