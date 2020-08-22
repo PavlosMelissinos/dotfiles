@@ -70,7 +70,7 @@
     },
     "cpu": {
         "format": "{usage}% ",
-        "tooltip": false
+        "tooltip": true
     },
     "memory": {
         "format": "{}% "
@@ -82,6 +82,18 @@
         // "format-critical": "{temperatureC}°C {icon}",
         "format": "{temperatureC}°C {icon}",
         "format-icons": ["", "", ""]
+    },
+    "disk": {
+        "interval": 30,
+        "format": "{path}: {percentage_used}%",
+        "format-alt": "{used}/{total}",
+        "path": "/"
+    },
+    "disk#home": {
+        "interval": 30,
+        "format": "{path}: {percentage_used}%",
+        "format-alt": "{used}/{total}",
+        "path": "/home"
     },
     "backlight": {
         // "device": "acpi_video1",
