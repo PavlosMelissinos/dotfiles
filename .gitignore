@@ -15,3 +15,6 @@
 !.config/redshift/*
 !.config/sway/
 !.config/sway/*
+!.config/waybar/
+!.config/waybar/*
+
