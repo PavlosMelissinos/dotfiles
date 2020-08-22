@@ -13,3 +13,5 @@
 .config/*
 !.config/redshift/
 !.config/redshift/*
+!.config/sway/
+!.config/sway/*
