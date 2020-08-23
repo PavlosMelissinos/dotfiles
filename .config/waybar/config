@@ -6,18 +6,18 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode", "custom/media"],
     "modules-center": ["sway/window"],
-    "modules-right": ["mpd", "idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "battery", "battery#bat2", "clock", "tray"],
-    // Modules configuration
+    "modules-right": ["idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "battery", "tray", "clock"],
     "sway/workspaces": {
         "disable-scroll": true,
-        "all-outputs": true,
-        "format": "{name}: {icon}",
+        "all-outputs": false,
+        "format": "{icon}",
         "format-icons": {
-            "1": "",
-            "2": "",
-            "3": "",
-            "4": "",
-            "5": "",
+            "1:term": "",
+            "2:web": "",
+            "3:code": "",
+            "4:work": "",
+            "5:music": "",
+            "6:docs": "",
             "urgent": "",
             "focused": "",
             "default": ""
@@ -38,7 +38,7 @@
         "spacing": 10
     },
     "clock": {
-        // "timezone": "America/New_York",
+        // "timezone": "Europe/Athens",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%Y-%m-%d}"
     },
@@ -75,6 +75,7 @@
         "format-icons": ["", ""]
     },
     "battery": {
+        //"bat": "BAT0",
         "states": {
             // "good": 95,
             "warning": 30,
@@ -88,13 +89,10 @@
         // "format-full": "",
         "format-icons": ["", "", "", "", ""]
     },
-    "battery#bat2": {
-        "bat": "BAT2"
-    },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
         "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
+        "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": "Disconnected ⚠",
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
@@ -108,8 +106,8 @@
         "format-source": "{volume}% ",
         "format-source-muted": "",
         "format-icons": {
-            "headphone": "",
-            "hands-free": "",
+            "headphones": "",
+            "handsfree": "",
             "headset": "",
             "phone": "",
             "portable": "",
@@ -127,7 +125,7 @@
             "default": "🎜"
         },
         "escape": true,
-        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+//        "exec-if": "pgrep spotify",
+        "exec": "$HOME/.config/waybar/mediaplayer.sh 2> /dev/null" // Script in resources folder
     }
 }
