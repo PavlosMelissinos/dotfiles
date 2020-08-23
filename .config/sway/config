@@ -56,8 +56,6 @@ output * bg /usr/share/backgrounds/default.png fill
 #       middle_emulation enabled
 #   }
    input "2:7:SynPS/2_Synaptics_TouchPad" {
-#       dwt enabled
-#       tap enabled
        natural_scroll enabled
 #       middle_emulation enabled
    }
@@ -95,6 +93,19 @@ output * bg /usr/share/backgrounds/default.png fill
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+#
+# Extra keys
+#
+bindsym XF86AudioRaiseVolume exec ~/bin/pavolume +5%
+bindsym XF86AudioLowerVolume exec ~/bin/pavolume -5%
+bindsym XF86AudioMute exec ~/bin/pavolume toggle
+bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+# bindsym XF86MonMaxBrightness exec brightnessctl set 100%
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
 #
 # Moving around:
 #

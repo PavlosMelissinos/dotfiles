@@ -17,4 +17,5 @@
 !.config/sway/*
 !.config/waybar/
 !.config/waybar/*
-
+!bin/
+!bin/pavolume
