@@ -64,9 +64,25 @@ window#waybar {
     }
 }
 
-#battery.warning:not(.charging) {
+@keyframes blink-critical {
+    to {
+        background-color: #ff0000;
+        color: black;
+    }
+}
+
+#battery.critical:not(.charging) {
     color: white;
     animation-name: blink;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#battery.fatal:not(.charging) {
+    color: red;
+    animation-name: blink-critical;
     animation-duration: 0.5s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
