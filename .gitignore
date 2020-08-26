@@ -23,5 +23,7 @@
 !.config/mako/*
 !.config/gammastep/
 !.config/gammastep/*
+!.config/wlogout/
+!.config/wlogout/*
 !bin/
 !bin/pavolume
