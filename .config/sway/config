@@ -14,7 +14,8 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term urxvt256c-ml
+#set $term urxvt256c-ml
+set $term gnome-terminal
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
@@ -30,6 +31,7 @@ exec ~/.azotebg
 exec /usr/libexec/geoclue-2.0/demos/agent
 exec gammastep
 
+default_border pixel 10
 #
 # Example configuration:
 #
