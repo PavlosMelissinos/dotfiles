@@ -38,7 +38,7 @@ window#waybar {
     border-bottom: 3px solid white;
 }
 
-#clock, #battery, #cpu, #memory, #network, #pulseaudio, #temperature, #backlight, #custom-spotify, #tray, #mode, #custom-github, #custom-power {
+#clock, #battery, #cpu, #memory, #network, #pulseaudio, #temperature, #backlight, #custom-spotify, #tray, #mode, #custom-github, #custom-vpn, #custom-power {
     padding: 0 5px;
     margin: 0 2px;
 }
@@ -123,5 +123,5 @@ window#waybar {
     padding: 0px 7.5px 0px 7.5px;
     /*Cmargin: 0px 10px 1.5px 20px;*/
     font-size: 13px;
-    text-shadow: 0px 2px 3px black;
+    /*text-shadow: 0px 2px 3px black;*/
 }
