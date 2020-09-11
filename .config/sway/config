@@ -22,7 +22,7 @@ set $term gnome-terminal
 #set $menu dmenu_path | dmenu | xargs swaymsg exec --
 set $menu dmenu_path | wofi --show drun -i | xargs swaymsg exec --
 
-set $MOZ_ENABLE_WAYLAND 1
+#set $MOZ_ENABLE_WAYLAND 1
 set $QT_WAYLAND_FORCE_DPI physical
 
 
@@ -37,17 +37,19 @@ exec gammastep
 
 exec mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob
 
-default_border pixel 10
+default_border pixel 2
 #
 # Example configuration:
 #
 #   output HDMI-A-1 resolution 1920x1080 position 1920,0
 
 output eDP-1 resolution 1920x1080 position 0,0
-output eDP-1 scale 1.2
-output "Dell Inc. DELL U2518D 3C4YP88P229L" resolution 2560x1440 position 1600,0
+#output eDP-1 scale 1.2
+#output "Dell Inc. DELL U2518D 3C4YP88P229L" resolution 2560x1440 position 1600,0
+output "Dell Inc. DELL U2518D 3C4YP88P229L" resolution 2560x1440 position 1920,0
 output "Dell Inc. DELL U2518D 3C4YP88P229L" scale 1.2
-output "Dell Inc. DELL U2311H HV8XP0BN1VFL" resolution 1080x1920 position 3734,0
+#output "Dell Inc. DELL U2311H HV8XP0BN1VFL" resolution 1080x1920 position 3734,0
+output "Dell Inc. DELL U2311H HV8XP0BN1VFL" resolution 1080x1920 position 4054,0
 output "Dell Inc. DELL U2311H HV8XP0BN1VFL" transform 270
 
 #   output HDMI-A-1 resolution 1920x1080 position 1920,0
@@ -116,6 +118,8 @@ exec swayidle -w \
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+    bindsym $mod+Alt+l exec swaylock -f -c 000000
 #
 # Extra keys
 #
@@ -136,6 +140,11 @@ bindsym XF86MonBrightnessUp exec brightnessctl set +5%
 bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
+
+# Screenshot with grim and swappy
+bindsym print exec grim -g "$(slurp)" - | swappy -f -
+bindsym Shift+print exec grim - | swappy -f -
+
 #
 # Moving around:
 #
