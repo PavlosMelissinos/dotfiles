@@ -11,6 +11,8 @@
 !.config/
 !.config/*
 .config/*
+!.config/flashfocus/
+!.config/flashfocus/*
 !.config/gammastep/
 !.config/gammastep/*
 !.config/mako/
