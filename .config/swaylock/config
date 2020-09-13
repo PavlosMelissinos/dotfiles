@@ -1,0 +1,12 @@
+#image=/usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png
+screenshots
+clock
+indicator
+indicator-radius=100
+indicator-thickness=5
+datestr=%Y-%m-%d
+timestr=%H:%M:%S
+#fade-in=5
+effect-blur=7x5
+#effect-greyscale
+effect-scale=0.8
