@@ -2,7 +2,7 @@
     border: none;
     border-radius: 0;
     font-family: "Ubuntu Nerd Font";
-    font-size: 13px;
+    font-size: 12px;
     min-height: 0;
 }
 
@@ -13,16 +13,16 @@ window#waybar {
 
 #window {
     font-weight: bold;
-    font-family: "Ubuntu";
+    /*font-family: "Ubuntu";*/
 }
-/*
+
 #workspaces {
     padding: 0 5px;
 }
-*/
+
 
 #workspaces button {
-    padding: 0 5px;
+    padding: 0 0px;
     background: transparent;
     color: white;
     border-top: 2px solid transparent;
@@ -38,13 +38,26 @@ window#waybar {
     border-bottom: 3px solid white;
 }
 
-#clock, #battery, #cpu, #memory, #network, #pulseaudio, #temperature, #backlight, #custom-spotify, #tray, #mode, #custom-github, #custom-vpn, #custom-power {
-    padding: 0 5px;
-    margin: 0 2px;
+#idle_inhibitor, #clock, #battery, #cpu, #memory, #network, #pulseaudio, #temperature, #backlight, #custom-spotify, #tray, #mode, #custom-github, #custom-vpn, #custom-power {
+    padding: 0 0px;
+    margin: 0 5px;
+}
+
+#idle_inhibitor, #pulseaudio, #backlight {
+    border-top: 1px solid orange;
+}
+
+#network, #custom-vpn {
+    border-top: 1px solid yellow;
+}
+
+#battery, #cpu, #memory, #temperature {
+    border-top: 1px solid red;
 }
 
 #clock {
     font-weight: bold;
+    font-size: 13px;
 }
 
 #battery {
