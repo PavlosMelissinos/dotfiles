@@ -23,6 +23,8 @@
 !.config/swappy/*
 !.config/sway/
 !.config/sway/*
+!.config/swaylock/
+!.config/swaylock/*
 !.config/waybar/
 !.config/waybar/*
 !.config/wlogout/
