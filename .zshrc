@@ -122,3 +122,4 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
 export VAGRANT_DEFAULT_PROVIDER=virtualbox
+export MOZ_ENABLE_WAYLAND=1
