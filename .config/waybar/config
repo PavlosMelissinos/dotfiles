@@ -6,7 +6,7 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/window", "custom/media"],
     "modules-center": ["clock", "custom/weather", "sway/mode"],
-    "modules-right": ["idle_inhibitor", "pulseaudio", "backlight", "network", "custom/vpn", "memory", "temperature", "battery", "custom/github", "tray", "custom/layout", "custom/power"],
+    "modules-right": ["idle_inhibitor", "pulseaudio", "backlight", "network", "custom/vpn", "memory", "temperature", "battery", "custom/github", "tray", "custom/layout", "custom/lockkeys", "custom/power"],
     "sway/workspaces": {
         "disable-scroll": true,
         "all-outputs": false,
@@ -169,6 +169,11 @@
         "interval": 1,
         "exec": "$HOME/.config/waybar/layout.sh",
         "on-click": "gnome-control-center region"
+    },
+    "custom/lockkeys": {
+        "format": "{}",
+        "exec": "$HOME/.config/waybar/lockkeys.sh",
+        "return-type": "json",
+        "interval": 1
     }
 }
-

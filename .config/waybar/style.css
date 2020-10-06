@@ -38,7 +38,10 @@ window#waybar {
     border-bottom: 3px solid white;
 }
 
-#idle_inhibitor, #clock, #battery, #cpu, #memory, #network, #pulseaudio, #temperature, #backlight, #custom-spotify, #tray, #mode, #custom-github, #custom-vpn, #custom-power {
+#idle_inhibitor, #clock, #battery, #cpu, #memory, #network,
+#pulseaudio, #temperature, #backlight, #custom-spotify,
+#tray, #mode, #custom-github, #custom-vpn, #custom-power,
+#custom-layout, #custom-lockkeys {
     padding: 0 0px;
     margin: 0 5px;
 }
