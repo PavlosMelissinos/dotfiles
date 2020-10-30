@@ -99,6 +99,7 @@
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "on-click": "gnome-control-center network",
         "format-alt-click": "click-right",
         "format-wifi": "{essid} ({signalStrength}%) ",
         "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
