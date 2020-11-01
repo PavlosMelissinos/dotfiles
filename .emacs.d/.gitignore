@@ -16,5 +16,6 @@ clojure/gxsclient.clj
 eshell/
 url/
 cider-history
-projectile-bookmarks.eld
 ido.last
+projectile-bookmarks.eld
+recentf
