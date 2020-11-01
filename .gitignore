@@ -33,3 +33,5 @@
 !.config/wofi/*
 !bin/
 !bin/pavolume
+!.emacs.d/
+!.emacs.d/**
