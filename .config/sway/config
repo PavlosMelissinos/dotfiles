@@ -125,6 +125,7 @@ for_window [class="Emacs"] {
 
 assign [title="main-term"] workspace 2
 exec $term -t main-term
+exec emacs
 
 # Clamshell mode
 
