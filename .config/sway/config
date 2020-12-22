@@ -73,16 +73,43 @@ output $monitor1 {
     resolution 1920x1080 position 0,0
     #scale 1.2
 }
+
 output $monitor2 {
+
+    # m1 scale 1
     resolution 2560x1440 position 1920,130
-    #resolution 2560x1440 position 1600,130
-    #scale 1.2
+
+    # m1 scale 1.2
+    #resolution 2560x1440 position 1600,109
+
+    # m1 scale 2
+    #resolution 2560x1440 position 960,65
+
+    #scale 2
 }
 
 output $monitor3 {
+    # m1 scale 1, m2 scale 1
     resolution 1080x1920 position 4480,0
-    # resolution 1080x1920 position 4054,0
-    # resolution 1080x1920 position 3734,0
+
+    # m1 scale 1, m2 scale 1.2
+    #resolution 1080x1920 position 4054,0
+
+    # m1 scale 1, m2 scale 2
+    #resolution 1080x1920 position 3200,0
+
+    # m1 scale 1.2, m2 scale 1
+    #resolution 1080x1920 position 4160,0
+
+    # m1 scale 1.2, m2 scale 1.2
+    #resolution 1080x1920 position 3734,0
+
+    # m1 scale 2, m2 scale 1
+    #resolution 1080x1920 position 3520,0
+
+    # m1 scale 2, m2 scale 1.2
+    #resolution 1080x1920 position 3094,0
+
     transform 270
 }
 
