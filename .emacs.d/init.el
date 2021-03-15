@@ -509,7 +509,7 @@
         org-confirm-elisp-link-function nil
         org-todo-keywords '((sequence "TODO" "PROG" "BLOK" "DONE"))
         org-todo-keyword-faces
-        '(;;("PROG" . "yellow")
+        '(("PROG" . "yellow")
           ("BLOK" . "IndianRed1"))
         org-support-shift-select t
         org-hide-emphasis-markers t
