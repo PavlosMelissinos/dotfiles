@@ -156,8 +156,13 @@ exec emacs
 
 # Clamshell mode
 
-set $laptop $monitor1
-bindswitch --reload --locked lid:on output $laptop disable
+# set $lock_script $HOME/.config/swaylock/lock.sh swaylock
+
+set $laptop eDP-1
+# Clamshell mode or lock & sleep
+# This is a if/else statement: [ outputs_count == 1 ] && true || false
+bindswitch --reload --locked lid:on exec '[ $(swaymsg -t get_outputs | grep name | wc -l) == 1 ] && ($sleep) || ($notify "Clamshell mode" "Laptop screen off" && swaymsg output $laptop disable)'
+
 bindswitch --reload --locked lid:off output $laptop enable
 
 
