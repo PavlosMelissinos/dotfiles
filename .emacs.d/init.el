@@ -608,11 +608,18 @@
   (after-init . org-roam-mode)
   :custom
   (org-roam-directory "~/notes/roam")
+  (org-roam-dailies-directory "~/notes/daily/")
+  (org-roam-dailies-capture-templates
+      '(("d" "default" entry
+         #'org-roam-capture--get-point
+         "* %?"
+         :file-name "~/notes/daily/%<%Y-%m-%d>"
+         :head "#+title: %<%Y-%m-%d>\n\n")))
   :bind (:map org-roam-mode-map
               (("C-c n l" . org-roam)
                ("C-c n f" . org-roam-find-file)
                ("C-c n g" . org-roam-graph))
-              :map org-mode-map
+         :map org-mode-map
               (("C-c n i" . org-roam-insert))
               (("C-c n I" . org-roam-insert-immediate)))
   ;;(add-hook 'after-init-hook 'org-roam-mode)
