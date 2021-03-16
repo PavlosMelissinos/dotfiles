@@ -275,7 +275,6 @@
 
 (use-package cider
   :ensure t
-  :defer t
   :diminish (cider-mode . " ⓒ")
   :pin melpa-stable
   :bind (:map cider-mode-map
@@ -455,7 +454,6 @@
 (use-package org
   :ensure t
   :pin org
-  :defer t
   :bind (:map org-mode-map
          ("<S-insert>" . org-complete)
          ("<S-return>" . org-insert-subheading)
@@ -466,7 +464,7 @@
                           '(("^ +\\([-*]\\) "
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "→"))))))
   :config
-  (setq  org-agenda-files (list "~/notes/personal.org"))
+  (setq  org-agenda-files (list "~/notes/personal.org" "~/notes/bsq.org"))
 
   (setq org-directory "~/notes")
   ;; Set to the name of the file where new notes will be stored
@@ -493,8 +491,9 @@
        (latex (format "\href{%s}{%s}"
                       path (or desc "video"))))))
 
-  (org-add-link-type
+  (org-link-set-parameters
    "vb"
+   :follow
    (lambda (id)
      (browse-url
       (concat "https://bare-square.atlassian.net/browse/VB-" id))))
@@ -505,7 +504,7 @@
      (browse-url
       (concat "https://nvd.nist.gov/vuln/detail/CVE-" id))))
 
-  (setq org-ellipsis "…" ;;"↴"
+  (setq org-ellipsis "↴" ;;"…"
         org-confirm-elisp-link-function nil
         org-todo-keywords '((sequence "TODO" "PROG" "BLOK" "DONE"))
         org-todo-keyword-faces
@@ -621,9 +620,7 @@
                ("C-c n g" . org-roam-graph))
          :map org-mode-map
               (("C-c n i" . org-roam-insert))
-              (("C-c n I" . org-roam-insert-immediate)))
-  ;;(add-hook 'after-init-hook 'org-roam-mode)
-  )
+              (("C-c n I" . org-roam-insert-immediate))))
 
 (use-package org-bullets
   :ensure t
@@ -838,10 +835,11 @@
   :init (setq markdown-command "multimarkdown"))
 
 
-(use-package open-github-from-here
-  :bind (("M-g M-h" . open-github-from-here))
-  :defer t
-  :load-path "lisp/emacs-open-github-from-here")
+;; github
+(use-package browse-at-remote
+  :bind (("C-c g g" . browse-at-remote))
+  :ensure t
+  :init (setq browse-at-remote-add-line-number-if-no-region-selected nil))
 
 (use-package restclient
   :ensure t
@@ -854,7 +852,7 @@
          ("C-c C-v" . ss/python-shell-send-snippet))
 
   :config
-  (setq python-shell-interpreter "/home/thirstytm/.pyenv/shims/python")
+  (setq python-shell-interpreter "~/.pyenv/shims/python")
 
   :init
   (add-hook 'python-mode-hook 'highlight-symbol-mode)
@@ -1340,8 +1338,6 @@
 ;; ========================================
 ;; Machine-specific config
 
-(if (string-equal system-type "darwin")
-    (require 'octavia))
 (if (string-equal system-type "darwin")
     (require 'octavia))
 (if (string-equal system-name "MUCHA")
