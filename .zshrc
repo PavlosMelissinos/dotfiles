@@ -2,13 +2,13 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-  export ZSH="$HOME/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# ZSH_THEME="agnoster"
+ZSH_THEME="agnoster"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -92,7 +92,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-source ~/.antigen.zsh
+source $HOME/.antigen.zsh
 
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
@@ -101,6 +101,8 @@ antigen use oh-my-zsh
 antigen bundle git
 antigen bundle pip
 antigen bundle command-not-found
+antigen bundle web-search
+antigen bundle python
 antigen bundle docker
 antigen bundle emacs
 #antigen bundle zsh-interactive-cd
@@ -108,6 +110,8 @@ antigen bundle emacs
 # Syntax highlighting bundle.
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zsh-users/zsh-autosuggestions
+
+antigen bundle darvid/zsh-poetry
 
 # Load the theme.
 antigen theme agnoster
@@ -117,10 +121,9 @@ antigen apply
 
 export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:$HOME/.poetry/bin"
+export GOOGLE_CLOUD_KEYFILE_JSON="$HOME/.bsq/gcp.json"
 
 export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
-export VAGRANT_DEFAULT_PROVIDER=virtualbox
-export MOZ_ENABLE_WAYLAND=1
