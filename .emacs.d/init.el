@@ -603,7 +603,7 @@
 (use-package org-roam
   :ensure t
   :hook
-  (after-init . org-roam-mode)
+  (org-mode . org-roam-mode)
   :custom
   (org-roam-directory "~/notes/roam")
   (org-roam-dailies-directory "~/notes/daily/")
