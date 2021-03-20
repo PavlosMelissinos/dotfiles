@@ -464,7 +464,7 @@
                           '(("^ +\\([-*]\\) "
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "→"))))))
   :config
-  (setq  org-agenda-files (list "~/notes/personal.org" "~/notes/bsq.org"))
+  (setq org-agenda-files (list "~/notes/personal.org" "~/notes/bsq.org"))
 
   (setq org-directory "~/notes")
   ;; Set to the name of the file where new notes will be stored
@@ -1307,6 +1307,7 @@
 ;;(load custom-file 'noerror)
 (column-number-mode t)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
 (put 'narrow-to-region 'disabled nil)
 
 ;;spaces-instead-of-tabs
