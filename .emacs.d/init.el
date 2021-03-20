@@ -399,6 +399,10 @@
   :defer t
   :pin melpa-stable)
 
+(use-package docker-compose-mode
+  :ensure t
+  :defer t)
+
 ;; (use-package eshell-mode
 ;;   :bind (("<up>" . previous-line)
 ;;          ("<down>" . next-line))
