@@ -66,7 +66,8 @@
   (add-hook #'log4j-mode-hook #'read-only-mode))
 
 (use-package yaml-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package hideshow
   :bind (("C-c TAB" . hs-toggle-hiding)
@@ -97,10 +98,7 @@
 
 (use-package emacs-lisp-mode
   :no-require t
-  :init
-  (add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (setq mode-name "elisp"))))
+  :hook ((emacs-lisp-mode . (lambda () (setq mode-name "elisp")))))
 
 (use-package clojure-snippets
   :ensure t)
@@ -122,12 +120,9 @@
   :mode (("\\.edn$" . clojure-mode)
          ("\\.repl$" . clojure-mode)
          ("\\.bb$" . clojure-mode))
+  :hook ((clojure-mode . (lambda () (setq mode-name "λ"))))
   :config
   (require 'flycheck-clj-kondo)
-
-  (add-hook 'clojure-mode-hook
-          (lambda ()
-            (setq mode-name "λ")))
 
   (custom-set-faces
    '(font-lock-doc-face ((t (:foreground "#5B6268" :slant normal)))))
