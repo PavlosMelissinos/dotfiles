@@ -457,9 +457,31 @@
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "→"))))))
   :custom
   (org-agenda-files (list "~/notes/personal.org" "~/notes/bsq.org"))
+  (org-babel-hash-show-time t)
+  (org-clock-display-default-range 'untilnow)
+  (org-clock-into-drawer nil)
+  (org-completion-use-ido t)
+  (org-confirm-babel-evaluate nil)
+  (org-confirm-elisp-link-function nil)
   (org-directory "~/notes")
-  ;; Set to the name of the file where new notes will be stored
+  (org-duration-format '(("h" . t) ("min" . t)))
+  (org-ellipsis "↴")
+  (org-export-babel-evaluate nil)
+  (org-hide-emphasis-markers t)
+  (org-hide-leading-stars t)
+  (org-html-htmlize-output-type 'css)
+  (org-image-actual-width nil)
   (org-mobile-inbox-for-pull "~/notes/flagged.org")
+  (org-support-shift-select t)
+  (org-outline-path-complete-in-steps nil)
+  (org-src-fontify-natively t)
+  (org-src-tab-acts-natively nil)
+  (org-src-preserve-indentation nil)
+  (org-startup-with-inline-images t)
+  (org-table-convert-region-max-lines 999)
+  (org-todo-keyword-faces '(("PROG" . "yellow")
+                            ("BLOK" . "IndianRed1")))
+  (org-todo-keywords '((sequence "TODO" "PROG" "BLOK" "DONE")))
   :config
   (defvar yt-iframe-format
     ;; You may want to change your width and height.
@@ -496,36 +518,6 @@
      (browse-url
       (concat "https://nvd.nist.gov/vuln/detail/CVE-" id))))
 
-  (setq org-ellipsis "↴"
-        org-confirm-elisp-link-function nil
-        org-todo-keywords '((sequence "TODO" "PROG" "BLOK" "DONE"))
-        org-todo-keyword-faces
-        '(("PROG" . "yellow")
-          ("BLOK" . "IndianRed1"))
-        org-support-shift-select t
-        org-hide-emphasis-markers t
-        org-hide-leading-stars t
-
-        org-confirm-babel-evaluate nil
-        org-outline-path-complete-in-steps nil
-        org-completion-use-ido t
-        org-src-fontify-natively t
-        org-src-tab-acts-natively nil
-        org-babel-hash-show-time t
-        org-src-preserve-indentation nil
-        org-startup-with-inline-images t
-
-        org-clock-display-default-range 'untilnow
-        org-clock-into-drawer nil
-        org-duration-format '(("h" . t) ("min" . t))
-
-        org-export-babel-evaluate nil
-
-        org-image-actual-width nil
-
-        org-html-htmlize-output-type 'css
-
-        org-table-convert-region-max-lines 999)
   (org-babel-do-load-languages 'org-babel-load-languages
                                '((shell      . t)
                                  ;;(http       . t)
@@ -590,8 +582,7 @@
   :ensure t
   ;; :bind (("<f12>" . org-tree-slide-mode)
 	;;  ("<S-f12>" . org-tree-slide-skip-done-toggle))
-  :init
-  (org-tree-slide-simple-profile))
+  :init (org-tree-slide-simple-profile))
 
 (use-package org-roam
   :ensure t
@@ -616,8 +607,7 @@
   ;;:ensure t
   ;;:pin marmalade
   :pin manual
-  :config
-  (require 'nano-writer)
+  :config (require 'nano-writer)
   ;; :hook (org-roam-mode . writer-mode)
   )
 
