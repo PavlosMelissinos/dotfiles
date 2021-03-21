@@ -450,8 +450,7 @@
          ("<S-insert>" . org-complete)
          ("<S-return>" . org-insert-subheading)
          ("<s-return>" . org-insert-subheading)
-         ("C-c a" . org-agenda)
-         ("RET" . org-return-indent))
+         ("C-c a" . org-agenda))
   :init
   (font-lock-add-keywords 'org-mode
                           '(("^ +\\([-*]\\) "
