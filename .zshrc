@@ -104,7 +104,7 @@ antigen bundle command-not-found
 antigen bundle web-search
 antigen bundle python
 antigen bundle docker
-antigen bundle emacs
+#antigen bundle emacs
 #antigen bundle zsh-interactive-cd
 
 # Syntax highlighting bundle.
