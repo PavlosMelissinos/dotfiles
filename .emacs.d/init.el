@@ -181,15 +181,16 @@
 (use-package align-cljlet
   :ensure t
   ;;:pin marmalade
-  :init
-  (add-hook 'clojure-mode-hook
-            '(lambda ()
-               (define-key clojure-mode-map "\C-c\C-a" 'align-cljlet))))
+  :hook
+  (clojure-mode . (lambda () (define-key clojure-mode-map "\C-c\C-a" 'align-cljlet))))
 
 (use-package paredit
   :ensure t
   :pin melpa-stable
   :diminish (paredit-mode . " Ⓟ")
+  :hook
+  ((lisp-mode emacs-lisp-mode scheme-mode cider-repl-mode clojure-mode) . paredit-mode)
+
   :bind (:map clojure-mode-map
          ("C-c p" . paredit-mode)
 
@@ -205,12 +206,6 @@
          ("<M-S-left>" . backward-sexp)
          ("<M-S-right>" . forward-sexp))
   :init
-  (add-hook 'lisp-mode-hook 'paredit-mode)
-  (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-  (add-hook 'scheme-mode-hook 'paredit-mode)
-  (add-hook 'cider-repl-mode-hook 'paredit-mode)
-  (add-hook 'clojure-mode-hook 'paredit-mode)
-
   (defun duplicate-sexp ()
     "Duplicates the sexp at point."
     (interactive)
