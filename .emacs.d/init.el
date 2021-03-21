@@ -23,10 +23,10 @@
   (find-file "~/.emacs.d/init.el"))
 
 (setq package-archives '(("melpa-stable" . "https://stable.melpa.org/packages/")
-                         ("melpa" . "http://melpa.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")
 
-                         ("org" . "http://orgmode.org/elpa/")
-		                     ("gnu"  . "http://elpa.gnu.org/packages/")))
+                         ("org" . "https://orgmode.org/elpa/")
+		                     ("gnu"  . "https://elpa.gnu.org/packages/")))
 
 (package-initialize)
 
@@ -61,9 +61,8 @@
 (use-package log4j-mode
   :ensure t
   :disabled t
-  :init
-  (add-hook #'log4j-mode-hook #'view-mode)
-  (add-hook #'log4j-mode-hook #'read-only-mode))
+  :hook ((log4j-mode . view-mode)
+         (log4j-mode . read-only-mode)))
 
 (use-package yaml-mode
   :ensure t
@@ -73,20 +72,19 @@
   :bind (("C-c TAB" . hs-toggle-hiding)
          ("C-;" . hs-toggle-hiding)
          ("M-+" . hs-show-all))
-  :init (add-hook #'prog-mode-hook #'hs-minor-mode)
+  :hook ((prog-mode . hs-minor-mode))
   :diminish hs-minor-mode
-  :config
-  (setq hs-special-modes-alist
-        (mapcar 'purecopy
-                '((c-mode "{" "}" "/[*/]" nil nil)
-                  (c++-mode "{" "}" "/[*/]" nil nil)
-                  (java-mode "{" "}" "/[*/]" nil nil)
-                  (js-mode "{" "}" "/[*/]" nil)
-                  (clojure-mode "[\(\[{]" "[\)\]}]" "#" nil nil)
-                  (cider-repl-mode "[\(\[{]" "[\)\]}]" "#" nil nil)
-                  (emacs-lisp-mode "\(" "\)" "#" nil nil)
-                  (json-mode "{" "}" "/[*/]" nil)
-                  (javascript-mode  "{" "}" "/[*/]" nil)))))
+  :custom (hs-special-modes-alist
+           (mapcar 'purecopy
+                   '((c-mode "{" "}" "/[*/]" nil nil)
+                     (c++-mode "{" "}" "/[*/]" nil nil)
+                     (java-mode "{" "}" "/[*/]" nil nil)
+                     (js-mode "{" "}" "/[*/]" nil)
+                     (clojure-mode "[\(\[{]" "[\)\]}]" "#" nil nil)
+                     (cider-repl-mode "[\(\[{]" "[\)\]}]" "#" nil nil)
+                     (emacs-lisp-mode "\(" "\)" "#" nil nil)
+                     (json-mode "{" "}" "/[*/]" nil)
+                     (javascript-mode  "{" "}" "/[*/]" nil)))))
 
 
 (use-package neotree
@@ -462,13 +460,12 @@
   (font-lock-add-keywords 'org-mode
                           '(("^ +\\([-*]\\) "
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "→"))))))
-  :config
-  (setq org-agenda-files (list "~/notes/personal.org" "~/notes/bsq.org"))
-
-  (setq org-directory "~/notes")
+  :custom
+  (org-agenda-files (list "~/notes/personal.org" "~/notes/bsq.org"))
+  (org-directory "~/notes")
   ;; Set to the name of the file where new notes will be stored
-  (setq org-mobile-inbox-for-pull "~/notes/flagged.org")
-
+  (org-mobile-inbox-for-pull "~/notes/flagged.org")
+  :config
   (defvar yt-iframe-format
     ;; You may want to change your width and height.
     (concat "<iframe width=\"440\""
@@ -497,13 +494,14 @@
      (browse-url
       (concat "https://bare-square.atlassian.net/browse/VB-" id))))
 
-  (org-add-link-type
+  (org-link-set-parameters
    "CVE"
+   :follow
    (lambda (id)
      (browse-url
       (concat "https://nvd.nist.gov/vuln/detail/CVE-" id))))
 
-  (setq org-ellipsis "↴" ;;"…"
+  (setq org-ellipsis "↴"
         org-confirm-elisp-link-function nil
         org-todo-keywords '((sequence "TODO" "PROG" "BLOK" "DONE"))
         org-todo-keyword-faces
@@ -602,17 +600,15 @@
 
 (use-package org-roam
   :ensure t
-  :hook
-  (org-mode . org-roam-mode)
-  :custom
-  (org-roam-directory "~/notes/roam")
-  (org-roam-dailies-directory "~/notes/daily/")
-  (org-roam-dailies-capture-templates
-      '(("d" "default" entry
-         #'org-roam-capture--get-point
-         "* %?"
-         :file-name "~/notes/daily/%<%Y-%m-%d>"
-         :head "#+title: %<%Y-%m-%d>\n\n")))
+  :hook (org-mode . org-roam-mode)
+  :custom (org-roam-directory "~/notes/roam")
+          (org-roam-dailies-directory "~/notes/daily/")
+          (org-roam-dailies-capture-templates
+           '(("d" "default" entry
+              #'org-roam-capture--get-point
+              "* %?"
+              :file-name "~/notes/daily/%<%Y-%m-%d>"
+              :head "#+title: %<%Y-%m-%d>\n\n")))
   :bind (:map org-roam-mode-map
               (("C-c n l" . org-roam)
                ("C-c n f" . org-roam-find-file)
@@ -623,14 +619,12 @@
 
 (use-package org-bullets
   :ensure t
-  :init
-  (setq org-bullets-bullet-list '("●"))
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+  :custom (org-bullets-bullet-list '("●"))
+  :hook (org-mode . (lambda () (org-bullets-mode 1))))
 
 (use-package org-jira
   :ensure t
-  :init
-  (setq jiralib-url "https://bare-square.atlassian.net"))
+  :custom (jiralib-url "https://bare-square.atlassian.net"))
 
 ;;; end of org
 
@@ -698,8 +692,8 @@
 (use-package dired
   ;;:bind (("<^>" . (lambda () (find-alternate-file "..")))) ;;TODO
   :demand t
+  :custom (dired-dwim-target t)
   :config
-  (setq dired-dwim-target t)
   (put 'dired-find-alternate-file 'disabled nil)
 
   (set-face-attribute 'dired-marked nil :foreground "#5fff00")
@@ -727,12 +721,12 @@
   :diminish highlight-symbol-mode
   :ensure t
   :no-require t
+  :hook ((lisp-mode . highlight-symbol-mode)
+         (emacs-lisp-mode . highlight-symbol-mode)
+         (scheme-mode . highlight-symbol-mode)
+         (cider-repl-mode . highlight-symbol-mode)
+         (clojure-mode . highlight-symbol-mode))
   :init
-  (add-hook 'lisp-mode-hook 'highlight-symbol-mode)
-  (add-hook 'emacs-lisp-mode-hook 'highlight-symbol-mode)
-  (add-hook 'scheme-mode-hook 'highlight-symbol-mode)
-  (add-hook 'cider-repl-mode-hook 'highlight-symbol-mode)
-  (add-hook 'clojure-mode-hook 'highlight-symbol-mode)
   (global-set-key (kbd "C-,") 'highlight-symbol-prev)
   (global-set-key (kbd "C-.") 'highlight-symbol-next)
   (defun highlight-symbol-count (&optional symbol)
@@ -809,8 +803,7 @@
   (global-set-key (kbd "C-\\") 'tiling-cycle))
 
 (use-package uniquify
-  :config
-  (setq uniquify-buffer-name-style 'forward))
+  :custom (uniquify-buffer-name-style 'forward))
 
 (use-package deadgrep
   :ensure t
@@ -831,14 +824,14 @@
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+  :custom (markdown-command "multimarkdown"))
 
 
 ;; github
 (use-package browse-at-remote
   :bind (("C-c g g" . browse-at-remote))
   :ensure t
-  :init (setq browse-at-remote-add-line-number-if-no-region-selected nil))
+  :custom (browse-at-remote-add-line-number-if-no-region-selected nil))
 
 (use-package restclient
   :ensure t
@@ -1062,57 +1055,56 @@
 
 
 (use-package all-the-icons
-  :demand
+  :demand t
   :init
-  (progn (defun ss/custom-modeline-github-vc ()
-           (let ((branch (mapconcat 'concat (cdr (split-string vc-mode "[:-]")) "-")))
-             (concat
-              (propertize (format "  %s" (all-the-icons-octicon "git-branch"))
-                          'face `(:height 1 :family ,(all-the-icons-octicon-family)))
-              (propertize " " 'display '(space-width 0.6)) ;;narrow space
-              (propertize (format "%s " branch)))))
+  (defun ss/custom-modeline-github-vc ()
+    (let ((branch (mapconcat 'concat (cdr (split-string vc-mode "[:-]")) "-")))
+      (concat
+       (propertize (format "  %s" (all-the-icons-octicon "git-branch"))
+                   'face `(:height 1 :family ,(all-the-icons-octicon-family)))
+       (propertize " " 'display '(space-width 0.6)) ;;narrow space
+       (propertize (format "%s " branch)))))
 
-         (defvar ss/mode-line-my-vc
-           '(:propertize
-             (:eval (when vc-mode
-                      (cond
-                       ((string-match "Git[:-]" vc-mode) (ss/custom-modeline-github-vc))
-                       (t (format "%s" vc-mode)))))
-             face mode-line)
-           "Formats the current directory."))
+  (defvar ss/mode-line-my-vc
+    '(:propertize
+      (:eval (when vc-mode
+               (cond
+                ((string-match "Git[:-]" vc-mode) (ss/custom-modeline-github-vc))
+                (t (format "%s" vc-mode)))))
+      face mode-line)
+    "Formats the current directory.")
   :config
-  (progn
-    (setq-default
-     mode-line-format
-     '((:eval
-        (justified-mode-line
-         (format-mode-line
-          (list
-           ""
-           mode-line-mule-info
-           mode-line-modified
-           mode-line-frame-identification
-           mode-line-buffer-identification
-           " (%I)"
-           " prj:"
-           '(:eval (let ((proj (projectile-project-name)))
-                     (if (> (string-width proj) 7)
-                         (remove-vowels proj)
-                       proj)))))
-         (format-mode-line
-          (list
-           mode-line-modes
-           ;;'(:eval (symbol-name major-mode))
-           '(:eval (when (org-clock-is-active)
-                     (concat "  "
-                             (propertize (format "%s" (all-the-icons-material "schedule"))
-                                         'face `(:family ,(all-the-icons-material-family))
-                                         'display '(raise -0.24))
-                             (propertize " " 'display '(space-width 0.8)) ;;narrow space
-                             (propertize (format "%s" (ss/org-clock-get-clock-string)))
-                             " ")))
-           ;;ss/mode-line-my-vc
-           " ☰ %l ‖ %c "))))))))
+  (setq-default
+   mode-line-format
+   '((:eval
+      (justified-mode-line
+       (format-mode-line
+        (list
+         ""
+         mode-line-mule-info
+         mode-line-modified
+         mode-line-frame-identification
+         mode-line-buffer-identification
+         " (%I)"
+         " prj:"
+         '(:eval (let ((proj (projectile-project-name)))
+                   (if (> (string-width proj) 7)
+                       (remove-vowels proj)
+                     proj)))))
+       (format-mode-line
+        (list
+         mode-line-modes
+         ;;'(:eval (symbol-name major-mode))
+         '(:eval (when (org-clock-is-active)
+                   (concat "  "
+                           (propertize (format "%s" (all-the-icons-material "schedule"))
+                                       'face `(:family ,(all-the-icons-material-family))
+                                       'display '(raise -0.24))
+                           (propertize " " 'display '(space-width 0.8)) ;;narrow space
+                           (propertize (format "%s" (ss/org-clock-get-clock-string)))
+                           " ")))
+         ;;ss/mode-line-my-vc
+         " ☰ %l ‖ %c ")))))))
 
 (set-face-attribute 'mode-line nil
                     :box '(:line-width 5 :color "#1c1e24")
@@ -1123,40 +1115,6 @@
                     :box '(:line-width 5 :color "#1d2026")
                     :overline nil
                     :underline nil)
-
-;; (use-package zenburn-theme
-;;   :ensure t)
-
-;; (use-package solarized-theme
-;;   :ensure t)
-
-;; (use-package powerline
-;;   :ensure t
-;;   :init
-;;   (powerline-default-theme)
-;;   (set-face-attribute 'mode-line nil
-;;                       :foreground "grey"
-;;                       :background "#34503e"
-;;                       :box nil
-;;                       :overline nil
-;;                       :underline nil
-;;                       :height 1)
-;;   (set-face-attribute 'mode-line-inactive nil
-;;                       :overline nil
-;;                       :underline nil
-;;                       :foreground "grey50"
-;;                       :background "#282828"
-;;                       :height 1)
-;;   :config
-;;   (set-face-attribute 'mode-line-buffer-id nil
-;;                       :foreground "grey")
-;;   (set-face-attribute 'mode-line-buffer-id-inactive nil
-;;                       :foreground "grey50")
-;;   (set-face-attribute 'powerline-active1 nil :background "#1a1a1a" :foreground "#667b7c")
-;;   (set-face-attribute 'powerline-active2 nil :background "#0a3641" :foreground "#647b7c")
-;;   (set-face-attribute 'powerline-inactive1 nil :background "#0f0f0f" :foreground "#494949")
-;;   (set-face-attribute 'powerline-inactive2 nil :background "#161616" :foreground "#444444")
-;;   (setq powerline-default-separator 'utf-8))
 
 (use-package hl-line-mode
   :no-require t
@@ -1313,7 +1271,7 @@
 (setq-default indent-tabs-mode nil)
 (setq-default default-tab-width 2)
 (setq-default tab-width 2)
-(setq python-indent 3)
+(setq python-indent 4)
 (setq c-basic-offset 3)
 (setq c-indent-level 3)
 (setq c++-tab-always-indent nil)
@@ -1446,9 +1404,8 @@
 
 (use-package graphviz-dot-mode
   :ensure t
-  :config
-  (setq graphviz-dot-dot-program "dot")
-  (setq graphviz-dot-auto-indent-on-semi nil))
+  :custom (graphviz-dot-dot-program "dot")
+          (graphviz-dot-auto-indent-on-semi nil))
 
 (setq ring-bell-function 'ignore)
 
