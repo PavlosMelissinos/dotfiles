@@ -612,6 +612,15 @@
               (("C-c n i" . org-roam-insert))
               (("C-c n I" . org-roam-insert-immediate))))
 
+(use-package nano-writer
+  ;;:ensure t
+  ;;:pin marmalade
+  :pin manual
+  :config
+  (require 'nano-writer)
+  ;; :hook (org-roam-mode . writer-mode)
+  )
+
 (use-package org-bullets
   :ensure t
   :custom (org-bullets-bullet-list '("●"))
