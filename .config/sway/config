@@ -14,8 +14,7 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-#set $term urxvt256c-ml
-set $term gnome-terminal
+set $term alacritty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
@@ -435,6 +434,4 @@ bar {
     swaybar_command waybar
     #swaybar_command i3status
 }
-include /etc/sway/config.d/*
-
-#exec "systemctl --user import-environment; systemctl --user start sway-session.target"
+include @sysconfdir@/sway/config.d/*
