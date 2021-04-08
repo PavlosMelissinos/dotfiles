@@ -32,12 +32,12 @@
           (nil? sym)
           (str "http://clojuredocs.org/search?q="
                (sanitise-symbol-name symbol-name))
-          
+
           (= "clojure.core" ns)
           (str "http://clojuredocs.org/clojure_core/"
                CLOJUREDOCS-VERSION "/" ns
                "/" (sanitise-symbol-name sym-name) "#examples")
-          
+
           :else
           (str "http://clojuredocs.org/search?q="
                (sanitise-symbol-name sym-name)))]
@@ -244,7 +244,7 @@
    first
    (partition-by
     identity
-    (map (fn [x]         
+    (map (fn [x]
            (str
             (java.lang.reflect.Modifier/toString (.getModifiers x))
             " "
