@@ -875,6 +875,10 @@
 ;;       python-shell-interpreter-args "-i"
 ;;       python-shell-completion-native-enable nil)
 
+(use-package ess
+  :ensure t
+  :defer t)
+
 (use-package hydra
   :ensure t
   :pin melpa-stable
