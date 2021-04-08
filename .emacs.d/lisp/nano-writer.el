@@ -98,20 +98,28 @@ etc.
   ;; Faces
   (face-remap-add-relative 'org-level-1
                            :overline nano-color-subtle
-                           :family "Roboto" :height 180)
+                           :family "Roboto" :height 2.0
+                           )
   (face-remap-add-relative 'org-level-2
-                           :family "Roboto" :height 160)
+                           :family "Roboto" :height 1.8)
   (face-remap-add-relative 'org-level-3
-                           :family "Roboto" :height 150)
+                           :family "Roboto" :height 1.5)
   (face-remap-add-relative 'org-document-info
                            :inherit 'nano-face-faded)
   (face-remap-add-relative 'org-document-title
                            :foreground nano-color-foreground
                            :family "Roboto Slab"
-                           :height 200
+                           :height 2.5
                            :weight 'medium)
   ;; hide title / author ... keywords
   (setq-local org-hidden-keywords '(title author date startup))
+
+  ;; turn progress text into symbols
+  (font-lock-add-keywords
+   'writer-mode `(("^\\*+ \\(TODO\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "□") nil)))
+               ("^\\*+ \\(PROG\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "▶") nil)))
+               ("^\\*+ \\(BLOK\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "✘") nil)))
+               ("^\\*+ \\(DONE\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "✔") nil)))))
 
   ;; Header line
   (setq header-line-format nil)
