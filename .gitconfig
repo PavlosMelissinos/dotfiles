@@ -9,3 +9,5 @@
 	rebase = false
 [merge]
 	conflictStyle = diff3
+[init]
+	defaultBranch = main
