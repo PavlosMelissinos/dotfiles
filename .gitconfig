@@ -3,6 +3,7 @@
 	email = pmelissi@gmail.com
 [core]
 	autocrlf = false
+	attributesfile = /home/thirstytm/.gitattributes
 [alias]
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 [pull]
@@ -11,3 +12,5 @@
 	conflictStyle = diff3
 [init]
 	defaultBranch = main
+[diff "clojure"]
+	xfuncname = (^\\(.*|\\s*\\(defn.*)
