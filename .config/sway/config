@@ -82,12 +82,12 @@ output $monitor2 {
     #resolution 2560x1440 position 1600,109
 
     # m1 scale 1.5
-    resolution 2560x1440 position 1280,130
+    resolution 2560x1440 position 1280,200
 
     # m1 scale 2
     #resolution 2560x1440 position 960,65
 
-    #scale 1.25
+    scale 1.25
 }
 
 output $monitor3 {
@@ -116,13 +116,13 @@ output $monitor3 {
     #resolution 1080x1920 position ????,0
 
     # m1 scale 1.5, m2 scale 1
-    resolution 1080x1920 position 3840,0
+    # resolution 1080x1920 position 3840,0
 
     # m1 scale 1.5, m2 scale 1.2
     #resolution 1080x1920 position 3413,0
 
     # m1 scale 1.5, m2 scale 1.25
-    #resolution 1080x1920 position 3328,0
+    resolution 1080x1920 position 3328,0
 
     # m1 scale 1.5, m2 scale 1.5
     #resolution 1080x1920 position 2987,0
@@ -172,7 +172,7 @@ for_window [app_id="Kodi"] {
     move to workspace 6
 }
 
-for_window [class="Emacs"] {
+for_window [app_id="emacs"] {
     move to workspace 4
 }
 
