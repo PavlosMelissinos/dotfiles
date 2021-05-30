@@ -98,12 +98,15 @@ source $HOME/.antigen.zsh
 antigen use oh-my-zsh
 
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
-antigen bundle git
+antigen bundle git  # aliases
+antigen bundle git-extras  # auto-completion
+#antigen bundle git-prompt  # shows extra info about current repo
 antigen bundle pip
 antigen bundle command-not-found
 antigen bundle web-search
 antigen bundle python
 antigen bundle docker
+antigen bundle history-substring-search
 #antigen bundle emacs
 #antigen bundle zsh-interactive-cd
 
