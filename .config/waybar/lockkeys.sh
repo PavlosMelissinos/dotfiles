@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-capslock_active=`cat /sys/class/leds/input24::capslock/brightness`
-numlock_active=`cat /sys/class/leds/input24::numlock/brightness`
+capslock_active=`cat /sys/class/leds/input3::capslock/brightness`
+numlock_active=`cat /sys/class/leds/input3::numlock/brightness`
 
 capslock_text=""
 if [[ "$capslock_active" != "0" ]]; then
