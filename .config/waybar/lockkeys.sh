@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 capslock_active=`cat /sys/class/leds/input24::capslock/brightness`
 numlock_active=`cat /sys/class/leds/input24::numlock/brightness`
