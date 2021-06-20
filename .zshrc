@@ -114,7 +114,7 @@ antigen bundle command-not-found
 antigen bundle web-search
 antigen bundle python
 antigen bundle docker
-antigen bundle history-substring-search
+#antigen bundle history-substring-search
 #antigen bundle emacs
 #antigen bundle zsh-interactive-cd
 
