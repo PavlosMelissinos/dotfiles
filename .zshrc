@@ -130,12 +130,9 @@ antigen theme agnoster
 # Tell Antigen that you're done.
 antigen apply
 
-export PATH="$PATH:$HOME/.local/bin"
-export PATH="$PATH:$HOME/.poetry/bin"
 export GOOGLE_CLOUD_KEYFILE_JSON="$HOME/.bsq/gcp.json"
 
 if command -v pyenv &> /dev/null; then
-  export PATH="$HOME/.pyenv/bin:$PATH"
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 fi
