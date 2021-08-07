@@ -15,6 +15,32 @@ dotfiles for the following tools:
 * [waybar](https://github.com/Alexays/Waybar)
 * [wofi](https://hg.sr.ht/~scoopta/wofi)
 
+others (experimental):
+
+* [guix (declarative package manager)](https://guix.gnu.org/)
+* [kitty (terminal emulator)](https://sw.kovidgoyal.net/kitty/)
+* [foot (terminal emulator)](https://gitlab.com/dnkl/foot)
+
+# Dependencies
+
+I should switch to a package manager that supports declarative package
+definitions (e.g. nix/guix). Until then, I'm listing the requirements here.
+
+## Required binaries
+
+* emacs
+* sway
+* swaylock
+* swayidle
+* waybar
+* zsh
+
+## Optional binaries
+
+* swaylock-effects
+  * `dnf copr enable eddsalkield/swaylock-effects`
+  * dnf install swaylock-effects
+
 # U2F auth
 
 1. Install required packages:
@@ -32,7 +58,7 @@ dotfiles for the following tools:
 
 1. Move it so it can be used for centralized authentication:
 
-   `sudo mv ~/'u2f_keys' '/etc/u2f_mappings'`
+   `sudo mv ~/.config/u2f_keys /etc/u2f_mappings`
 
 1. To use it with GDM/GNOME, you need to edit this file:
 
@@ -52,9 +78,9 @@ dotfiles for the following tools:
 
 1. swaylock:
 
-   `sudo -e 'etc/pam.d/swaylock'`
+   `sudo -e '/etc/pam.d/swaylock'`
 
-   and add the following line:
+   and add the following line (before `auth include login`, if that's present):
 
    `auth sufficient pam_u2f.so authfile=/etc/u2f_mappings cue`
 
