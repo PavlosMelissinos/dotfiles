@@ -631,6 +631,7 @@
   :diminish auto-revert-mode
   :config
   (global-set-key (kbd "C-c C-g") 'magit-status)
+  (global-set-key (kbd "C-x g") 'magit-status)
 
   (setq git-commit-fill-column 3000
         git-commit-finish-query-functions nil
