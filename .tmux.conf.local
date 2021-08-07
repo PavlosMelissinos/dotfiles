@@ -402,7 +402,7 @@ set -g @plugin 'tmux-plugins/tmux-sensible'
 set -g @plugin 'tmux-plugins/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
 
-set -g @continuum-restore 'on'
+# set -g @continuum-restore 'on'
 set -g status-right ${status_right}'Continuum status: #{continuum_status}'
 
 # -- custom variables ----------------------------------------------------------
