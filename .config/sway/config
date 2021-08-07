@@ -67,6 +67,7 @@ exec flashfocus
 set $monitor1 eDP-1
 set $monitor2 "Dell Inc. DELL U2518D 3C4YP88P229L"
 set $monitor3 "Dell Inc. DELL U2311H HV8XP0BN1VFL"
+set $monitor4 "Panasonic Industry Company Panasonic-TV 0x00000000"
 
 output $monitor1 {
     resolution 1920x1080 position 0,800
@@ -139,6 +140,12 @@ output $monitor3 {
     transform 270
 }
 
+output $monitor4 {
+    # m1 scale 1.5
+    resolution 4096x2160 position 1280,200
+    scale 3
+}
+
 workspace 1 {
     output $monitor1
 }
@@ -150,6 +157,7 @@ workspace 2 {
 
 workspace 3 {
     output $monitor3
+    output $monitor4
     output $monitor1
 }
 
