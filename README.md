@@ -90,3 +90,13 @@ U2F auth setup instructions are heavily based on [this
 article](https://reddit.com/r/Fedora/comments/akck9m/authenticating_with_gdm_and_sudo_with_a_u2f/)
 and adapted from [the Arch
 guide](https://wiki.archlinux.org/index.php/Universal_2nd_Factor#Adding_a_key).
+
+
+## FAQ - things I am definitely going to forget
+
+- /usr/share/applications/[...].desktop cannot be executed: Remote peer
+  disconnected
+  Open the desktop file, look for a `DBusActivatable=true` line and comment it
+  out
+  An alternative solution (running `exec dbus-daemon --session
+  --address=unix:path=$XDG_RUNTIME_DIR/bus`) didn't seem to work for me...
