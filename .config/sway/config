@@ -58,11 +58,11 @@ gaps inner 5
 exec ~/.azotebg
 
 exec /usr/libexec/geoclue-2.0/demos/agent
-exec gammastep
+exec_always gammastep
 
 exec mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob
 
-exec flashfocus
+exec_always flashfocus
 
 set $monitor1 eDP-1
 set $monitor2 "Dell Inc. DELL U2518D 3C4YP88P229L"
