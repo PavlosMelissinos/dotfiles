@@ -1,7 +1,7 @@
 stylesheet=style.css
 show=drun
 width=25%
-lines=10
+lines=7
 gtk_dark=true
 #dynamic_lines=true
 # hide_scroll=true
