@@ -63,6 +63,7 @@ exec_always gammastep
 exec_always mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob
 
 exec_always flashfocus
+exec_always mako
 
 set $monitor1 eDP-1
 set $monitor2 "Dell Inc. DELL U2518D 3C4YP88P229L"
@@ -320,10 +321,6 @@ bindsym --to-code {
     XF86AudioNext exec playerctl next
     XF86AudioPrev exec playerctl previous
 
-    # Screenshot with grim and swappy
-    print exec grim -g "$(slurp)" - | swappy -f -
-    Shift+print exec grim - | swappy -f -
-
     #
     # Moving around:
     #
@@ -430,6 +427,11 @@ bindsym --to-code {
     $mod+r mode "resize"
 
 }
+
+# Screenshot with grim and swappy
+bindsym print exec grim -g "$(slurp)" - | swappy -f -
+bindsym Shift+print exec grim - | swappy -f -
+
 
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
