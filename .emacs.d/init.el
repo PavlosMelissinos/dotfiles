@@ -596,10 +596,12 @@
           (org-roam-dailies-directory "~/notes/daily/")
           (org-roam-dailies-capture-templates
            '(("d" "default" entry
-              #'org-roam-capture--get-point
+              ;;#'org-roam-capture--get-point
               "* %?"
               :file-name "~/notes/daily/%<%Y-%m-%d>"
-              :head "#+title: %<%Y-%m-%d>\n\n")))
+              :head "#+title: %<%Y-%m-%d>\n\n"
+              :target (file+head "%<%Y-%m-%d>.org"
+                                 "#+title: %<%Y-%m-%d>\n"))))
           (package-check-signature nil)
           (org-roam-v2-ack t)
   :bind (("C-c n l" . org-roam-buffer-toggle)
