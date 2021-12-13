@@ -25,12 +25,13 @@
 (setq package-archives '(("melpa-stable" . "https://stable.melpa.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")
 
-                         ("org" . "https://orgmode.org/elpa/")
-		                     ("gnu"  . "https://elpa.gnu.org/packages/")))
+                         ("nongnu" . "https://elpa.nongnu.org/packages/")
+                         ("gnu"  . "https://elpa.gnu.org/packages/")))
 
 (package-initialize)
 
-(when (not (package-installed-p 'use-package))
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
   (package-install 'use-package))
 
 (eval-when-compile
@@ -445,7 +446,6 @@
 
 (use-package org
   :ensure t
-  :pin org
   :bind (:map org-mode-map
          ("<S-insert>" . org-complete)
          ("<S-return>" . org-insert-subheading)
@@ -504,6 +504,12 @@
        (latex (format "\href{%s}{%s}"
                       path (or desc "video"))))))
 
+  (org-link-set-parameters
+   "j"
+   :follow
+   (lambda (id)
+     (browse-url
+      (concat "https://bare-square.atlassian.net/browse/" id))))
   (org-link-set-parameters
    "vb"
    :follow
@@ -586,7 +592,6 @@
 
 (use-package org-roam
   :ensure t
-  :hook (org-mode . org-roam-mode)
   :custom (org-roam-directory "~/notes/roam")
           (org-roam-dailies-directory "~/notes/daily/")
           (org-roam-dailies-capture-templates
@@ -595,13 +600,19 @@
               "* %?"
               :file-name "~/notes/daily/%<%Y-%m-%d>"
               :head "#+title: %<%Y-%m-%d>\n\n")))
-  :bind (:map org-roam-mode-map
-              (("C-c n l" . org-roam)
-               ("C-c n f" . org-roam-find-file)
-               ("C-c n g" . org-roam-graph))
-         :map org-mode-map
-              (("C-c n i" . org-roam-insert))
-              (("C-c n I" . org-roam-insert-immediate))))
+          (package-check-signature nil)
+          (org-roam-v2-ack t)
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol))
 
 (use-package nano-writer
   ;;:ensure t
@@ -627,7 +638,6 @@
 
 (use-package magit
   :ensure t
-  :pin melpa-stable
   :diminish auto-revert-mode
   :config
   (global-set-key (kbd "C-c C-g") 'magit-status)
