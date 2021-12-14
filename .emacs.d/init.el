@@ -593,7 +593,7 @@
 (use-package org-roam
   :ensure t
   :custom (org-roam-directory "~/notes/roam")
-          (org-roam-dailies-directory "~/notes/daily/")
+          (org-roam-dailies-directory "daily/")
           (org-roam-dailies-capture-templates
            '(("d" "default" entry
               ;;#'org-roam-capture--get-point
@@ -610,7 +610,12 @@
          ("C-c n i" . org-roam-node-insert)
          ("C-c n c" . org-roam-capture)
          ;; Dailies
-         ("C-c n j" . org-roam-dailies-capture-today))
+         ("C-c n j" . org-roam-dailies-capture-today)
+         ("C-c n t" . org-roam-dailies-goto-today)
+         ("C-c n y" . org-roam-dailies-goto-yesterday)
+         (:map org-mode-map
+               ("C-<" . org-roam-dailies-goto-previous-note)
+               ("C->" . org-roam-dailies-goto-next-note)))
   :config
   (org-roam-db-autosync-mode)
   ;; If using org-roam-protocol
