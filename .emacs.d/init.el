@@ -418,7 +418,8 @@
                           ivy-rich-path-style 'abbrev)
   :config
   (ivy-set-display-transformer 'ivy-switch-buffer
-                               'ivy-rich-switch-buffer-transformer))
+                               'ivy-rich-switch-buffer-transformer)
+  (ivy-rich-mode))
 
 (use-package swiper
   :ensure t
