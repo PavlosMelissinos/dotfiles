@@ -389,25 +389,43 @@
   (setq company-begin-commands
         '(self-insert-command org-self-insert-command orgtbl-self-insert-command c-scope-operator c-electric-colon c-electric-lt-gt c-electric-slash cljr-slash)))
 
-(use-package ido
-  :init
-  (setq ido-enable-flex-matching t)
-  (setq ido-everywhere t)
-  (setq ido-file-extensions-order '(".clj" ".cljs" ".tf" ".org" ".el" ".py" ".txt"))
-  (ido-mode t))
-
-(use-package ido-completing-read+
+(use-package ivy
   :ensure t
-  :pin melpa-stable
-  :init
-  (ido-ubiquitous-mode 1))
+  :defer 0.1
+  :diminish
+  :bind (("C-c C-r" . ivy-resume)
+         ("C-x B" . ivy-switch-buffer-other-window))
+  :custom
+  (ivy-count-format "(%d/%d) ")
+  (ivy-use-virtual-buffers t)
+  :config (ivy-mode))
 
-(use-package ido-vertical-mode
+(use-package counsel
   :ensure t
-  :pin melpa-stable
-  :init
-  (ido-vertical-mode 1)
-  (setq ido-vertical-define-keys 'C-n-C-p-up-down-left-right))
+  :after ivy
+  :diminish
+  :config
+  (counsel-mode)
+  (ivy-mode 1))
+
+(use-package ivy-rich
+  :ensure t
+  :after ivy
+  :diminish
+  :custom
+  (ivy-virtual-abbreviate 'full
+                          ivy-rich-switch-buffer-align-virtual-buffer t
+                          ivy-rich-path-style 'abbrev)
+  :config
+  (ivy-set-display-transformer 'ivy-switch-buffer
+                               'ivy-rich-switch-buffer-transformer))
+
+(use-package swiper
+  :ensure t
+  :after ivy
+  :diminish
+  :bind (("C-s" . swiper)
+         ("C-r" . swiper)))
 
 (defun org-clocktable-try-shift-left ()
   (interactive)
@@ -433,7 +451,6 @@
   (org-babel-hash-show-time t)
   (org-clock-display-default-range 'untilnow)
   (org-clock-into-drawer nil)
-  (org-completion-use-ido t)
   (org-confirm-babel-evaluate nil)
   (org-confirm-elisp-link-function nil)
   (org-directory "~/notes")
