@@ -109,7 +109,6 @@
 
 (use-package clojure-mode
   :ensure t
-  :pin melpa-stable
   :diminish (clojure-mode . "clj")
   :defines clojure-mode-map
   :bind (:map clojure-mode-map
@@ -165,29 +164,23 @@
 
 (use-package clj-refactor
   :ensure t
-  :pin melpa-stable
   :diminish clj-refactor-mode
   :init
   (add-hook 'clojure-mode-hook (lambda ()
                                  (clj-refactor-mode 1)
                                  (cljr-add-keybindings-with-prefix "C-c C-v")))
+  :custom
+  (cljr-clojure-test-declaration "[clojure.test :refer [is deftest testing]")
+  (cljr-cljc-clojure-test-declaration
+   "#?(:clj [clojure.test :refer [is deftest testing]]
+   :cljs [cljs.test :refer [is deftest testing] :include-macros true])")
   :config
-  (setq cljr-clojure-test-declaration "[clojure.test :refer :all]")
-  (setq cljr-cljc-clojure-test-declaration
-        "#?(:clj [clojure.test :refer :all] :cljs [cljs.test :refer :all :include-macros true])")
   (add-to-list 'cljr-magic-require-namespaces '("s" . "clojure.spec.alpha"))
   (add-to-list 'cljr-magic-require-namespaces '("pp" . "clojure.pprint"))
   (add-to-list 'cljr-magic-require-namespaces '("ig" . "integrant.core")))
 
-(use-package align-cljlet
-  :ensure t
-  ;;:pin marmalade
-  :hook
-  (clojure-mode . (lambda () (define-key clojure-mode-map "\C-c\C-a" 'align-cljlet))))
-
 (use-package paredit
   :ensure t
-  :pin melpa-stable
   :diminish (paredit-mode . " Ⓟ")
   :hook
   ((lisp-mode emacs-lisp-mode scheme-mode cider-repl-mode clojure-mode) . paredit-mode)
@@ -245,13 +238,6 @@
           (sgml-skip-tag-backward 1))
       (mark-sexp))))
 
-(use-package tagedit
-  :ensure t
-  :init
-  (add-hook 'html-mode-hook (lambda () (tagedit-mode 1)))
-  :config
-  (tagedit-add-paredit-like-keybindings))
-
 (use-package paren
   :init
   (add-hook 'lisp-mode-hook 'show-paren-mode)
@@ -265,7 +251,6 @@
 (use-package cider
   :ensure t
   :diminish (cider-mode . " ⓒ")
-  :pin melpa-stable
   :bind (:map cider-mode-map
          ("C-c M-o" . cider-repl-clear-buffer)
          ("C-x M-e" . cider-pprint-eval-last-sexp-to-repl)
@@ -279,42 +264,30 @@
          )
   :init
   (add-hook 'cider-mode-hook #'eldoc-mode)
-  :config
-  (set-face-attribute 'cider-test-failure-face nil :background "#8c2020")
-  (setq cider-prompt-for-symbol nil)
-  (setq cider-repl-history-file "~/.emacs.d/cider-history")
-  ;;(setq cider-font-lock-dynamically '(macro core function var))
-  (setq cider-font-lock-dynamically nil)
-  (setq cider-repl-use-pretty-printing t)
-  (setq cider-repl-use-clojure-font-lock t)
-  ;;(setq cider-repl-result-prefix ";; => ")
-  (setq cider-repl-wrap-history t)
-  (setq cider-repl-history-size 3000)
-  (setq cider-show-error-buffer 'except-in-repl)
-  (setq cider-repl-display-help-banner nil)
-  (setq cider-inject-dependencies-at-jack-in t)
-  (setq nrepl-prompt-to-kill-server-buffer-on-quit nil)
+  :custom
+  (cider-prompt-for-symbol nil)
+  (cider-repl-history-file "~/.emacs.d/cider-history")
+  (cider-font-lock-dynamically nil)
+  (cider-repl-use-pretty-printing t)
+  (cider-repl-use-clojure-font-lock t)
+  (cider-repl-wrap-history t)
+  (cider-repl-history-size 3000)
+  (cider-show-error-buffer 'except-in-repl)
+  (cider-repl-display-help-banner nil)
+  (cider-inject-dependencies-at-jack-in t)
+  (nrepl-prompt-to-kill-server-buffer-on-quit nil)
 
   ;; Try to replicate this workflow: https://github.com/clojure-emacs/cider/issues/2617
-  (setq cider-invert-insert-eval-p t)
-  (setq cider-switch-to-repl-after-insert-p nil) ;; TODO remove in next version of CIDER
-  ;;(setq cider-switch-to-repl-on-insert nil) ;;TODO enable in next version of CIDER
+  (cider-invert-insert-eval-p t)
+  (cider-switch-to-repl-on-insert nil)
 
-  (bind-key "C-c M-o" 'cider-repl-clear-buffer cider-repl-mode-map)
+  (clojure-quick-sexp
+   '("(dev/reset)" "(user/fix)" "(use 'clojure.repl)"
+     "(use 'clojure.tools.trace)" "(use 'clojure.pprint)"
+     "(dev/start-cljs-figwheel)"))
 
-  (setq clojure-quick-sexp
-        '("(dev/reset)"
-          "(user/fix)"
-          "(use 'clojure.repl)"
-          "(use 'clojure.tools.trace)"
-          "(use 'clojure.pprint)"
-          "(dev/start-cljs-figwheel)"))
-
-  (defun clojure-quick-eval ()
-    (interactive)
-    (let ((selection (ido-completing-read
-                      "Clojure eval: " clojure-quick-sexp nil t "")))
-      (cider-interactive-eval selection)))
+  :config
+  (set-face-attribute 'cider-test-failure-face nil :background "#8c2020")
 
   (defun macroexpand-replace ()
     (interactive)
