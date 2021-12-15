@@ -631,14 +631,25 @@
 (use-package magit
   :ensure t
   :diminish auto-revert-mode
+  :custom-face
+  (magit-blame-date ((t (:background "#404040" :foreground "#F2804F"))))
+  (magit-blame-heading ((t (:background "#404040" :foreground "#073642"))))
+  (magit-diff-file-heading-highlight ((t (:background "#073642" :weight semi-bold))))
+  (magit-blame-name ((t (:inherit magit-blame-heading :background "#404040" :foreground "#F2804F"))))
+  (magit-blame-summary ((t (:background "#404040" :foreground "#F2804F" :weight bold))))
+  (magit-diff-hunk-heading ((t (:background "#009F00" :foreground "black"))))
+  (magit-diff-hunk-heading-highlight ((t (:background "#5FFF5F" :foreground "black"))))
+  (magit-popup-argument ((t (:foreground "white"))))
+  (smerge-refined-added ((t (:inherit smerge-refined-change :background "#227022"))))
+  :custom
+  (git-commit-fill-column 3000)
+  (git-commit-finish-query-functions nil)
+  (git-commit-summary-max-length 120)
+  (magit-log-margin '(t "%Y-%m-%d " magit-log-margin-width t 18))
+
   :config
   (global-set-key (kbd "C-c C-g") 'magit-status)
   (global-set-key (kbd "C-x g") 'magit-status)
-
-  (setq git-commit-fill-column 3000
-        git-commit-finish-query-functions nil
-        git-commit-summary-max-length 120
-        magit-log-margin '(t "%Y-%m-%d " magit-log-margin-width t 18))
 
   (defun ss/current-line ()
     (let ((start (point-min))
@@ -670,18 +681,7 @@
             (goto-line line)
             (recenter)
             (message (format "Switched to %s." magit-buffer-refname)))
-        (message "Current file rev cannot be determined"))))
-
-  (custom-set-faces
-   '(magit-blame-date ((t (:background "#404040" :foreground "#F2804F"))))
-   '(magit-blame-heading ((t (:background "#404040" :foreground "#073642"))))
-   '(magit-diff-file-heading-highlight ((t (:background "#073642" :weight semi-bold))))
-   '(magit-blame-name ((t (:inherit magit-blame-heading :background "#404040" :foreground "#F2804F"))))
-   '(magit-blame-summary ((t (:background "#404040" :foreground "#F2804F" :weight bold))))
-   '(magit-diff-hunk-heading ((t (:background "#009F00" :foreground "black"))))
-   '(magit-diff-hunk-heading-highlight ((t (:background "#5FFF5F" :foreground "black"))))
-   '(magit-popup-argument ((t (:foreground "white"))))
-   '(smerge-refined-added ((t (:inherit smerge-refined-change :background "#227022"))))))
+        (message "Current file rev cannot be determined")))))
 
 ;; ========================================
 ;; Navigation
