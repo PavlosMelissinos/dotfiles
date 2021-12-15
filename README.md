@@ -100,3 +100,9 @@ guide](https://wiki.archlinux.org/index.php/Universal_2nd_Factor#Adding_a_key).
   out
   An alternative solution (running `exec dbus-daemon --session
   --address=unix:path=$XDG_RUNTIME_DIR/bus`) didn't seem to work for me...
+- `Unable to connect to /run/user/1000/sway-ipc.1000.3043.sock`
+  `ls /run/user/1000/sway-ipc.*`
+  `/run/user/1000/sway-ipc.1000.1556432.sock
+  /run/user/1000/sway-ipc.1000.1556432.sock.wob`
+  then `export SWAYSOCK=<SOCKET_FILE>`
+  e.g. `export SWAYSOCK=/run/user/1000/sway-ipc.1000.1556432.sock`
