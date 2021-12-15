@@ -346,7 +346,8 @@
     projectile-globally-ignored-directories
     '(".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" "venv" "build"
       "vendor" "vendors" ".cabal-sandbox" "dist" ".vagrant" "node_modules"
-      "bower_components" ".bundle" ".stack-work"))
+      "bower_components" ".bundle" ".stack-work")
+    projectile-completion-system 'ivy)
   (projectile-global-mode nil))
 
 (use-package terraform-mode
@@ -425,8 +426,9 @@
   :ensure t
   :after ivy
   :diminish
-  :bind (("C-s" . swiper)
-         ("C-r" . swiper)))
+  :config
+  (global-set-key (kbd "C-s") 'swiper-isearch)
+  (global-set-key (kbd "C-r") 'swiper-isearch))
 
 (defun org-clocktable-try-shift-left ()
   (interactive)
@@ -765,7 +767,7 @@
 
 (use-package browse-kill-ring
   :ensure t
-  :pin melpa-stable
+  ;;:pin melpa-stable
   :config
   (browse-kill-ring-default-keybindings))
 
