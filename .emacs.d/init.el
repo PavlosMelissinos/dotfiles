@@ -268,18 +268,18 @@
   (cider-prompt-for-symbol nil)
   (cider-repl-history-file "~/.emacs.d/cider-history")
   (cider-font-lock-dynamically nil)
-  (cider-repl-use-pretty-printing t)
-  (cider-repl-use-clojure-font-lock t)
   (cider-repl-wrap-history t)
   (cider-repl-history-size 3000)
+  (cider-repl-buffer-size-limit 100000)
   (cider-show-error-buffer 'except-in-repl)
   (cider-repl-display-help-banner nil)
   (cider-inject-dependencies-at-jack-in t)
   (nrepl-prompt-to-kill-server-buffer-on-quit nil)
+  (cider-repl-result-prefix ";; => ")
 
   ;; Try to replicate this workflow: https://github.com/clojure-emacs/cider/issues/2617
   (cider-invert-insert-eval-p t)
-  (cider-switch-to-repl-on-insert nil)
+  (cider-repl-pop-to-buffer-on-connect nil)
 
   (clojure-quick-sexp
    '("(dev/reset)" "(user/fix)" "(use 'clojure.repl)"
