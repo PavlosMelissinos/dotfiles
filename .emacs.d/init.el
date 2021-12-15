@@ -750,7 +750,6 @@
 
 (use-package undo-tree
   :ensure t
-  :pin gnu
   :diminish undo-tree-mode
   :config
   (global-undo-tree-mode)
@@ -828,7 +827,7 @@
 (use-package browse-at-remote
   :bind (("C-c g g" . browse-at-remote))
   :ensure t
-  :custom (browse-at-remote-add-line-number-if-no-region-selected nil))
+  :custom (browse-at-remote-add-line-number-if-no-region-selected t))
 
 (use-package restclient
   :ensure t
@@ -840,8 +839,7 @@
          ("C-M-x" . python-shell-send-def)
          ("C-c C-v" . ss/python-shell-send-snippet))
 
-  :config
-  (setq python-shell-interpreter "~/.pyenv/shims/python")
+  :custom (python-shell-interpreter "~/.pyenv/shims/python")
 
   :init
   (add-hook 'python-mode-hook 'highlight-symbol-mode)
@@ -976,9 +974,9 @@
     ("," beginning-of-buffer "home")
     ("." end-of-buffer "end")
 
-    ("f" ido-find-file)
+    ("f" counsel-find-file)
     ("b" (progn (remove-window-move-indicator)
-                (ido-switch-buffer)
+                (ivy-switch-buffer)
                 (add-window-move-indicator)) "switch")
     ("k" (progn (remove-window-move-indicator)
                 (kill-this-buffer)
@@ -1123,7 +1121,6 @@
   (global-hl-line-mode)
   (set-face-attribute 'hl-line nil
                       :background "#02242a"))
-
 
 (setq elfeed-feeds
       '("https://news.ycombinator.com/rss"
