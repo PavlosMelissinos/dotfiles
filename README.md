@@ -91,8 +91,26 @@ article](https://reddit.com/r/Fedora/comments/akck9m/authenticating_with_gdm_and
 and adapted from [the Arch
 guide](https://wiki.archlinux.org/index.php/Universal_2nd_Factor#Adding_a_key).
 
+## Guix
 
-## FAQ - things I am definitely going to forget
+### On a new system
+
+- Add all channels:
+  `asd`
+- Install packages defined in manifest:
+  `asd`
+
+### Maintenance
+
+- On a foreign distro:
+  - upgrade the build daemon by running:
+    `sudo -i guix pull`
+  - if the distro uses systemd also run:
+    `systemctl restart guix-daemon.service`
+
+
+
+## Do not forget
 
 - /usr/share/applications/[...].desktop cannot be executed: Remote peer
   disconnected
@@ -100,9 +118,5 @@ guide](https://wiki.archlinux.org/index.php/Universal_2nd_Factor#Adding_a_key).
   out
   An alternative solution (running `exec dbus-daemon --session
   --address=unix:path=$XDG_RUNTIME_DIR/bus`) didn't seem to work for me...
-- `Unable to connect to /run/user/1000/sway-ipc.1000.3043.sock`
-  `ls /run/user/1000/sway-ipc.*`
-  `/run/user/1000/sway-ipc.1000.1556432.sock
-  /run/user/1000/sway-ipc.1000.1556432.sock.wob`
-  then `export SWAYSOCK=<SOCKET_FILE>`
-  e.g. `export SWAYSOCK=/run/user/1000/sway-ipc.1000.1556432.sock`
+- Unable to connect to `/run/user/1000/sway-ipc.1000.3043.sock`
+  `export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock`
