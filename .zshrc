@@ -130,9 +130,13 @@ antigen theme agnoster
 # Tell Antigen that you're done.
 antigen apply
 
-export GOOGLE_CLOUD_KEYFILE_JSON="$HOME/.bsq/gcp.json"
-
 if command -v pyenv &> /dev/null; then
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 fi
+
+#export GUIX_PROFILE="$HOME/.guix-profile"
+GUIX_PROFILE="$HOME/.config/guix/current"
+. "$GUIX_PROFILE/etc/profile"
+
+export PATH="$PATH:/home/pavlos/.cargo/bin"
