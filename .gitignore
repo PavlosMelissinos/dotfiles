@@ -13,6 +13,8 @@
 !.config/
 !.config/*
 .config/*
+!.config/alacritty/
+!.config/alacritty/*
 !.config/flashfocus/
 !.config/flashfocus/*
 !.config/gammastep/
@@ -33,6 +35,8 @@
 !.config/wlogout/*
 !.config/wofi/
 !.config/wofi/*
+!.config/guix/
+!.config/guix/*
 !bin/
 !bin/pavolume
 !.emacs.d/

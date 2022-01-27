@@ -16,7 +16,7 @@
         "wob"
         "kodi"
         "gtk+:bin"
-        "emacs-native-comp"
+        "emacs-pgtk-native-comp"
         "fontmanager"
         "materia-theme"
         "gtk-layer-shell"
@@ -68,4 +68,9 @@
         "emacs"
         "jq"
         "lvm2"
-        "sway"))
+        "sway"
+        "steam"
+        "nss-certs"
+        "font-dejavu"
+        "gs-fonts"
+        "glibc-locales"))
