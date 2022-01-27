@@ -4,7 +4,7 @@ clock
 effect-blur=7x5
 effect-greyscale
 effect-scale=0.8
-fade-in=0.5
+fade-in=0.2
 font=monospace
 #indicator
 indicator-caps-lock
