@@ -72,23 +72,23 @@ set $monitor4 "Panasonic Industry Company Panasonic-TV 0x00000000"
 set $monitor5 "Dell Inc. DELL U2415 08DXD49M0WEL"
 
 output $monitor1 {
-    resolution 1920x1080 position 0,800
+    resolution 1920x1080 position 0 800
     scale 1.5
 }
 
 output $monitor2 {
 
     # m1 scale 1
-    #resolution 2560x1440 position 1920,130
+    #resolution 2560x1440 position 1920 130
 
     # m1 scale 1.2
-    #resolution 2560x1440 position 1600,109
+    #resolution 2560x1440 position 1600 109
 
     # m1 scale 1.5
-    resolution 2560x1440 position 1280,200
+    resolution 2560x1440 position 1280 200
 
     # m1 scale 2
-    #resolution 2560x1440 position 960,65
+    #resolution 2560x1440 position 960 65
 
     scale 1.25
 }
@@ -125,7 +125,7 @@ output $monitor3 {
     #resolution 1080x1920 position 3413,0
 
     # m1 scale 1.5, m2 scale 1.25
-    resolution 1080x1920 position 3328,0
+    resolution 1080x1920 position 3328 0
 
     # m1 scale 1.5, m2 scale 1.5
     #resolution 1080x1920 position 2987,0

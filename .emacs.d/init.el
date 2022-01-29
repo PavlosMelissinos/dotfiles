@@ -28,7 +28,12 @@
                          ("nongnu" . "https://elpa.nongnu.org/packages/")
                          ("gnu"  . "https://elpa.gnu.org/packages/")))
 
-(package-initialize)
+;; Initialize the packages, avoiding a re-initialization.
+
+(unless (bound-and-true-p package--initialized)
+  (package-initialize))
+
+;; Make sure `use-package' is available.
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -381,14 +386,33 @@
 
 (use-package company
   :ensure t
-  :pin melpa-stable
+  :defer t
   :diminish company-mode
-  :bind (("<s-SPC>" . company-complete))
-  :init
-  (global-company-mode)
-  (setq company-minimum-prefix-length 2)
-  (setq company-begin-commands
-        '(self-insert-command org-self-insert-command orgtbl-self-insert-command c-scope-operator c-electric-colon c-electric-lt-gt c-electric-slash cljr-slash)))
+;;  :bind (("<s-SPC>" . company-complete))
+  :custom
+  (company-dabbrev-other-buffers t)
+  (company-dabbrev-code-other-buffers t)
+  ;; M-<num> to select an option according to its number.
+  (company-show-numbers t)
+  ;; Only 2 letters required for completion to activate.
+  (company-minimum-prefix-length 3)
+  ;; Do not downcase completions by default.
+  (company-dabbrev-downcase nil)
+  ;; Even if I write something with the wrong case,
+  ;; provide the correct casing.
+  (company-dabbrev-ignore-case t)
+  ;; Don't wait before completion.
+  (company-idle-delay 0)
+  ;; No company-mode in shell & eshell
+  (company-global-modes '(not eshell-mode shell-mode))
+  :hook ((text-mode-hook . company-mode)
+         (prog-mode-hook . company-mode))
+  ;; :init
+  ;; (global-company-mode)
+  ;; (setq company-minimum-prefix-length 2)
+  ;; (setq company-begin-commands
+  ;;       '(self-insert-command org-self-insert-command orgtbl-self-insert-command c-scope-operator c-electric-colon c-electric-lt-gt c-electric-slash cljr-slash))
+  )
 
 (use-package ivy
   :ensure t
@@ -503,6 +527,7 @@
    (lambda (id)
      (browse-url
       (concat "https://bare-square.atlassian.net/browse/" id))))
+
   (org-link-set-parameters
    "vb"
    :follow
@@ -841,38 +866,108 @@
   :ensure t
   :mode (("\\.http$" . restclient-mode)))
 
+;;;========================================
+;;; Python
+;;;========================================
+;;; Note that the hook use the `:hook (stuff-hook . some-mode)` form
+;;; The default use-package experience uses `:hook (stuff . some-mode)` instead
+
 (use-package python
+  :ensure t
+  :defer t
+  :delight "Py"
+  ;; Remove guess indent python message
+  :custom (python-indent-guess-indent-offset-verbose nil)
+  ;; Use IPython when available or fall back to regular Python
+  (cond
+   ((executable-find "ipython")
+    (progn
+      (setq python-shell-buffer-name "IPython"
+	    python-shell-interpreter "ipython"
+	    python-shell-interpreter-args "-i --simple-prompt")))
+   ((setq python-shell-interpreter "python"))))
+
+;; Hide the modeline for inferior python processes (as well as R)
+(use-package inferior-python-mode
+  :ensure nil
+  :hook ((inferior-python-mode-hook . hide-mode-line-mode)
+	 (inferior-ess-r-mode-hook . hide-mode-line-mode)))
+
+(use-package hide-mode-line
+  :ensure t
+  :defer t)
+
+;;; Use poetry to manage packages and when to switch to virtualenvs
+;;; See https://python-poetry.org/ for more info
+;;; See https://python-poetry.org/docs/managing-environments/ for virtual envs management
+(use-package poetry
+  :ensure t
+  :defer t
+  :config
+  (setq poetry-tracking-strategy 'switch-buffer)
+  (setenv "WORKON_HOME" "~/.cache/pypoetry/virtualenvs"))
+
+;; Buffer formatting on save
+(use-package yapfify
+  :diminish yapf-mode
+  :ensure t
+  :defer t
+  :hook (python-mode-hook . yapf-mode))
+
+;; numpy docstring for python
+(use-package numpydoc
+  :ensure t
+  :defer t
+  :custom
+  (numpydoc-insert-examples-block nil)
+  (numpydoc-template-long nil)
   :bind (:map python-mode-map
-         ("C-c M-j" . run-python)
-         ("C-M-x" . python-shell-send-def)
-         ("C-c C-v" . ss/python-shell-send-snippet))
+              ("C-c C-n" . numpydoc-generate)))
 
-  :custom (python-shell-interpreter "~/.pyenv/shims/python")
+;;; `lsp-mode` proper
+;;; The config should be relatively agnostic up to here
 
+(use-package lsp-mode
+  :ensure t
+  :defer t
+  :delight " LSP"
+  :defines (lsp-keymap-prefix lsp-mode-map)
   :init
-  (add-hook 'python-mode-hook 'highlight-symbol-mode)
+  (setq lsp-keymap-prefix "C-c l")
+  :custom
+  (lsp-keep-workspace-alive nil)
+  (lsp-auto-guess-root nil)
+  (lsp-eldoc-enable-hover nil)
+  (lsp-signature-auto-activate nil)
+  (lsp-completion-enable t)
+  :hook (lsp-mode-hook . lsp-enable-which-key-integration)
+  :commands (lsp lsp-deferred)
+  :bind (:map lsp-mode-map
+	      ("M-<RET>" . lsp-execute-code-action)))
 
-  (defun ss/python-shell-send-snippet ()
-    (interactive)
-    (save-excursion
-      (search-backward "##")
-      (end-of-line)
-      (set-mark-command nil)
-      (search-forward "##")
-      (call-interactively 'python-shell-send-region)
-      (deactivate-mark))))
+;; Debugger
+(use-package dap-mode
+  :ensure t
+  :defer t
+  :after lsp-mode
+  :config
+  (dap-auto-configure-mode))
 
-(use-package inferior-python
-  :bind (:map inferior-python-mode-map
-         ("C-c C-q" . ss/python-kill-buffer))
-  :init
-  (defun ss/python-kill-buffer ()
-    (interactive)
-    (kill-buffer (buffer-name (current-buffer)))))
-
-;; (setq python-shell-interpreter "python"
-;;       python-shell-interpreter-args "-i"
-;;       python-shell-completion-native-enable nil)
+;;; See https://emacs-lsp.github.io/lsp-mode/ for more info
+(use-package lsp-pyright
+  :ensure t
+  :defer t
+  :custom
+  (lsp-pyright-disable-language-service nil)
+  (lsp-pyright-disable-organize-imports nil)
+  (lsp-pyright-auto-import-completions t)
+  (lsp-pyright-use-library-code-for-types t)
+  (lsp-pyright-venv-path "~/.cache/pypoetry/virtualenvs")
+  (lsp-completion-enable t)
+  :hook ((python-mode-hook . (lambda ()
+			       (poetry-tracking-mode)
+			       (require 'lsp-pyright)
+			       (lsp-deferred)))))
 
 (use-package ess
   :ensure t
@@ -1440,11 +1535,6 @@
 
 (define-key org-mode-map [drag-n-drop] 'ss/org-mode-dnd)
 (setq org-startup-with-inline-images t)
-
-
-(defun ss/json-format-python (start end)
-  (interactive "r")
-  (shell-command-on-region start end "python -m json.tool" nil 't))
 
 (defun ss/json-format (start end)
   (interactive "r")
