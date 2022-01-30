@@ -909,7 +909,7 @@
   :defer t
   :config
   (setq poetry-tracking-strategy 'switch-buffer)
-  (setenv "WORKON_HOME" "~/.cache/pypoetry/virtualenvs"))
+  (setenv "WORKON_HOME" (expand-file-name "~/.cache/pypoetry/virtualenvs")))
 
 ;; Buffer formatting on save
 (use-package yapfify
@@ -970,9 +970,9 @@
   (lsp-pyright-disable-organize-imports nil)
   (lsp-pyright-auto-import-completions t)
   (lsp-pyright-use-library-code-for-types t)
-  (lsp-pyright-venv-path "~/.cache/pypoetry/virtualenvs")
+  (lsp-pyright-venv-path (expand-file-name "~/.cache/pypoetry/virtualenvs"))
   (lsp-completion-enable t)
-  :hook ((python-mode-hook . (lambda ()
+  :hook ((python-mode . (lambda ()
 			       (poetry-tracking-mode)
 			       (require 'lsp-pyright)
 			       (lsp-deferred)))))
