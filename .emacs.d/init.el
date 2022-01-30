@@ -406,7 +406,8 @@
   ;; No company-mode in shell & eshell
   (company-global-modes '(not eshell-mode shell-mode))
   :hook ((text-mode-hook . company-mode)
-         (prog-mode-hook . company-mode))
+         (prog-mode-hook . company-mode)
+         (python-mode-hook . company-mode))
   ;; :init
   ;; (global-company-mode)
   ;; (setq company-minimum-prefix-length 2)
@@ -876,6 +877,9 @@
   :ensure t
   :defer t
   :delight "Py"
+  :bind (:map python-mode-map
+         ("C-c C-k" . python-shell-send-buffer)
+         ("C-x C-e" . python-shell-send-statement ))
   ;; Remove guess indent python message
   :custom (python-indent-guess-indent-offset-verbose nil)
   ;; Use IPython when available or fall back to regular Python
@@ -940,7 +944,11 @@
   (lsp-eldoc-enable-hover nil)
   (lsp-signature-auto-activate nil)
   (lsp-completion-enable t)
-  :hook (lsp-mode-hook . lsp-enable-which-key-integration)
+  (lsp-headerline-breadcrumb-segments t)
+  (gc-cons-threshold 1600000)
+  (read-process-output-max (* 1024 1024))
+  :hook ((python-mode . lsp-deferred)
+         (lsp-mode-hook . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred)
   :bind (:map lsp-mode-map
 	      ("M-<RET>" . lsp-execute-code-action)))
