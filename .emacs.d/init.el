@@ -882,6 +882,7 @@
          ("C-x C-e" . python-shell-send-statement ))
   ;; Remove guess indent python message
   :custom (python-indent-guess-indent-offset-verbose nil)
+  :config
   ;; Use IPython when available or fall back to regular Python
   (cond
    ((executable-find "ipython")
