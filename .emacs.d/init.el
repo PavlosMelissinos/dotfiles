@@ -914,6 +914,13 @@
   (setq poetry-tracking-strategy 'switch-buffer)
   (setenv "WORKON_HOME" (expand-file-name "~/.cache/pypoetry/virtualenvs")))
 
+(use-package python-black
+  ;;:demand t
+  :ensure t
+  :defer t
+  :after python
+  :hook (python-mode . python-black-on-save-mode-enable-dwim))
+
 ;; Buffer formatting on save
 (use-package yapfify
   :diminish yapf-mode
