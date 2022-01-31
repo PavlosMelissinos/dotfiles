@@ -408,7 +408,7 @@
   (company-global-modes '(not eshell-mode shell-mode))
   :hook ((text-mode-hook . company-mode)
          (prog-mode-hook . company-mode)
-         (python-mode-hook . company-mode))
+         (python-mode . company-mode))
   ;; :init
   ;; (global-company-mode)
   ;; (setq company-minimum-prefix-length 2)
@@ -879,6 +879,7 @@
   :defer t
   :delight "Py"
   :bind (:map python-mode-map
+         ("C-c M-j" . run-python) ;; "jack-in"
          ("C-c C-k" . python-shell-send-buffer)
          ("C-x C-e" . python-shell-send-statement ))
   ;; Remove guess indent python message
@@ -918,7 +919,7 @@
   :diminish yapf-mode
   :ensure t
   :defer t
-  :hook (python-mode-hook . yapf-mode))
+  :hook (python-mode . yapf-mode))
 
 ;; numpy docstring for python
 (use-package numpydoc
