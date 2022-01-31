@@ -881,7 +881,7 @@
   :bind (:map python-mode-map
          ("C-c M-j" . run-python) ;; "jack-in"
          ("C-c C-k" . python-shell-send-buffer)
-         ("C-x C-e" . python-shell-send-statement ))
+         ("C-x C-e" . python-shell-send-statement))
   ;; Remove guess indent python message
   :custom (python-indent-guess-indent-offset-verbose nil)
   :config
@@ -954,7 +954,6 @@
   (lsp-eldoc-enable-hover nil)
   (lsp-signature-auto-activate nil)
   (lsp-completion-enable t)
-  (lsp-headerline-breadcrumb-segments t)
   (gc-cons-threshold 1600000)
   (read-process-output-max (* 1024 1024))
   :hook ((python-mode . lsp-deferred)
@@ -983,9 +982,9 @@
   (lsp-pyright-venv-path (expand-file-name "~/.cache/pypoetry/virtualenvs"))
   (lsp-completion-enable t)
   :hook ((python-mode . (lambda ()
-			       (poetry-tracking-mode)
-			       (require 'lsp-pyright)
-			       (lsp-deferred)))))
+			                    (poetry-tracking-mode)
+			                    (require 'lsp-pyright)
+			                    (lsp-deferred)))))
 
 (use-package ess
   :ensure t
