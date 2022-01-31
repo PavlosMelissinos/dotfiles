@@ -119,7 +119,8 @@
   :bind (:map clojure-mode-map
          ("C-x t" . clojure-jump-to-test)
          ("C-c C-w" . cider-eval-last-sexp-and-replace)
-         ("C-c M-e" . cider-eval-print-last-sexp))
+         ("C-c M-e" . cider-eval-print-last-sexp)
+         ("C-c j" . cider-jack-in-clj&cljs))
   :mode (("\\.edn$" . clojure-mode)
          ("\\.repl$" . clojure-mode)
          ("\\.bb$" . clojure-mode))
