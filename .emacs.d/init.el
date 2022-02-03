@@ -197,6 +197,10 @@
          :map lisp-mode-map
          ("C-c p" . paredit-mode)
 
+         :map python-mode-map
+         ("{" . paredit-open-curly)
+         ("}" . paredit-close-curly)
+
          :map paredit-mode-map
          ("C-c d" . duplicate-sexp)
          ("M-{" . paredit-wrap-curly)
