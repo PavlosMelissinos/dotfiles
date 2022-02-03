@@ -250,13 +250,13 @@
 
 (use-package paren
   :init
-  (add-hook 'lisp-mode-hook 'show-paren-mode)
-  (add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
-  (add-hook 'scheme-mode-hook 'show-paren-mode)
-  (add-hook 'cider-repl-mode-hook 'show-paren-mode)
-  (add-hook 'clojure-mode-hook 'show-paren-mode)
   (custom-set-faces
-   '(show-paren-match ((t (:foreground "gray100" :background "#9c7618" :weight bold))))))
+   '(show-paren-match ((t (:foreground "gray100" :background "#9c7618" :weight bold)))))
+  :hook ((lisp-mode . show-paren-mode)
+         (emacs-lisp-mode . show-paren-mode)
+         (scheme-mode . show-paren-mode)
+         (cider-repl-mode . show-paren-mode)
+         (clojure-mode . show-paren-mode)))
 
 (use-package cider
   :ensure t
@@ -410,8 +410,8 @@
   (company-idle-delay 0)
   ;; No company-mode in shell & eshell
   (company-global-modes '(not eshell-mode shell-mode))
-  :hook ((text-mode-hook . company-mode)
-         (prog-mode-hook . company-mode)
+  :hook ((text-mode . company-mode)
+         (prog-mode . company-mode)
          (python-mode . company-mode))
   ;; :init
   ;; (global-company-mode)
@@ -490,17 +490,18 @@
   (org-duration-format '(("h" . t) ("min" . t)))
   (org-ellipsis "↴")
   (org-export-babel-evaluate nil)
+  (org-export-backends '(ascii html icalendar latex md odt))
   (org-hide-emphasis-markers t)
   (org-hide-leading-stars t)
   (org-html-htmlize-output-type 'css)
   (org-image-actual-width nil)
   (org-mobile-inbox-for-pull "~/notes/flagged.org")
-  (org-support-shift-select t)
   (org-outline-path-complete-in-steps nil)
   (org-src-fontify-natively t)
-  (org-src-tab-acts-natively nil)
-  (org-src-preserve-indentation nil)
+  (org-src-tab-acts-natively t)              ; Tabs act as 4 spaces in source blocks
+  (org-src-preserve-indentation t)           ; Preserving indentation in source blocks
   (org-startup-with-inline-images t)
+  (org-support-shift-select t)
   (org-table-convert-region-max-lines 999)
   (org-todo-keyword-faces '(("PROG" . "yellow")
                             ("BLOK" . "IndianRed1")))
@@ -816,12 +817,8 @@
 (use-package expand-region
   :ensure t
   :pin melpa-stable
-  :bind (:map clojure-mode-map
-              ("M-=" . er/expand-region)
-         :map cider-repl-mode-map
-              ("M-=" . er/expand-region)
-         :map emacs-lisp-mode-map
-              ("M-=" . er/expand-region)))
+  :bind (("M-=" . er/expand-region)
+         ("M--" . er/contract-region)))
 
 ;; bookmarks
 (use-package bm
@@ -875,8 +872,6 @@
 ;;;========================================
 ;;; Python
 ;;;========================================
-;;; Note that the hook use the `:hook (stuff-hook . some-mode)` form
-;;; The default use-package experience uses `:hook (stuff . some-mode)` instead
 
 (use-package python
   :ensure t
@@ -901,8 +896,8 @@
 ;; Hide the modeline for inferior python processes (as well as R)
 (use-package inferior-python-mode
   :ensure nil
-  :hook ((inferior-python-mode-hook . hide-mode-line-mode)
-	 (inferior-ess-r-mode-hook . hide-mode-line-mode)))
+  :hook ((inferior-python-mode . hide-mode-line-mode)
+	       (inferior-ess-r-mode . hide-mode-line-mode)))
 
 (use-package hide-mode-line
   :ensure t
@@ -961,7 +956,7 @@
   (gc-cons-threshold 1600000)
   (read-process-output-max (* 1024 1024))
   :hook ((python-mode . lsp-deferred)
-         (lsp-mode-hook . lsp-enable-which-key-integration))
+         (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred)
   :bind (:map lsp-mode-map
 	      ("M-<RET>" . lsp-execute-code-action)))
@@ -975,6 +970,8 @@
   (dap-auto-configure-mode))
 
 ;;; See https://emacs-lsp.github.io/lsp-mode/ for more info
+;;; Dependency:
+;;;  npm i -g pyright
 (use-package lsp-pyright
   :ensure t
   :defer t
@@ -998,7 +995,7 @@
   :ensure t
   :pin melpa-stable
   :init
-  (global-set-key (kbd "§") 'hydra-windows/body)
+  (global-set-key (kbd "C-`") 'hydra-windows/body)
 
   (make-face 'move-window-buffer-face)
   (setq ss/window-move-remap-cookie nil)
@@ -1109,9 +1106,8 @@
                 (delete-window)
                 (add-window-move-indicator)) "del")
 
-    ("§" nil "exit")
+    ("C-`" nil "exit")
     ("q" nil "exit")))
-
 
 (use-package diminish
   :ensure t
@@ -1238,13 +1234,6 @@
                     :box '(:line-width 5 :color "#1d2026")
                     :overline nil
                     :underline nil)
-
-(use-package hl-line-mode
-  :no-require t
-  :init
-  (global-hl-line-mode)
-  (set-face-attribute 'hl-line nil
-                      :background "#02242a"))
 
 (setq elfeed-feeds
       '("https://news.ycombinator.com/rss"
@@ -1405,25 +1394,10 @@
 (setq default-input-method "greek")
 (global-set-key (kbd "s-\\") 'toggle-input-method)
 
-;;"Edit with Emacs" chrome plugin
-;; (require 'edit-server)
-;; (setq edit-server-new-frame nil)
-;; (edit-server-start)
-;; (require 'edit-server-htmlize)
-;; (autoload 'edit-server-maybe-dehtmlize-buffer "edit-server-htmlize" "edit-server-htmlize" t)
-;; (autoload 'edit-server-maybe-htmlize-buffer   "edit-server-htmlize" "edit-server-htmlize" t)
-;; (add-hook 'edit-server-start-hook 'edit-server-maybe-dehtmlize-buffer)
-;; (add-hook 'edit-server-done-hook  'edit-server-maybe-htmlize-buffer)
-
 ;; ========================================
 ;; Machine-specific config
 
-(if (string-equal system-type "darwin")
-    (require 'octavia))
-(if (string-equal system-name "MUCHA")
-    (require 'mucha))
-(if (not window-system)
-    (require 'no-window))
+(if (not window-system) (require 'no-window))
 
 (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
 
@@ -1435,8 +1409,6 @@
     (buffer-string)))
 (setq initial-scratch-message (get-string-from-file "~/.emacs.d/logo"))
 
-
-;;(load (expand-file-name "~/quicklisp/slime-helper.el"))
 
 (defun eshell/clear ()
   "Clear the eshell buffer."
