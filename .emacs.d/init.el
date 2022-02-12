@@ -913,6 +913,20 @@
   (setq poetry-tracking-strategy 'switch-buffer)
   (setenv "WORKON_HOME" (expand-file-name "~/.cache/pypoetry/virtualenvs")))
 
+(use-package python-pytest
+  :ensure t
+  :after python
+  :bind (:map python-mode-map
+	      ("C-c C-t n" . python-pytest-file-dwim)
+        ("C-c C-t t" . python-pytest-function-dwim))
+  :custom
+  (python-pytest-arguments
+   '(;;"--v"            ;; show verbose output
+     "--color"        ;; colored output in the buffer
+     "--failed-first" ;; run the previous failed tests first
+     "--maxfail=5"    ;; exit in 5 continuous failures in a run
+  )))
+
 (use-package python-black
   ;;:demand t
   :ensure t
@@ -979,7 +993,8 @@
   (lsp-pyright-disable-language-service nil)
   (lsp-pyright-disable-organize-imports nil)
   (lsp-pyright-auto-import-completions t)
-  (lsp-pyright-use-library-code-for-types t)
+  (lsp-pyright-use-library-code-for-types nil)
+  (lsp-pyright-diagnostic-mode "openFilesOnly")
   (lsp-pyright-venv-path (expand-file-name "~/.cache/pypoetry/virtualenvs"))
   (lsp-completion-enable t)
   :hook ((python-mode . (lambda ()
