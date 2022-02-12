@@ -197,10 +197,6 @@
          :map lisp-mode-map
          ("C-c p" . paredit-mode)
 
-         :map python-mode-map
-         ("{" . paredit-open-curly)
-         ("}" . paredit-close-curly)
-
          :map paredit-mode-map
          ("C-c d" . duplicate-sexp)
          ("M-{" . paredit-wrap-curly)
@@ -867,12 +863,18 @@
 
 (use-package python
   :ensure t
-  :defer t
   :delight "Py"
   :bind (:map python-mode-map
-         ("C-c M-j" . run-python) ;; "jack-in"
-         ("C-c C-k" . python-shell-send-buffer)
-         ("C-x C-e" . python-shell-send-statement))
+              ("C-c M-j" . run-python) ;; "jack-in"
+              ("C-c C-k" . python-shell-send-buffer)
+              ("C-x C-e" . python-shell-send-statement))
+  :hook ((python-mode . (lambda ()
+                          (define-key python-mode-map "\"" 'electric-pair)
+                          (define-key python-mode-map "\'" 'electric-pair)
+                          (define-key python-mode-map "(" 'electric-pair)
+                          (define-key python-mode-map "[" 'electric-pair)
+                          (define-key python-mode-map "{" 'electric-pair)
+                          (setq mode-name "Py"))))
   ;; Remove guess indent python message
   :custom (python-indent-guess-indent-offset-verbose nil)
   :config
@@ -881,9 +883,15 @@
    ((executable-find "ipython")
     (progn
       (setq python-shell-buffer-name "IPython"
-	    python-shell-interpreter "ipython"
-	    python-shell-interpreter-args "-i --simple-prompt")))
-   ((setq python-shell-interpreter "python"))))
+	          python-shell-interpreter "ipython"
+	          python-shell-interpreter-args "-i --simple-prompt")))
+   ((setq python-shell-interpreter "python")))
+
+  (defun electric-pair ()
+    "If at end of line, insert character pair without surrounding spaces.
+    Otherwise, just insert the typed character."
+    (interactive)
+    (if (eolp) (let (parens-require-spaces) (insert-pair)) (self-insert-command 1))))
 
 ;; Hide the modeline for inferior python processes (as well as R)
 (use-package inferior-python-mode
