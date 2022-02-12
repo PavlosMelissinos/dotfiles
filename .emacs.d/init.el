@@ -22,11 +22,11 @@
   (interactive)
   (find-file "~/.emacs.d/init.el"))
 
-(setq package-archives '(("melpa-stable" . "https://stable.melpa.org/packages/")
+(setq package-archives '(("gnu"  . "https://elpa.gnu.org/packages/")
+                         ;;("melpa-stable" . "https://stable.melpa.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")
 
-                         ("nongnu" . "https://elpa.nongnu.org/packages/")
-                         ("gnu"  . "https://elpa.gnu.org/packages/")))
+                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 
 ;; Initialize the packages, avoiding a re-initialization.
 
@@ -365,7 +365,6 @@
 
 (use-package yasnippet
   :ensure t
-  :pin melpa-stable
   :diminish yas-minor-mode
   :config
   (yas-global-mode 1)
@@ -374,8 +373,7 @@
 
 (use-package dockerfile-mode
   :ensure t
-  :defer t
-  :pin melpa-stable)
+  :defer t)
 
 (use-package docker-compose-mode
   :ensure t
@@ -799,7 +797,6 @@
 
 (use-package browse-kill-ring
   :ensure t
-  ;;:pin melpa-stable
   :config
   (browse-kill-ring-default-keybindings))
 
@@ -816,7 +813,6 @@
 
 (use-package expand-region
   :ensure t
-  :pin melpa-stable
   :bind (("M-=" . er/expand-region)
          ("M--" . er/contract-region)))
 
@@ -843,7 +839,6 @@
 
 (use-package pcre2el
   :ensure t
-  :pin melpa-stable
   :init
   (pcre-mode)) ;;uses Emacs’s advice system to make all commands that
                ;;read regexps using the minibuffer use emulated PCRE
@@ -857,7 +852,6 @@
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :custom (markdown-command "multimarkdown"))
-
 
 ;; github
 (use-package browse-at-remote
@@ -993,7 +987,6 @@
 
 (use-package hydra
   :ensure t
-  :pin melpa-stable
   :init
   (global-set-key (kbd "C-`") 'hydra-windows/body)
 
