@@ -715,6 +715,21 @@
             (message (format "Switched to %s." magit-buffer-refname)))
         (message "Current file rev cannot be determined")))))
 
+(use-package blamer
+  :ensure t
+  :defer 20
+  :custom
+  (blamer-idle-time 0.5)
+  (blamer-min-offset 70)
+  (blamer-author-formatter " ✎ %s ")
+  :custom-face
+  (blamer-face ((t :foreground "#7a88cf"
+                    :background nil
+                    ;;:height 140
+                    :italic t)))
+  :config
+  (global-blamer-mode 1))
+
 ;; ========================================
 ;; Navigation
 
@@ -928,7 +943,6 @@
   )))
 
 (use-package python-black
-  ;;:demand t
   :ensure t
   :defer t
   :after python
