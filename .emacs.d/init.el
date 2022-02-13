@@ -229,7 +229,6 @@
     (backward-sexp)))
 
 (use-package sgml-mode
-  :config
   :bind (:map sgml-mode-map
          ("<f1> SPC" . sgml-mark-tag))
   :mode (("\\.html$" . sgml-mode)
@@ -584,6 +583,13 @@
         (goto-char (point-min))
         (replace-regexp "^\\*\\*" "") ; remove item stars
         (kill-ring-save (point-min) (point-max)))))
+
+  (defun ss/html-from-org (beg end)
+    (interactive "r")
+    (narrow-to-region beg end)
+    (org-html-export-to-html)
+    (browse-url (concat "/tmp/" (org-export-output-file-name ".html")))
+    (widen))
 
   (set-face-attribute 'org-hide nil :foreground "DarkSlateGray")
   (set-face-attribute 'org-link nil :foreground "CornflowerBlue")
@@ -1569,7 +1575,6 @@
 
 (setq ring-bell-function 'ignore)
 
-
 (defun ss/org-mode-dnd (event &optional new-frame force-text)
   (interactive "e")
   (let* ((window (posn-window (event-start event)))
@@ -1593,7 +1598,6 @@
     (org-display-inline-images)))
 
 (define-key org-mode-map [drag-n-drop] 'ss/org-mode-dnd)
-(setq org-startup-with-inline-images t)
 
 (defun ss/json-format (start end)
   (interactive "r")
@@ -1614,13 +1618,6 @@
   (interactive "r")
   (save-excursion
     (shell-command-on-region beg end "sql-formatter-cli" nil t)))
-
-(defun ss/html-from-org (beg end)
-  (interactive "r")
-  (narrow-to-region beg end)
-  (org-html-export-to-html)
-  (browse-url (org-export-output-file-name ".html"))
-  (widen))
 
 ;;(setq debug-on-error t)
 (put 'scroll-left 'disabled nil)
