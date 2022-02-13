@@ -253,6 +253,10 @@
          (cider-repl-mode . show-paren-mode)
          (clojure-mode . show-paren-mode)))
 
+(use-package paren-face ;; dims parentheses
+  :custom
+  (paren-face-regexp "[][(){}]"))
+
 (use-package cider
   :ensure t
   :diminish (cider-mode . " ⓒ")
@@ -1522,6 +1526,10 @@
   (interactive)
   (kill-new (buffer-file-name)))
 
+(use-package crux
+  :ensure t
+  :init
+  (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line))
 
 (use-package ibuffer
   :config
