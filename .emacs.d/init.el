@@ -933,7 +933,8 @@
   :after python
   :bind (:map python-mode-map
 	      ("C-c C-t n" . python-pytest-file-dwim)
-        ("C-c C-t t" . python-pytest-function-dwim))
+        ("C-c C-t t" . python-pytest-function-dwim)
+        ("C-c C-t s" . python-pytest-dispatch))
   :custom
   (python-pytest-arguments
    '(;;"--v"            ;; show verbose output
