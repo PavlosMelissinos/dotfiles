@@ -720,7 +720,7 @@
   :defer 20
   :custom
   (blamer-idle-time 0.5)
-  (blamer-min-offset 70)
+  (blamer-min-offset 40)
   (blamer-author-formatter " ✎ %s ")
   :custom-face
   (blamer-face ((t :foreground "#7a88cf"
