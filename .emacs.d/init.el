@@ -468,7 +468,8 @@
          ("<S-insert>" . org-complete)
          ("<S-return>" . org-insert-subheading)
          ("<s-return>" . org-insert-subheading)
-         ("C-c a" . org-agenda))
+         ("C-c a" . org-agenda)
+         ("C-c s" . ss/standup))
   :init
   (font-lock-add-keywords 'org-mode
                           '(("^ +\\([-*]\\) "
@@ -498,8 +499,9 @@
   (org-support-shift-select t)
   (org-table-convert-region-max-lines 999)
   (org-todo-keyword-faces '(("PROG" . "yellow")
+                            ("CNCL" . "IndianRed1")
                             ("BLOK" . "IndianRed1")))
-  (org-todo-keywords '((sequence "TODO" "PROG" "BLOK" "DONE")))
+  (org-todo-keywords '((sequence "TODO" "PROG" "BLOK" "CNCL" "DONE")))
   :config
   (defvar yt-iframe-format
     ;; You may want to change your width and height.
@@ -561,13 +563,36 @@
   ;;   (org-force-self-insert "|")
   ;;   (multiple-cursors-mode))
 
+  (defun ss/standup (start end)
+    (interactive "r")
+    (let ((oldbuf (current-buffer)))
+      (with-temp-buffer
+        (insert-buffer-substring oldbuf start end)
+        (goto-char (point-min))
+        ;; (replace-string " BLOK" " :alarm_clock:")
+        (replace-string " BLOK" " :todo-doing::alarm_clock:")
+        (goto-char (point-min))
+        (replace-string " DONE" " :todo-done:")
+        (goto-char (point-min))
+        (replace-string " PROG" " :todo-doing:")
+        (goto-char (point-min))
+        (replace-string " CNCL" " :todo-cancel:")
+        (goto-char (point-min))
+        (replace-string " TODO" " :todo:")
+        (goto-char (point-min))
+        (replace-regexp "^\\*\\* " "") ; remove header stars and space
+        (goto-char (point-min))
+        (replace-regexp "^\\*\\*" "") ; remove item stars
+        (kill-ring-save (point-min) (point-max)))))
+
   (set-face-attribute 'org-hide nil :foreground "DarkSlateGray")
   (set-face-attribute 'org-link nil :foreground "CornflowerBlue")
   (set-face-attribute 'org-link nil :underline t)
   (font-lock-add-keywords
    'org-mode `(("^\\*+ \\(TODO\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "□") nil)))
                ("^\\*+ \\(PROG\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "▶") nil)))
-               ("^\\*+ \\(BLOK\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "✘") nil)))
+               ("^\\*+ \\(BLOK\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "⏰️") nil)))
+               ("^\\*+ \\(CNCL\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "✘") nil)))
                ("^\\*+ \\(DONE\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "✔") nil)))))
   (let* ((ss/variable-font-tuple (list :font "DejaVu Sans Mono"))
          (ss/fixed-font-tuple    (list :font "DejaVu Sans Mono" :height 1.0))
