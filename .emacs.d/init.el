@@ -505,6 +505,7 @@
                             ("CNCL" . "IndianRed1")
                             ("BLOK" . "IndianRed1")))
   (org-todo-keywords '((sequence "TODO" "PROG" "BLOK" "CNCL" "DONE")))
+  (org-roam-v2-ack t)
   :config
   (defvar yt-iframe-format
     ;; You may want to change your width and height.
@@ -655,7 +656,6 @@
               :target (file+head "%<%Y-%m-%d>.org"
                                  "#+title: %<%Y-%m-%d>\n"))))
           (package-check-signature nil)
-          (org-roam-v2-ack t)
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
          ("C-c n g" . org-roam-graph)
