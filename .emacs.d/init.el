@@ -752,6 +752,7 @@
 
 (use-package blamer
   :ensure t
+  :after magit
   :defer 20
   :custom
   (blamer-idle-time 0.5)
@@ -764,6 +765,10 @@
                     :italic t)))
   :config
   (global-blamer-mode 1))
+
+(use-package forge
+  :ensure t
+  :after magit)
 
 ;; ========================================
 ;; Navigation

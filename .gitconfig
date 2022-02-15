@@ -14,3 +14,5 @@
 	defaultBranch = main
 [diff "clojure"]
 	xfuncname = (^\\(.*|\\s*\\(defn.*)
+[github]
+	user = PavlosMelissinos
