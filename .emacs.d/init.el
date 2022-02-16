@@ -688,7 +688,8 @@
 
 (use-package org-jira
   :ensure t
-  :custom (jiralib-url "https://bare-square.atlassian.net"))
+  :custom (jiralib-url "https://bare-square.atlassian.net")
+  :bind ("C-c j s" . org-jira-get-summary))
 
 ;;; end of org
 
