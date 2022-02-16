@@ -1313,6 +1313,9 @@
         "https://www.retronator.com/rss"
         "http://feeds.feedburner.com/stevelosh?format=xml"))
 
+(use-package keycast
+  :ensure t
+  :defer t)
 
 ;; ========================================
 ;; misc
