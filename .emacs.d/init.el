@@ -41,6 +41,7 @@
 
 (eval-when-compile
   (require 'use-package))
+(require 'diminish)
 (require 'bind-key)                ;; if you use any :bind variant
 
 (when (not package-archive-contents)
@@ -1555,12 +1556,11 @@
   (setq ibuffer-saved-filter-groups
         (quote
          (("groups"
-           ("Notes"      (filename . "/home/thirstytm/notes/*"))
-           ("Emacs Lisp" (mode . emacs-lisp-mode))
-	         ;; ("Magit" (mode . magit-status-mode))
-           ;; ("Help" (or (name . "\*Help\*")
-		       ;;             (name . "\*Apropos\*")
-		       ;;             (name . "\*info\*")))
+           ;;("Notes"      (filename . "\/notes\/*"))
+           ("Org"        (mode . org-mode))
+           ("Emacs Lisp" (or (mode . emacs-lisp-mode)
+                             (mode . elisp-mode)))
+           ("Clojure"    (mode . clojure-mode))
            ("Special"    (name . "\*.+\*"))))))
 
   (add-hook 'ibuffer-mode-hook
@@ -1568,9 +1568,7 @@
               (ibuffer-auto-mode 1)
               (ibuffer-switch-to-saved-filter-groups "groups")))
 
-  (setq ibuffer-show-empty-filter-groups nil)
-
-  (setq ibuffer-expert t)
+  (setq ibuffer-show-empty-filter-groups t)
 
   (define-ibuffer-column size-h
     (:name "Size" :inline t)
