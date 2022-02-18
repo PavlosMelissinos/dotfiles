@@ -1564,9 +1564,9 @@
            ("Special"    (name . "\*.+\*"))))))
 
   (add-hook 'ibuffer-mode-hook
-	          (lambda ()
+            (lambda ()
               (ibuffer-auto-mode 1)
-	            (ibuffer-switch-to-saved-filter-groups "groups")))
+              (ibuffer-switch-to-saved-filter-groups "groups")))
 
   (setq ibuffer-show-empty-filter-groups nil)
 
@@ -1582,14 +1582,14 @@
 
   ;; Modify the default ibuffer-formats
   (setq ibuffer-formats
-	      '((mark modified read-only " "
-		            (name 18 18 :left :elide)
-		            " "
-		            (size-h 9 -1 :right)
-		            " "
-		            (mode 16 16 :left :elide)
-		            " "
-		            filename-and-process))))
+        '((mark modified read-only " "
+                (name 18 18 :left :elide)
+                " "
+                (size-h 9 -1 :right)
+                " "
+                (mode 16 16 :left :elide)
+                " "
+                filename-and-process))))
 
 (use-package ibuf-ext
   :config
