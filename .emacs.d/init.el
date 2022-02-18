@@ -688,7 +688,10 @@
 
 (use-package org-jira
   :ensure t
-  :custom (jiralib-url "https://bare-square.atlassian.net")
+  :custom
+  (jiralib-url "https://bare-square.atlassian.net")
+  ;;override request backend (curl) to fix [error] request--curl-sync: semaphore never called
+  (request-backend 'url-retrieve)
   :bind ("C-c j s" . org-jira-get-summary))
 
 ;;; end of org
