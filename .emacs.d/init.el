@@ -935,7 +935,9 @@
                           (define-key python-mode-map "{" 'electric-pair)
                           (setq mode-name "Py"))))
   ;; Remove guess indent python message
-  :custom (python-indent-guess-indent-offset-verbose nil)
+  :custom
+  (python-indent-guess-indent-offset-verbose nil)
+  (python-indent-offset 4)
   :config
   ;; Use IPython when available or fall back to regular Python
   (cond
@@ -1458,7 +1460,6 @@
 (setq-default indent-tabs-mode nil)
 (setq-default default-tab-width 2)
 (setq-default tab-width 2)
-(setq python-indent 4)
 (setq c-basic-offset 3)
 (setq c-indent-level 3)
 (setq c++-tab-always-indent nil)
