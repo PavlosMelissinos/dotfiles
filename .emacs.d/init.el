@@ -1415,10 +1415,10 @@
 (defun new-scratch ()
   "open up a guaranteed new scratch buffer"
   (interactive)
-  (switch-to-buffer (loop for num from 0
-                          for name = (format "new-%03i" num)
-                          while (get-buffer name)
-                          finally return name)))
+  (switch-to-buffer (cl-loop for num from 0
+                             for name = (format "new-%03i" num)
+                             while (get-buffer name)
+                             finally return name)))
 
 ;;shell stuff
 (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
