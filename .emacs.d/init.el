@@ -584,9 +584,9 @@
         (goto-char (point-min))
         (replace-string " TODO" " :todo:")
         (goto-char (point-min))
-        (replace-regexp "^\\*\\* " "") ; remove header stars and space
+        (replace-regexp "^\\* " "") ; remove header stars and space
         (goto-char (point-min))
-        (replace-regexp "^\\*\\*" "") ; remove item stars
+        (replace-regexp "^\\*" "") ; remove item stars
         (kill-ring-save (point-min) (point-max)))))
 
   (defun ss/html-from-org (beg end)
