@@ -20,7 +20,7 @@
 
 (defun init ()
   (interactive)
-  (find-file "~/.emacs.d/init.el"))
+  (find-file (concat user-emacs-directory "init.el")))
 
 (setq package-archives '(("gnu"  . "https://elpa.gnu.org/packages/")
                          ;;("melpa-stable" . "https://stable.melpa.org/packages/")
@@ -275,7 +275,7 @@
   (add-hook 'cider-mode-hook #'eldoc-mode)
   :custom
   (cider-prompt-for-symbol nil)
-  (cider-repl-history-file "~/.emacs.d/cider-history")
+  (cider-repl-history-file (concat user-emacs-directory "cider-history"))
   (cider-font-lock-dynamically nil)
   (cider-repl-wrap-history t)
   (cider-repl-history-size 3000)
@@ -367,8 +367,8 @@
   :diminish yas-minor-mode
   :config
   (yas-global-mode 1)
-  (add-to-list 'yas-snippet-dirs "~/.emacs.d/snippets")
-  (yas-load-directory "~/.emacs.d/snippets"))
+  (add-to-list 'yas-snippet-dirs (concat user-emacs-directory "snippets"))
+  (yas-load-directory (concat user-emacs-directory "snippets")))
 
 (use-package dockerfile-mode
   :ensure t
@@ -1454,7 +1454,7 @@
 (setq ring-bell-function 'ignore)
 (setq make-backup-files nil) ;; no backups!
 (setq auto-save-default nil) ;; stop creating those #autosave# files
-(setq custom-file "~/.emacs.d/custom.el")
+(setq custom-file (concat user-emacs-directory "custom.el"))
 (setq temporary-file-directory "/tmp") ;; necessary for tramp+babel
 ;;(load custom-file 'noerror)
 (column-number-mode t)
@@ -1490,7 +1490,7 @@
   (with-temp-buffer
     (insert-file-contents filePath)
     (buffer-string)))
-(setq initial-scratch-message (get-string-from-file "~/.emacs.d/logo"))
+(setq initial-scratch-message (get-string-from-file (concat user-emacs-directory "logo")))
 
 
 (defun eshell/clear ()
