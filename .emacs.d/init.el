@@ -772,7 +772,13 @@
 
 (use-package forge
   :ensure t
-  :after magit)
+  :after magit
+  :defer t
+  :init
+  ;; hack to allow magit to work on guix emacs
+  ;; TODO: remove after checking it's not necessary on guix emacs
+  (unless (boundp 'bug-reference-auto-setup-functions)
+    (defvar bug-reference-auto-setup-functions '())))
 
 ;; ========================================
 ;; Navigation
