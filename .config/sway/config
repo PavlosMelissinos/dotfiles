@@ -95,61 +95,61 @@ output $monitor2 {
 
 output $monitor3 {
     # m1 scale 1, m2 scale 1
-    #resolution 1080x1920 position 4480,0
+    #resolution 1080x1920 position 4480 0
 
     # m1 scale 1, m2 scale 1.2
-    #resolution 1080x1920 position 4054,0
+    #resolution 1080x1920 position 4054 0
 
     # m1 scale 1, m2 scale 1.5
-    #resolution 1080x1920 position ????,0
+    #resolution 1080x1920 position ???? 0
 
     # m1 scale 1, m2 scale 2
-    # resolution 1080x1920 position 3200,0
+    # resolution 1080x1920 position 3200 0
 
     # m1 scale 1.2, m2 scale 1
-    #resolution 1080x1920 position 4160,0
+    #resolution 1080x1920 position 4160 0
 
     # m1 scale 1.2, m2 scale 1.2
-    #resolution 1080x1920 position 3734,0
+    #resolution 1080x1920 position 3734 0
 
     # m1 scale 1.2, m2 scale 1.5
-    #resolution 1080x1920 position ????,0
+    #resolution 1080x1920 position ???? 0
 
     # m1 scale 1.2, m2 scale 2
-    #resolution 1080x1920 position ????,0
+    #resolution 1080x1920 position ???? 0
 
     # m1 scale 1.5, m2 scale 1
-    # resolution 1080x1920 position 3840,0
+    # resolution 1080x1920 position 3840 0
 
     # m1 scale 1.5, m2 scale 1.2
-    #resolution 1080x1920 position 3413,0
+    #resolution 1080x1920 position 3413 0
 
     # m1 scale 1.5, m2 scale 1.25
     resolution 1080x1920 position 3328 0
 
     # m1 scale 1.5, m2 scale 1.5
-    #resolution 1080x1920 position 2987,0
+    #resolution 1080x1920 position 2987 0
 
     # m1 scale 2, m2 scale 1
-    #resolution 1080x1920 position 3520,0
+    #resolution 1080x1920 position 3520 0
 
     # m1 scale 2, m2 scale 1.2
-    #resolution 1080x1920 position 3094,0
+    #resolution 1080x1920 position 3094 0
 
     # m1 scale 1.5, m2 scale 1.2
-    #resolution 1080x1920 position 3734,0
+    #resolution 1080x1920 position 3734 0
 
     transform 270
 }
 
 output $monitor4 {
     # m1 scale 1.5
-    resolution 4096x2160 position 1280,200
+    resolution 4096x2160 position 1280 200
     scale 3
 }
 
 output $monitor5 {
-    resolution 1200x1920 position 3328,200
+    resolution 1200x1920 position 3328 200
     transform 90
 }
 
@@ -198,8 +198,6 @@ exec $term -t main-term
 exec emacs
 
 # Clamshell mode
-
-# set $lock_script $HOME/.config/swaylock/lock.sh swaylock
 
 set $laptop eDP-1
 # Clamshell mode or lock & sleep
