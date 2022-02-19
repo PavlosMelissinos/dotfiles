@@ -765,9 +765,9 @@
   (blamer-author-formatter " ✎ %s ")
   :custom-face
   (blamer-face ((t :foreground "#7a88cf"
-                    :background nil
-                    ;;:height 140
-                    :italic t)))
+                   :background nil
+                   ;;:height 140
+                   :italic t)))
   :config
   (global-blamer-mode 1))
 
@@ -776,7 +776,7 @@
   :after magit
   :defer t
   :init
-  ;; hack to allow magit to work on guix emacs
+  ;; hack to allow forge to work on guix emacs
   ;; TODO: remove after checking it's not necessary on guix emacs
   (unless (boundp 'bug-reference-auto-setup-functions)
     (defvar bug-reference-auto-setup-functions '())))
