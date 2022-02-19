@@ -1,5 +1,3 @@
-export PATH="$PATH:$HOME/.local/bin"
-export PATH="$PATH:$HOME/.poetry/bin"
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"

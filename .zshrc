@@ -130,13 +130,7 @@ antigen theme agnoster
 # Tell Antigen that you're done.
 antigen apply
 
-if command -v pyenv &> /dev/null; then
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-fi
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
 
-#export GUIX_PROFILE="$HOME/.guix-profile"
-GUIX_PROFILE="$HOME/.config/guix/current"
 . "$GUIX_PROFILE/etc/profile"
-
-export PATH="$PATH:/home/pavlos/.cargo/bin"
