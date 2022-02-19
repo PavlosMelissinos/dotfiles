@@ -39,5 +39,5 @@
 !.config/guix/*
 !bin/
 !bin/pavolume
-!.emacs.d/
-!.emacs.d/**
+!.config/emacs/
+!.config/emacs/**
