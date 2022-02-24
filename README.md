@@ -107,7 +107,7 @@ guide](https://wiki.archlinux.org/index.php/Universal_2nd_Factor#Adding_a_key).
     `sudo -i guix pull`
   - if the distro uses systemd also run:
     `systemctl restart guix-daemon.service`
-
+  - don't forget to upgrade the guix channels sha every now and then
 
 
 ## Do not forget
@@ -120,3 +120,11 @@ guide](https://wiki.archlinux.org/index.php/Universal_2nd_Factor#Adding_a_key).
   --address=unix:path=$XDG_RUNTIME_DIR/bus`) didn't seem to work for me...
 - Unable to connect to `/run/user/1000/sway-ipc.1000.3043.sock`
   `export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock`
+
+## Known issues
+
+- sway
+  - Reloading sway/returning from sleep causes firefox-wayland to crash
+  - waybar disappears every now and then: run `nohup waybar &` to restart it
+  - reloading sway sometimes does not load gammastep
+  - going to sleep when in clamshell-mode sometimes doesn't restore the display
