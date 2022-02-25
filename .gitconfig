@@ -1,9 +1,8 @@
 [user]
-	name = Pavlos Melissinos
-	email = pmelissi@gmail.com
+  # These values are set in ~/.gitconfig_local
 [core]
 	autocrlf = false
-	attributesfile = /home/thirstytm/.gitattributes
+	attributesfile = $HOME/.gitattributes
 [alias]
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 [pull]
@@ -15,4 +14,6 @@
 [diff "clojure"]
 	xfuncname = (^\\(.*|\\s*\\(defn.*)
 [github]
-	user = PavlosMelissinos
+  # These values are set in ~/.gitconfig_local
+[include]
+  path = ~/.gitconfig_local
