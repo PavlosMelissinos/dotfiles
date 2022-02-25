@@ -1,5 +1,5 @@
 [user]
-  # These values are set in ~/.gitconfig_local
+  # These values are set in ~/.config/git/config_local
 [core]
 	autocrlf = false
 	attributesfile = $HOME/.gitattributes
@@ -14,6 +14,6 @@
 [diff "clojure"]
 	xfuncname = (^\\(.*|\\s*\\(defn.*)
 [github]
-  # These values are set in ~/.gitconfig_local
+  # These values are set in ~/.config/git/config_local
 [include]
-  path = ~/.gitconfig_local
+  path = ~/.config/git/config_local
