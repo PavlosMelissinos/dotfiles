@@ -691,6 +691,7 @@
   :ensure t
   :custom
   (jiralib-url "https://bare-square.atlassian.net")
+  (org-jira-working-dir "$XDG_DATA_HOME/org-jira")
   ;;override request backend (curl) to fix [error] request--curl-sync: semaphore never called
   (request-backend 'url-retrieve)
   :bind ("C-c j s" . org-jira-get-summary))
