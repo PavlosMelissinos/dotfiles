@@ -29,3 +29,5 @@
 !wlogout/*
 !wofi/
 !wofi/*
+!zsh/
+!zsh/*
