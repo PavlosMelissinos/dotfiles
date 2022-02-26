@@ -766,10 +766,11 @@
   :custom-face
   (blamer-face ((t :foreground "#7a88cf"
                    :background nil
-                   ;;:height 140
+                   :height 0.7
                    :italic t)))
-  :config
-  (global-blamer-mode 1))
+  ;; :config
+  ;; (global-blamer-mode 1)
+  )
 
 (use-package forge
   :ensure t
