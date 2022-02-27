@@ -384,6 +384,17 @@ tmux_conf_update_plugins_on_launch=true
 #   - false
 tmux_conf_update_plugins_on_reload=true
 
+# by default, reloading the configuration will uninstall tpm and plugins when no
+# plugins are enabled
+#   - true (default)
+#   - false
+tmux_conf_uninstall_plugins_on_reload=true
+
+# /!\ the tpm bindings differ slightly from upstream:
+#   - installing plugins: <prefix> + I
+#   - uninstalling plugins: <prefix> + Alt + u
+#   - updating plugins: <prefix> + u
+
 # /!\ do not add set -g @plugin 'tmux-plugins/tpm'
 # /!\ do not add run '~/.tmux/plugins/tpm/tpm'
 
@@ -394,15 +405,11 @@ tmux_conf_update_plugins_on_reload=true
 #set -g @plugin 'tmux-plugins/tmux-resurrect'
 #set -g @plugin 'tmux-plugins/tmux-continuum'
 #set -g @continuum-restore 'on'
-#set -g @plugin 'github_username/plugin_name'
-#set -g @plugin 'git@github.com/user/plugin'
-#set -g @plugin 'git@bitbucket.com/user/plugin'
 
 set -g @plugin 'tmux-plugins/tmux-sensible'
 set -g @plugin 'tmux-plugins/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
 
-# set -g @continuum-restore 'on'
 set -g status-right ${status_right}'Continuum status: #{continuum_status}'
 
 # -- custom variables ----------------------------------------------------------

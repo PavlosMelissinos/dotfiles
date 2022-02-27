@@ -13,6 +13,7 @@ export KODI_HOME="$XDG_CONFIG_HOME"
 zstyle ':completion:*' cache-path $XDG_CACHE_HOME/zsh/zcompcache
 export AWS_SHARED_CREDENTIALS_FILE="$XDG_CONFIG_HOME"/aws/credentials
 export AWS_CONFIG_FILE="$XDG_CONFIG_HOME"/aws/config
+export TMUX_PLUGIN_MANAGER_PATH="$XDG_DATA_HOME/tmux/plugins"
 
 export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PYENV_ROOT/bin:$PATH"
