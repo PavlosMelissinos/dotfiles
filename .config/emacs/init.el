@@ -9,9 +9,7 @@
 (global-unset-key (kbd "C-z"))
 (setq mac-use-title-bar 't)
 (setq-default fill-column 80)
-;;(make-frame)
-;;(other-frame 0)
-;;(delete-frame)
+(menu-bar-mode 0)
 
 ;; ========================================
 ;; package
@@ -41,16 +39,12 @@
 
 (eval-when-compile
   (require 'use-package))
-(require 'diminish)
 (require 'bind-key)                ;; if you use any :bind variant
 
 (when (not package-archive-contents)
   (package-refresh-contents))
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-
-;; ERC config
-;; (require 'ss-erc)
 
 ;; ========================================
 ;; Modes
