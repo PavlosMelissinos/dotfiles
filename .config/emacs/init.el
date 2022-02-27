@@ -916,6 +916,8 @@
 (use-package markdown-mode
   :ensure t
   :commands (markdown-mode gfm-mode)
+  :bind (("<M-up>" . markdown-move-list-item-up)
+         ("<M-down>" . markdown-move-list-item-down))
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
@@ -1536,18 +1538,6 @@ respectively."
                                   (car
                                    (org-jira-get-issue-by-id id))))))))
     (insert (format "[%s]: %s" (replace-regexp-in-string "\\-" ":" (downcase id)) summary))))
-
-(defun jira/summary ()
-  "Given a jira ticket id, append its summary.
-   Adapted from https://github.com/stathissideris/dotfiles/blob/96a811b03135a0cfdc5af7fb77419954c9501564/.emacs.d/init.el#L1567-L1575"
-  (interactive)
-  (save-excursion
-    (let* ((id (thing-at-point 'symbol 'no-pr))
-           (bounds (bounds-of-thing-at-point 'symbol))
-           (summary (shell-command-to-string (concat "get-jira " id " summary"))))
-      (goto-char (cdr bounds))
-      (insert " ")
-      (insert (string-trim-right summary)))))
 
 (defun ss/copy-file-name ()
   (interactive)
