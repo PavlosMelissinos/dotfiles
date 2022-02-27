@@ -20,11 +20,17 @@
   (interactive)
   (find-file (concat user-emacs-directory "init.el")))
 
-(setq package-archives '(("gnu"  . "https://elpa.gnu.org/packages/")
-                         ;;("melpa-stable" . "https://stable.melpa.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")
+(setq package-archives
+      '(("GNU ELPA"  . "https://elpa.gnu.org/packages/")
+        ("MELPA Stable" . "https://stable.melpa.org/packages/")
+        ("MELPA" . "https://melpa.org/packages/")
 
-                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+        ;;("nongnu" . "https://elpa.nongnu.org/nongnu/")
+        )
+      package-archive-priorities
+      '(("GNU ELPA"     . 10)
+        ("MELPA Stable" . 5)
+        ("MELPA"        . 0)))
 
 ;; Initialize the packages, avoiding a re-initialization.
 
