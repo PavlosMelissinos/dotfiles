@@ -9,7 +9,7 @@
 (global-unset-key (kbd "C-z"))
 (setq mac-use-title-bar 't)
 (setq-default fill-column 80)
-(menu-bar-mode 0)
+(setq save-abbrevs 'silently)
 
 ;; ========================================
 ;; package
@@ -171,6 +171,8 @@
 
 (use-package clj-refactor
   :ensure t
+  :after clojure
+  ;; :pin MELPA
   :diminish clj-refactor-mode
   :init
   (add-hook 'clojure-mode-hook (lambda ()
@@ -255,6 +257,7 @@
          (clojure-mode . show-paren-mode)))
 
 (use-package paren-face ;; dims parentheses
+  :defer t
   :custom
   (paren-face-regexp "[][(){}]"))
 
@@ -981,6 +984,7 @@
 ;;; See https://python-poetry.org/docs/managing-environments/ for virtual envs management
 (use-package poetry
   :ensure t
+  :pin MELPA
   :defer t
   :config
   (setq poetry-tracking-strategy 'switch-buffer)
@@ -1208,6 +1212,7 @@
 
 (use-package doom-themes
   :ensure t
+  :pin MELPA
   :config
   (require 'doom-themes)
   (if window-system
@@ -1217,6 +1222,7 @@
       (tool-bar-mode -1)
       (setq window-divider-default-right-width 1)
       (set-face-foreground 'vertical-border "#525070")))
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
   (doom-themes-neotree-config)
   (doom-themes-org-config))
 
