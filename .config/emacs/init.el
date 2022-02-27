@@ -715,11 +715,12 @@
   (magit-popup-argument ((t (:foreground "white"))))
   (smerge-refined-added ((t (:inherit smerge-refined-change :background "#227022"))))
   :custom
-  (git-commit-fill-column 3000)
   (git-commit-finish-query-functions nil)
   (git-commit-summary-max-length 120)
   (magit-log-margin '(t "%Y-%m-%d " magit-log-margin-width t 18))
-
+  :hook ((magit-mode-hook . (lambda ()
+                              (setq fill-column 72)
+                              (auto-fill-mode t))))
   :config
   (global-set-key (kbd "C-c C-g") 'magit-status)
   (global-set-key (kbd "C-x g") 'magit-status)
@@ -1210,25 +1211,12 @@
   (if window-system
     (progn
       (load-theme 'doom-one t)
-      ;; (load-theme 'solarized-dark t)
       (scroll-bar-mode -1)
       (tool-bar-mode -1)
-      ;;(fringe-mode '(8 . 8))
-      ;; ;;(set-default 'cursor-type 'bar)
-      ;; (set-cursor-color "#e3e2d6")
-      ;;(setq x-underline-at-descent-line t)
       (setq window-divider-default-right-width 1)
-      (set-face-foreground 'vertical-border "#525070"))
-    ;;(load-theme 'zenburn t)
-    )
+      (set-face-foreground 'vertical-border "#525070")))
   (doom-themes-neotree-config)
   (doom-themes-org-config))
-
-(defun justified-mode-line (left right)
-  "Return a string of `window-width' length containing LEFT, and RIGHT
- aligned respectively."
-  (let* ((available-width (- (window-width) (length left) 2)))
-    (format (format " %%s %%%ds " available-width) left right)))
 
 ;;title bar
 (setq frame-title-format "%f (%m) %n")
@@ -1277,6 +1265,12 @@
       face mode-line)
     "Formats the current directory.")
   :config
+  (defun justified-mode-line (left right)
+    "Return a string of `window-width' length containing LEFT, and RIGHT aligned
+respectively."
+    (let* ((available-width (- (window-width) (length left) 2)))
+      (format (format " %%s %%%ds " available-width) left right)))
+
   (setq-default
    mode-line-format
    '((:eval
@@ -1488,13 +1482,12 @@
 (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
 
 ;;custom-scratch-message
-(defun get-string-from-file (filePath)
+(defun slurp (filePath)
   "Return filePath's file content."
   (with-temp-buffer
     (insert-file-contents filePath)
     (buffer-string)))
-(setq initial-scratch-message (get-string-from-file (concat user-emacs-directory "logo")))
-
+(setq initial-scratch-message (slurp (concat user-emacs-directory "logo")))
 
 (defun eshell/clear ()
   "Clear the eshell buffer."
