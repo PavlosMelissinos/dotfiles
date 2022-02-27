@@ -1217,11 +1217,15 @@
   (require 'doom-themes)
   (if window-system
     (progn
-      (load-theme 'doom-one t)
+      ;;(load-theme 'doom-one t)
+      (load-theme 'doom-vibrant t)
       (scroll-bar-mode -1)
+      (menu-bar-mode -1)
       (tool-bar-mode -1)
       (setq window-divider-default-right-width 1)
       (set-face-foreground 'vertical-border "#525070")))
+  ;;Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
   ;; Enable custom neotree theme (all-the-icons must be installed!)
   (doom-themes-neotree-config)
   (doom-themes-org-config))
