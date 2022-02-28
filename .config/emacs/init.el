@@ -1549,42 +1549,37 @@ respectively."
   (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line))
 
 (use-package ibuffer
+  :hook ((ibuffer-mode . (lambda ()
+                           (ibuffer-auto-mode 1)
+                           (ibuffer-switch-to-saved-filter-groups "groups"))))
+  :custom
+  (ibuffer-show-empty-filter-groups t)
+  (ibuffer-saved-filter-groups
+   '(("groups"
+      ;;("Notes"      (filename . "\/notes\/*"))
+      ("Org"        (mode . org-mode))
+      ("Emacs Lisp" (or (mode . emacs-lisp-mode)
+                        (mode . elisp-mode)))
+      ("Clojure"    (mode . clojure-mode))
+      ("Special"    (name . "\*.+\*")))))
+  ;; Modify the default ibuffer-formats
+  (ibuffer-formats
+   '((mark modified read-only " "
+           (name 18 18 :left :elide)
+           " "
+           (size-h 9 -1 :right)
+           " "
+           (mode 16 16 :left :elide)
+           " "
+           filename-and-process)))
   :config
-  (setq ibuffer-saved-filter-groups
-        (quote
-         (("groups"
-           ;;("Notes"      (filename . "\/notes\/*"))
-           ("Org"        (mode . org-mode))
-           ("Emacs Lisp" (or (mode . emacs-lisp-mode)
-                             (mode . elisp-mode)))
-           ("Clojure"    (mode . clojure-mode))
-           ("Special"    (name . "\*.+\*"))))))
-
-  (add-hook 'ibuffer-mode-hook
-            (lambda ()
-              (ibuffer-auto-mode 1)
-              (ibuffer-switch-to-saved-filter-groups "groups")))
-
-  (setq ibuffer-show-empty-filter-groups t)
-
   (define-ibuffer-column size-h
     (:name "Size" :inline t)
     (cond
      ((> (buffer-size) 1000000) (format "%7.1fM" (/ (buffer-size) 1000000.0)))
      ((> (buffer-size) 100000) (format "%7.0fk" (/ (buffer-size) 1000.0)))
      ((> (buffer-size) 1000) (format "%7.1fk" (/ (buffer-size) 1000.0)))
-     (t (format "%8d" (buffer-size)))))
-
-  ;; Modify the default ibuffer-formats
-  (setq ibuffer-formats
-        '((mark modified read-only " "
-                (name 18 18 :left :elide)
-                " "
-                (size-h 9 -1 :right)
-                " "
-                (mode 16 16 :left :elide)
-                " "
-                filename-and-process))))
+     (t (format "%8d" (buffer-size))))))
 
 (use-package ibuf-ext
   :config
