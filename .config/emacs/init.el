@@ -512,6 +512,7 @@
                             ("BLOK" . "IndianRed1")))
   (org-todo-keywords '((sequence "TODO" "PROG" "BLOK" "CNCL" "DONE")))
   (org-roam-v2-ack t)
+  (org-special-ctrl-a/e t)
   :config
   (defvar yt-iframe-format
     ;; You may want to change your width and height.
