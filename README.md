@@ -124,7 +124,7 @@ guide](https://wiki.archlinux.org/index.php/Universal_2nd_Factor#Adding_a_key).
 ## Known issues
 
 - sway
+  - coming back from sleep doesn't restore the laptop screen (it's all black)
   - Reloading sway/returning from sleep causes firefox-wayland to crash
   - waybar disappears every now and then: run `nohup waybar &` to restart it
   - reloading sway sometimes does not load gammastep
-  - going to sleep when in clamshell-mode sometimes doesn't restore the display

@@ -214,9 +214,14 @@ bindswitch --reload --locked lid:off output $laptop enable
 #
 # Example configuration:
 #
+# FIXME: This is buggy
+# Running swaymsg "output * dpms off" and then
+# swaymsg "output * dpms on" does not restore eDP-1 and there's no way to bring
+# it back - Look into SWAYSOCK
 exec_always swayidle -w \
          timeout 300 'swaylock -f' \
-         timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+         timeout 600 'swaymsg "output * dpms off"' \
+              resume 'swaymsg "output * dpms on"' \
          before-sleep 'swaylock -f'
 
 # This will lock your screen after 300 seconds of inactivity, then turn off
