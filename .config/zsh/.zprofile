@@ -9,7 +9,7 @@ export PYENV_ROOT="$XDG_DATA_HOME/pyenv"
 export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
 export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
 export HISTFILE="$XDG_STATE_HOME"/zsh/history
-export KODI_HOME="$XDG_CONFIG_HOME"
+#export KODI_HOME="$XDG_CONFIG_HOME"
 zstyle ':completion:*' cache-path $XDG_CACHE_HOME/zsh/zcompcache
 export AWS_SHARED_CREDENTIALS_FILE="$XDG_CONFIG_HOME"/aws/credentials
 export AWS_CONFIG_FILE="$XDG_CONFIG_HOME"/aws/config
