@@ -65,12 +65,6 @@
   :ensure t)
 ;;then run (all-the-icons-install-fonts) once
 
-(use-package log4j-mode
-  :ensure t
-  :disabled t
-  :hook ((log4j-mode . view-mode)
-         (log4j-mode . read-only-mode)))
-
 (use-package yaml-mode
   :ensure t
   :defer t)
@@ -263,6 +257,7 @@
 
 (use-package cider
   :ensure t
+  ;;:pin MELPA
   :diminish (cider-mode . " ⓒ")
   :bind (:map cider-mode-map
          ("C-c M-o" . cider-repl-clear-buffer)
@@ -382,19 +377,11 @@
   :ensure t
   :defer t)
 
-;; (use-package eshell-mode
-;;   :bind (("<up>" . previous-line)
-;;          ("<down>" . next-line))
-;;   :init
-;;   (define-key eshell-mode-map (kbd "<up>") 'previous-line)
-;;   (bind-key "<up>" 'previous-line eshell-mode-map)
-;;   (bind-key "<down>" 'next-line eshell-mode-map))
-
 (use-package company
   :ensure t
   :defer t
   :diminish company-mode
-;;  :bind (("<s-SPC>" . company-complete))
+  ;;:bind (("<tab>" . company-complete))
   :custom
   (company-dabbrev-other-buffers t)
   (company-dabbrev-code-other-buffers t)
@@ -463,14 +450,6 @@
   (global-set-key (kbd "C-s") 'swiper-isearch)
   (global-set-key (kbd "C-r") 'swiper-isearch))
 
-(defun org-clocktable-try-shift-left ()
-  (interactive)
-  (org-clocktable-try-shift 'left 1))
-
-(defun org-clocktable-try-shift-right ()
-  (interactive)
-  (org-clocktable-try-shift 'right 1))
-
 (use-package org
   :ensure t
   :bind (:map org-mode-map
@@ -481,8 +460,10 @@
          ("C-c s" . ss/standup))
   :init
   (font-lock-add-keywords 'org-mode
-                          '(("^ +\\([-*]\\) "
-                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "→"))))))
+                          '(("^ +\\([-*]\\) " . (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "→"))))
+                            ("\\<\\(FIXME\\):" 1 'font-lock-warning-face prepend)
+                            ;;("\\<\\(and\\|or\\|not\\)\\>" . 'font-lock-keyword-face)
+                            ))
   :custom
   (org-agenda-files (list "~/notes/personal.org" "~/notes/bsq.org"))
   (org-babel-hash-show-time t)
@@ -609,7 +590,7 @@
   (font-lock-add-keywords
    'org-mode `(("^\\*+ \\(TODO\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "□") nil)))
                ("^\\*+ \\(PROG\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "▶") nil)))
-               ("^\\*+ \\(BLOK\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "⏰️") nil)))
+               ("^\\*+ \\(BLOK\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "⏸") nil)))
                ("^\\*+ \\(CNCL\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "✘") nil)))
                ("^\\*+ \\(DONE\\) " (1 (progn (compose-region (match-beginning 1) (match-end 1) "✔") nil)))))
   (let* ((ss/variable-font-tuple (list :font "DejaVu Sans Mono"))
@@ -680,18 +661,10 @@
   ;; If using org-roam-protocol
   (require 'org-roam-protocol))
 
-(use-package nano-writer
-  ;;:ensure t
-  ;;:pin marmalade
-  :pin manual
-  :config (require 'nano-writer)
-  ;; :hook (org-roam-mode . writer-mode)
-  )
-
-(use-package org-bullets
+(use-package org-superstar
   :ensure t
   :custom (org-bullets-bullet-list '("●"))
-  :hook (org-mode . (lambda () (org-bullets-mode 1))))
+  :hook (org-mode . (lambda () (org-superstar-mode 1))))
 
 (use-package org-jira
   :ensure t
@@ -713,9 +686,9 @@
   :custom-face
   (magit-blame-date ((t (:background "#404040" :foreground "#F2804F"))))
   (magit-blame-heading ((t (:background "#404040" :foreground "#073642"))))
-  (magit-diff-file-heading-highlight ((t (:background "#073642" :weight semi-bold))))
   (magit-blame-name ((t (:inherit magit-blame-heading :background "#404040" :foreground "#F2804F"))))
   (magit-blame-summary ((t (:background "#404040" :foreground "#F2804F" :weight bold))))
+  (magit-diff-file-heading-highlight ((t (:background "#073642" :weight semi-bold))))
   (magit-diff-hunk-heading ((t (:background "#009F00" :foreground "black"))))
   (magit-diff-hunk-heading-highlight ((t (:background "#5FFF5F" :foreground "black"))))
   (magit-popup-argument ((t (:foreground "white"))))
@@ -723,6 +696,7 @@
   :custom
   (git-commit-finish-query-functions nil)
   (git-commit-summary-max-length 120)
+  (magit-diff-refine-hunk t)
   (magit-log-margin '(t "%Y-%m-%d " magit-log-margin-width t 18))
   :hook ((magit-mode-hook . (lambda ()
                               (setq fill-column 72)
@@ -824,24 +798,25 @@
 (use-package highlight-symbol
   :diminish highlight-symbol-mode
   :ensure t
-  :no-require t
+  ;;:no-require t
   :hook ((lisp-mode . highlight-symbol-mode)
          (emacs-lisp-mode . highlight-symbol-mode)
          (scheme-mode . highlight-symbol-mode)
          (cider-repl-mode . highlight-symbol-mode)
-         (clojure-mode . highlight-symbol-mode))
+         (clojure-mode . highlight-symbol-mode)
+         (python-mode . highlight-symbol-mode))
   :init
   (global-set-key (kbd "C-,") 'highlight-symbol-prev)
   (global-set-key (kbd "C-.") 'highlight-symbol-next)
-  (defun highlight-symbol-count (&optional symbol)
-    "(Do not) Print the number of occurrences of symbol at point."
-    (interactive))
   :config
   (setq highlight-symbol-idle-delay 1)
   (setq highlight-symbol-on-navigation-p 't)
   (setq highlight-symbol-occurrence-message (quote (explicit)))
   (custom-set-faces
-   '(highlight-symbol-face ((t (:foreground "gray100" :background "#9c7618" :weight semi-bold))))))
+   '(highlight-symbol-face ((t (:foreground "gray100" :background "#9c7618" :weight semi-bold)))))
+  (defun highlight-symbol-count (&optional symbol)
+    "(Do not) Print the number of occurrences of symbol at point."
+    (interactive)))
 
 (use-package windmove
   :init
@@ -905,14 +880,6 @@
 (use-package deadgrep
   :ensure t
   :bind ("<f9>" . deadgrep))
-
-(use-package pcre2el
-  :ensure t
-  :init
-  (pcre-mode)) ;;uses Emacs’s advice system to make all commands that
-               ;;read regexps using the minibuffer use emulated PCRE
-               ;;syntax, but it's an EXPERIMENTAL feature, disable if
-               ;;it causes problems
 
 (use-package markdown-mode
   :ensure t
@@ -1088,6 +1055,7 @@
 
 (use-package hydra
   :ensure t
+  :pin MELPA
   :init
   (global-set-key (kbd "C-`") 'hydra-windows/body)
 
@@ -1109,7 +1077,6 @@
           (windmove-find-other-window 'right))
         (enlarge-window-horizontally arg)
       (shrink-window-horizontally arg)))
-
 
   (defun move-splitter-up (arg)
     "Move window splitter up."
@@ -1209,36 +1176,285 @@
   (diminish 'eldoc-mode)
   (diminish 'pcre-mode))
 
-
 ;; ========================================
 ;; Colors and looks
 
-(use-package doom-themes
-  :ensure t
-  :pin MELPA
+(use-package emacs
   :config
-  (require 'doom-themes)
-  (if window-system
-    (progn
-      ;;(load-theme 'doom-one t)
-      (load-theme 'doom-vibrant t)
-      (scroll-bar-mode -1)
-      (menu-bar-mode -1)
-      (tool-bar-mode -1)
-      (setq window-divider-default-right-width 1)
-      (set-face-foreground 'vertical-border "#525070")))
-  ;;Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  (doom-themes-org-config))
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  ;;(set-face-attribute 'mode-line-inactive nil :background "#303030")
 
-;;title bar
-(setq frame-title-format "%f (%m) %n")
-(setq ns-use-proxy-icon nil)
+  ;;title bar
+  (setq frame-title-format "%f (%m) %n")
+  (setq ns-use-proxy-icon nil)
 
-(defun remove-vowels (string)
-  (replace-regexp-in-string "a\\|e\\|i\\|o\\|u\\|" "" string))
+  ;; ========================================
+  ;; misc
+
+  ;;(require 'simple-copy)
+
+  ;;global-custom-keys
+  (global-set-key (kbd "C-=") (lambda () (interactive) (text-scale-increase 0.5)))
+  (global-set-key (kbd "C--") (lambda () (interactive) (text-scale-increase -0.5)))
+  (global-set-key (kbd "C-0") (lambda () (interactive) (text-scale-increase 0)))
+
+  ;;(global-set-key (kbd "<f1> SPC") 'mark-sexp)
+
+  (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
+  (global-set-key [f7] 'toggle-truncate-lines)
+  (global-set-key (kbd "RET") 'newline-and-indent)
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
+
+  (define-key lisp-interaction-mode-map (kbd "C-x M-e") 'eval-print-last-sexp)
+
+  (global-unset-key (kbd "C-x C-d"))
+  (global-unset-key (kbd "<f1> <f1>"))
+  (global-unset-key (kbd "C-x <C-left>"))
+  (global-unset-key (kbd "C-x <C-right>"))
+
+  (defun yank-without-moving ()
+    (interactive)
+    (let ((pos (point)))
+      (yank)
+      (set-window-point nil pos)))
+
+  (global-set-key (kbd "s-y") 'yank-without-moving)
+
+  ;; special chars
+
+  (defun euro ()
+    (interactive)
+    (insert "€"))
+
+  (defun pound ()
+    (interactive)
+    (insert "£"))
+
+  ;; camelcase
+
+  (defun un-camelcase-string (s &optional sep start)
+    "Convert CamelCase string S to lower case with word separator SEP.
+   Default for SEP is a hyphen \"-\".
+   If third argument START is non-nil, convert words after that
+   index in STRING."
+    (let ((done-first nil)
+          (case-fold-search nil))
+      (while (string-match "[A-ZΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ]" s (or start 0))
+        (if done-first
+            (setq s (replace-match (concat (or sep "-")
+                                           (downcase (match-string 0 s)))
+                                   t nil s))
+          (progn
+            (setq s (replace-match (downcase (match-string 0 s)) t nil s))
+            (setq done-first 't))))
+      (downcase (s-replace "--" "-" s))))
+
+  (defun un-camelcase-region ()
+    (interactive)
+    (let ((s (buffer-substring (region-beginning) (region-end))))
+      (delete-region (region-beginning) (region-end))
+      (insert (un-camelcase-string s))))
+
+  (defun un-camelcase-symbol ()
+    (interactive)
+    (save-excursion
+      (let ((s (format "%s" (symbol-at-point)))
+            (bounds (bounds-of-thing-at-point 'symbol)))
+        (let ((replacement (un-camelcase-string s)))
+          (when replacement
+            (delete-region (car bounds) (cdr bounds))
+            (insert replacement))))))
+
+  (defun camel->kebab ()
+    (interactive)
+    (un-camelcase-region))
+
+  ;;
+
+  (defun refresh-file ()
+    (interactive)
+    (revert-buffer t t t))
+  (global-set-key [f5] `refresh-file)
+  (global-set-key [f6] `mark-whole-buffer)
+
+  (defun date (arg)
+    (interactive "P")
+    (insert (if arg
+                (format-time-string "%d.%m.%Y")
+              (format-time-string "%Y-%m-%d"))))
+
+  (defun new-scratch ()
+    "open up a guaranteed new scratch buffer"
+    (interactive)
+    (switch-to-buffer (cl-loop for num from 0
+                               for name = (format "new-%03i" num)
+                               while (get-buffer name)
+                               finally return name)))
+
+  ;;shell stuff
+  (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
+  (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+
+  ;;super-slow-scroll
+  (setq mouse-wheel-scroll-amount '(2 ((shift) . 1))) ;; one two lines at a time
+  (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+  (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+  (setq scroll-step 1) ;; keyboard scroll one line at a time
+  (setq scroll-conservatively 10000)
+
+  ;;misc-custom-vars
+
+  ;;global-subword-mode is nice but it adds an annoying comma to modeline
+  (global-subword-mode 1)
+
+  (setq frame-resize-pixelwise t)
+  (setq inhibit-splash-screen t)
+  (setq comment-empty-lines t)
+  (setq visible-bell nil)
+  (setq ring-bell-function 'ignore)
+  (setq make-backup-files nil) ;; no backups!
+  (setq auto-save-default nil) ;; stop creating those #autosave# files
+  (setq custom-file (concat user-emacs-directory "custom.el"))
+  (setq temporary-file-directory "/tmp") ;; necessary for tramp+babel
+  ;;(load custom-file 'noerror)
+  (column-number-mode t)
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+  (add-hook 'text-mode-hook 'turn-on-auto-fill)
+  (put 'narrow-to-region 'disabled nil)
+
+  ;;spaces-instead-of-tabs
+  (setq-default indent-tabs-mode nil)
+  (setq-default default-tab-width 2)
+  (setq-default tab-width 2)
+  (setq c-basic-offset 3)
+  (setq c-indent-level 3)
+  (setq c++-tab-always-indent nil)
+  (setq js-indent-level 2)
+  (setq lua-indent-level 2)
+  (setq css-indent-offset 2)
+
+  ;;greek support
+  (setq default-input-method "greek")
+  (global-set-key (kbd "s-\\") 'toggle-input-method)
+
+  ;; ========================================
+  ;; Machine-specific config
+
+  (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
+
+  ;;custom-scratch-message
+  (defun slurp (filePath)
+    "Return filePath's file content."
+    (with-temp-buffer
+      (insert-file-contents filePath)
+      (buffer-string)))
+  (setq initial-scratch-message (slurp (concat user-emacs-directory "logo")))
+
+  (defun unix-file ()
+    "Change the current buffer to Unix line-ends."
+    (interactive)
+    (set-buffer-file-coding-system 'unix t))
+
+  ;; see https://github.com/ahungry/org-jira/issues/44
+  ;;(setq jiralib-token `("Cookie" . ""))
+
+  (defun google (x)
+    (browse-url (concat "https://www.google.com/search?q=" x)))
+
+  (defun google-this ()
+    (interactive)
+    (if (use-region-p)
+        (google (buffer-substring-no-properties (region-beginning) (region-end)))
+      (google (word-at-point))))
+
+
+  (defun jira/insert ()
+    "Insert a JIRA link with a description at point"
+    (interactive)
+    (let* ((id (read-string "Issue ID: "))
+           (summary (cdr
+                     (assoc 'summary
+                            (cdr
+                             (assoc 'fields
+                                    (car
+                                     (org-jira-get-issue-by-id id))))))))
+      (insert (format "[%s]: %s" (replace-regexp-in-string "\\-" ":" (downcase id)) summary))))
+
+  (defun ss/copy-file-name ()
+    (interactive)
+    (kill-new (buffer-file-name)))
+
+
+
+
+  (use-package doom-themes
+    :ensure t
+    :pin MELPA
+    :config
+    (require 'doom-themes)
+    (if window-system
+        (progn
+          ;;(load-theme 'doom-one t)
+          (load-theme 'doom-vibrant t)
+          (scroll-bar-mode -1)
+          (setq window-divider-default-right-width 1)
+          (set-face-foreground 'vertical-border "#525070")))
+    ;;Enable flashing mode-line on errors
+    (doom-themes-visual-bell-config)
+    ;; Enable custom neotree theme (all-the-icons must be installed!)
+    (doom-themes-neotree-config)
+    (doom-themes-org-config))
+
+  (defun remove-vowels (string)
+    (replace-regexp-in-string "a\\|e\\|i\\|o\\|u\\|" "" string))
+
+  (defun ss/org-mode-dnd (event &optional new-frame force-text)
+    (interactive "e")
+    (let* ((window (posn-window (event-start event)))
+           (arg (car (cdr (cdr event))))
+           (type (car arg))
+           (data (car (cdr arg)))
+           (buffer (window-buffer window))
+           (buffer-dir (file-name-directory (buffer-file-name buffer)))
+           (dest-dir (concat buffer-dir "images/"))
+           (dest-file (concat dest-dir (file-name-nondirectory data)))
+           (rel-file (concat "images/" (file-name-nondirectory data))))
+
+      ;; (if (not (= 'org-mode (with-current-buffer buffer major-mode)))
+      ;;     (error "Not an org-mode buffer"))
+
+      (if (not (file-exists-p dest-dir))
+          (make-directory dest-dir))
+
+      (rename-file data dest-file t)
+      (insert (concat "[[file:" rel-file "]]"))
+      (org-display-inline-images)))
+
+  (define-key org-mode-map [drag-n-drop] 'ss/org-mode-dnd)
+
+  (defun ss/json-format (start end)
+    (interactive "r")
+    (shell-command-on-region start end "jq -r ." nil 't))
+
+  (pixel-scroll-mode)
+  (setq pixel-dead-time 0) ; Never go back to the old scrolling behaviour.
+  (setq pixel-resolution-fine-flag t) ; Scroll by number of pixels instead of lines (t = frame-char-height pixels).
+  (setq mouse-wheel-scroll-amount '(1)) ; Distance in pixel-resolution to scroll each mouse wheel event.
+  (setq mouse-wheel-progressive-speed nil)
+
+  ;;(require 'flycheck-joker)
+
+  (defun ss/sql-format (beg end)
+    "Beautify SQL in region between beg and END.
+  Dependency:
+  npm i -g sql-formatter-cli"
+    (interactive "r")
+    (save-excursion
+      (shell-command-on-region beg end "sql-formatter-cli" nil t)))
+
+  ;;(setq debug-on-error t)
+  (put 'scroll-left 'disabled nil))
 
 (defun ss/truncate (str len)
   (if (> (string-width str) len)
@@ -1340,210 +1556,6 @@ respectively."
   :ensure t
   :defer t)
 
-;; ========================================
-;; misc
-
-(require 'simple-copy)
-
-;;global-custom-keys
-(global-set-key (kbd "C-=") (lambda () (interactive) (text-scale-increase 0.5)))
-(global-set-key (kbd "C--") (lambda () (interactive) (text-scale-increase -0.5)))
-(global-set-key (kbd "C-0") (lambda () (interactive) (text-scale-increase 0)))
-
-(global-set-key (kbd "<f1> SPC") 'mark-sexp)
-
-(global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
-(global-set-key [f7] 'toggle-truncate-lines)
-(global-set-key (kbd "RET") 'newline-and-indent)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-
-(define-key lisp-interaction-mode-map (kbd "C-x M-e") 'eval-print-last-sexp)
-
-(global-unset-key (kbd "C-x C-d"))
-(global-unset-key (kbd "<f1> <f1>"))
-(global-unset-key (kbd "C-x <C-left>"))
-(global-unset-key (kbd "C-x <C-right>"))
-
-(defun yank-without-moving ()
-  (interactive)
-  (let ((pos (point)))
-    (yank)
-    (set-window-point nil pos)))
-
-(global-set-key (kbd "s-y") 'yank-without-moving)
-
-;; special chars
-
-(defun euro ()
-  (interactive)
-  (insert "€"))
-
-(defun pound ()
-  (interactive)
-  (insert "£"))
-
-;; camelcase
-
-(defun un-camelcase-string (s &optional sep start)
-  "Convert CamelCase string S to lower case with word separator SEP.
-   Default for SEP is a hyphen \"-\".
-   If third argument START is non-nil, convert words after that
-   index in STRING."
-  (let ((done-first nil)
-        (case-fold-search nil))
-    (while (string-match "[A-ZΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ]" s (or start 0))
-      (if done-first
-        (setq s (replace-match (concat (or sep "-")
-                                       (downcase (match-string 0 s)))
-                               t nil s))
-        (progn
-          (setq s (replace-match (downcase (match-string 0 s)) t nil s))
-          (setq done-first 't))))
-    (downcase (s-replace "--" "-" s))))
-
-(defun un-camelcase-region ()
-  (interactive)
-  (let ((s (buffer-substring (region-beginning) (region-end))))
-    (delete-region (region-beginning) (region-end))
-    (insert (un-camelcase-string s))))
-
-(defun un-camelcase-symbol ()
-  (interactive)
-  (save-excursion
-    (let ((s (format "%s" (symbol-at-point)))
-          (bounds (bounds-of-thing-at-point 'symbol)))
-      (let ((replacement (un-camelcase-string s)))
-        (when replacement
-          (delete-region (car bounds) (cdr bounds))
-          (insert replacement))))))
-
-(defun camel->kebab ()
-  (interactive)
-  (un-camelcase-region))
-
-;;
-
-(defun refresh-file ()
-  (interactive)
-  (revert-buffer t t t))
-(global-set-key [f5] `refresh-file)
-(global-set-key [f6] `mark-whole-buffer)
-
-(defun date (arg)
-  (interactive "P")
-  (insert (if arg
-              (format-time-string "%d.%m.%Y")
-            (format-time-string "%Y-%m-%d"))))
-
-(defun new-scratch ()
-  "open up a guaranteed new scratch buffer"
-  (interactive)
-  (switch-to-buffer (cl-loop for num from 0
-                             for name = (format "new-%03i" num)
-                             while (get-buffer name)
-                             finally return name)))
-
-;;shell stuff
-(autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-
-;;super-slow-scroll
-(setq mouse-wheel-scroll-amount '(2 ((shift) . 1))) ;; one two lines at a time
-(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
-(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
-(setq scroll-step 1) ;; keyboard scroll one line at a time
-(setq scroll-conservatively 10000)
-
-;;misc-custom-vars
-
-;;global-subword-mode is nice but it adds an annoying comma to modeline
-;;(global-subword-mode 1)
-
-(setq frame-resize-pixelwise t)
-(setq inhibit-splash-screen t)
-(setq comment-empty-lines t)
-(setq visible-bell nil)
-(setq ring-bell-function 'ignore)
-(setq make-backup-files nil) ;; no backups!
-(setq auto-save-default nil) ;; stop creating those #autosave# files
-(setq custom-file (concat user-emacs-directory "custom.el"))
-(setq temporary-file-directory "/tmp") ;; necessary for tramp+babel
-;;(load custom-file 'noerror)
-(column-number-mode t)
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
-(put 'narrow-to-region 'disabled nil)
-
-;;spaces-instead-of-tabs
-(setq-default indent-tabs-mode nil)
-(setq-default default-tab-width 2)
-(setq-default tab-width 2)
-(setq c-basic-offset 3)
-(setq c-indent-level 3)
-(setq c++-tab-always-indent nil)
-(setq js-indent-level 2)
-(setq lua-indent-level 2)
-(setq css-indent-offset 2)
-
-;;greek support
-(setq default-input-method "greek")
-(global-set-key (kbd "s-\\") 'toggle-input-method)
-
-;; ========================================
-;; Machine-specific config
-
-(if (not window-system) (require 'no-window))
-
-(setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
-
-;;custom-scratch-message
-(defun slurp (filePath)
-  "Return filePath's file content."
-  (with-temp-buffer
-    (insert-file-contents filePath)
-    (buffer-string)))
-(setq initial-scratch-message (slurp (concat user-emacs-directory "logo")))
-
-(defun eshell/clear ()
-  "Clear the eshell buffer."
-  (let ((inhibit-read-only t))
-    (erase-buffer)
-    (eshell-send-input)))
-
-(defun unix-file ()
-  "Change the current buffer to Unix line-ends."
-  (interactive)
-  (set-buffer-file-coding-system 'unix t))
-
-;; see https://github.com/ahungry/org-jira/issues/44
-;;(setq jiralib-token `("Cookie" . ""))
-
-(defun google (x)
-  (browse-url (concat "https://www.google.com/search?q=" x)))
-
-(defun google-this ()
-  (interactive)
-  (if (use-region-p)
-      (google (buffer-substring-no-properties (region-beginning) (region-end)))
-    (google (word-at-point))))
-
-
-(defun jira/insert ()
-  "Insert a JIRA link with a description at point"
-  (interactive)
-  (let* ((id (read-string "Issue ID: "))
-         (summary (cdr
-                   (assoc 'summary
-                          (cdr
-                           (assoc 'fields
-                                  (car
-                                   (org-jira-get-issue-by-id id))))))))
-    (insert (format "[%s]: %s" (replace-regexp-in-string "\\-" ":" (downcase id)) summary))))
-
-(defun ss/copy-file-name ()
-  (interactive)
-  (kill-new (buffer-file-name)))
-
 (use-package crux
   :ensure t
   :init
@@ -1590,52 +1602,3 @@ respectively."
   :ensure t
   :custom (graphviz-dot-dot-program "dot")
           (graphviz-dot-auto-indent-on-semi nil))
-
-(setq ring-bell-function 'ignore)
-
-(defun ss/org-mode-dnd (event &optional new-frame force-text)
-  (interactive "e")
-  (let* ((window (posn-window (event-start event)))
-         (arg (car (cdr (cdr event))))
-         (type (car arg))
-         (data (car (cdr arg)))
-         (buffer (window-buffer window))
-         (buffer-dir (file-name-directory (buffer-file-name buffer)))
-         (dest-dir (concat buffer-dir "images/"))
-         (dest-file (concat dest-dir (file-name-nondirectory data)))
-         (rel-file (concat "images/" (file-name-nondirectory data))))
-
-    ;; (if (not (= 'org-mode (with-current-buffer buffer major-mode)))
-    ;;     (error "Not an org-mode buffer"))
-
-    (if (not (file-exists-p dest-dir))
-        (make-directory dest-dir))
-
-    (rename-file data dest-file t)
-    (insert (concat "[[file:" rel-file "]]"))
-    (org-display-inline-images)))
-
-(define-key org-mode-map [drag-n-drop] 'ss/org-mode-dnd)
-
-(defun ss/json-format (start end)
-  (interactive "r")
-  (shell-command-on-region start end "jq -r ." nil 't))
-
-(pixel-scroll-mode)
-(setq pixel-dead-time 0) ; Never go back to the old scrolling behaviour.
-(setq pixel-resolution-fine-flag t) ; Scroll by number of pixels instead of lines (t = frame-char-height pixels).
-(setq mouse-wheel-scroll-amount '(1)) ; Distance in pixel-resolution to scroll each mouse wheel event.
-(setq mouse-wheel-progressive-speed nil)
-
-;;(require 'flycheck-joker)
-
-(defun ss/sql-format (beg end)
-  "Beautify SQL in region between beg and END.
-  Dependency:
-  npm i -g sql-formatter-cli"
-  (interactive "r")
-  (save-excursion
-    (shell-command-on-region beg end "sql-formatter-cli" nil t)))
-
-;;(setq debug-on-error t)
-(put 'scroll-left 'disabled nil)

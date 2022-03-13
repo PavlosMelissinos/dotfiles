@@ -1,13 +1,13 @@
 (require 'inf-lisp)
 (require 'clj-refactor)
-(require 'align-cljlet)
+;;(require 'align-cljlet)
 (require 'cider-macroexpansion)
 
 (defun load-clojure-file (filename)
   "Loads a clojure file in the new REPL. Assumes that the files are in the .elisp/ dir of home."
   (with-temp-message (concat "Loading Clojure file " filename)
     (cider-interactive-eval
-     (concat "(try (load-file \"" (expand-file-name "~") "/.emacs.d/clojure/" filename "\") (catch Exception e (.getMessage e)))"))))
+     (concat "(try (load-file \"" user-emacs-directory "clojure/" filename "\") (catch Exception e (.getMessage e)))"))))
 
 (defun clojuredocs-example ()
   (interactive)
@@ -42,11 +42,6 @@
 
 ;;(setq cider-show-error-buffer 'except-in-repl)
 ;;(setq cider-auto-select-error-buffer t)
-(setq cider-repl-wrap-history t)
-(setq cider-repl-history-size 1000)
-(setq cider-repl-history-file "~/.emacs.d/cider-history")
-
-;;jump to tests and back
 
 (defun cider-eval-last-sexp-and-replace ()
   "Evaluate the expression preceding point and replace it with its result."
