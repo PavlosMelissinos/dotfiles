@@ -463,4 +463,3 @@ bar {
     swaybar_command waybar
     #swaybar_command i3status
 }
-include @sysconfdir@/sway/config.d/*
