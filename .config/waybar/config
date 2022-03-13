@@ -129,7 +129,8 @@
         }
     },
     "sway/language": {
-        "format": "{}",
+        "format": "{shortDescription}",
+        "tooltip-format": "{long} {variant}",
         "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
         "on-click-right": "gnome-control-center region"
     },
