@@ -6,21 +6,23 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/window", "custom/media"],
     "modules-center": ["clock", "custom/weather", "sway/mode"],
-    "modules-right": ["idle_inhibitor", "pulseaudio", "backlight", "network", "custom/vpn", "memory", "temperature", "battery", "custom/github", "tray", "custom/layout", "custom/lockkeys", "custom/power"],
+    "modules-right": ["idle_inhibitor", "pulseaudio", "backlight", "network", "custom/vpn", "memory", "temperature", "battery", "custom/github", "tray", "sway/language", "custom/lockkeys", "custom/power"],
     "sway/workspaces": {
         "disable-scroll": true,
         "all-outputs": false,
         "format": "{icon}",
         "format-icons": {
-            "1:term": "",
-            "2:web": "",
-            "3:code": "",
-            "4:work": "",
-            "5:music": "",
-            "6:docs": "",
+            "1": "",
+            "2": "Terminal ",
+            "3": "",
+            "4": "Code ",
+            "5": "",
+            "6": "",
+            // "6:docs": "",
             "urgent": "",
             "focused": "",
             "default": ""
+            // "default": ""
         }
     },
     "sway/mode": {
@@ -39,7 +41,7 @@
     },
     "clock": {
         // "timezone": "Europe/Athens",
-        "interval": 1,
+        "interval": 20,
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt>{calendar}</tt>",
         //"format": "{:%H:%M:%S}C",
         "format": "{:%Y-%m-%d | %H:%M}",
@@ -52,14 +54,20 @@
         "on-click": "gnome-system-monitor"
     },
     "memory": {
-        "format": "{}% "
+        //"format": "{percentage}% ",
+        "format": "",
+        "format-warning": "{percentage}% ",
+        "format-critical": "{percentage}% ",
+        "tooltip-format": "RAM: {used:0.1f}G/{total:0.1f}G Swap: {swapUsed:0.1f}G/{swapTotal:0.1f}G",
+        "states": {"warning": 80, "critical": 95},
+        "on-click": "gnome-system-monitor"
     },
     "temperature": {
         // "thermal-zone": 2,
         // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
-        "critical-threshold": 80,
-        // "format-critical": "{temperatureC}°C {icon}",
-        "format": "{temperatureC}°C {icon}",
+        "critical-threshold": 60,
+        "format-critical": "{temperatureC}°C {icon}",
+        "format": "{icon}",
         "format-icons": ["", "", ""]
     },
     "disk": {
@@ -84,6 +92,7 @@
     "battery": {
         //"bat": "BAT0",
         "states": {
+            "full": 100,
             "good": 95,
             "warning": 30,
             "critical": 15,
@@ -94,18 +103,35 @@
         "format-plugged": "{capacity}% ",
         "format-alt": "{time} {icon}",
         //"format-good": "", // An empty format will hide the module
-        //"format-full": "",
+        "format-full": "",
         "format-icons": ["", "", "", "", ""]
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
         "on-click": "gnome-control-center network",
-        "format-alt-click": "click-right",
-        "format-wifi": "{essid} ({signalStrength}%) ",
+        //"format-alt-click": "click-right",
         "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
-        "format-linked": "{ifname} (No IP) ",
+        "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr}",
+        "format-wifi": "{essid:4} {icon}",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%)  {ifname}: {ipaddr}/{cidr}",
+        "format-linked": "{ifname}: (No IP) ",
         "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        //"format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "format-icons": ["", "", ""]
+    },
+    "keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": "{name} {icon}",
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        }
+    },
+    "sway/language": {
+        "format": "{}",
+        "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
+        "on-click-right": "gnome-control-center region"
     },
     "custom/vpn": {
         "format": "VPN ",
@@ -132,7 +158,8 @@
             "car": "",
             "default": ["", ""]
         },
-        "on-click": "pavucontrol"
+        "on-click": "pavucontrol",
+        "on-click-right": "pactl -- set-source-mute @DEFAULT_SOURCE@ toggle"
     },
     "custom/media": {
         "format": "{icon} {}",
@@ -144,19 +171,23 @@
         },
         "escape": true,
 //        "exec-if": "pgrep spotify",
-        "exec": "$HOME/.config/waybar/mediaplayer.sh 2> /dev/null" // Script in resources folder
+        "exec": "$XDG_CONFIG_HOME/waybar/mediaplayer.sh 2> /dev/null" // Script in resources folder
     },
     "custom/weather": {
-        "exec": "curl 'https://wttr.in/?format=1'",
-        "interval": 900,
-        "max-length": 100,
-        "on-click": "gnome-weather"
+        //"exec": "curl 'https://wttr.in/?format=1'",
+        //"format": "{}",
+        "tooltip": true,
+        "interval": 3600,
+        "exec": "$XDG_CONFIG_HOME/waybar/waybar-wttr.py",
+        "return-type": "json",
+        "on-click": "gnome-weather",
+        "max-length": 10
     },
     "custom/github": {
         "format": "{} ",
         "return-type": "json",
         "interval": 60,
-        "exec": "$HOME/.config/waybar/github.sh",
+        "exec": "$XDG_CONFIG_HOME/waybar/github.sh",
         "on-click": "xdg-open https://github.com/notifications"
     },
     "custom/power": {
@@ -164,16 +195,9 @@
         "on-click": "wlogout",
         "tooltip": false
     },
-    "custom/layout": {
-        "format": "{}",
-//        "return-type": "json",
-        "interval": 1,
-        "exec": "$HOME/.config/waybar/layout.sh",
-        "on-click": "gnome-control-center region"
-    },
     "custom/lockkeys": {
         "format": "{}",
-        "exec": "$HOME/.config/waybar/lockkeys.sh",
+        "exec": "$XDG_CONFIG_HOME/waybar/lockkeys.sh",
         "return-type": "json",
         "interval": 1
     }

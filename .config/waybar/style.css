@@ -1,7 +1,9 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: "Ubuntu Nerd Font";
+    /* font-family: monospace; */
+    font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    /* font-family: "Ubuntu Nerd Font"; */
     font-size: 12px;
     min-height: 0;
 }
@@ -22,7 +24,7 @@ window#waybar {
 
 
 #workspaces button {
-    padding: 0 0px;
+    padding: 0 5px;
     background: transparent;
     color: white;
     border-top: 2px solid transparent;
@@ -35,7 +37,7 @@ window#waybar {
 
 #mode {
     background: #64727D;
-    border-bottom: 3px solid white;
+    border-bottom: 2px solid white;
 }
 
 #idle_inhibitor, #clock, #battery, #cpu, #memory, #network,
@@ -55,7 +57,11 @@ window#waybar {
 }
 
 #battery, #cpu, #memory, #temperature {
-    border-top: 1px solid red;
+    border-top: 1px solid #cc3300;
+}
+
+#temperature.critical {
+    color: #cc3300;
 }
 
 #clock {
@@ -67,7 +73,7 @@ window#waybar {
 }
 
 #battery icon {
-    color: red;
+    color: #cc3300;
 }
 
 #battery.charging {
@@ -82,7 +88,7 @@ window#waybar {
 
 @keyframes blink-critical {
     to {
-        background-color: #ff0000;
+        background-color: #cc3300;
         color: black;
     }
 }
@@ -97,7 +103,7 @@ window#waybar {
 }
 
 #battery.fatal:not(.charging) {
-    color: red;
+    color: #cc3300;
     animation-name: blink-critical;
     animation-duration: 0.5s;
     animation-timing-function: linear;
@@ -111,11 +117,24 @@ window#waybar {
 #memory {
 }
 
+#memory.warning {
+  background: #ffcc00;
+}
+
+#memory.critical {
+  background: #cc3300;
+  animation-name: blink-critical;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
 #network {
 }
 
 #network.disconnected {
-    background: #f53c3c;
+    background: #cc3300;
 }
 
 #pulseaudio {
