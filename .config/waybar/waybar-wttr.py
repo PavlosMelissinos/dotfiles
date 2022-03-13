@@ -8,7 +8,7 @@ import requests
 import string as str
 from datetime import datetime
 
-internationalization = {
+localization = {
     "en": {
         "feels_like": "Feels like",
         "wind": "Wind",
@@ -45,7 +45,7 @@ internationalization = {
 }
 
 lang = "el"
-text = internationalization[lang]
+text = localization[lang]
 
 WEATHER_CODES = {
     '113': '☀️',
