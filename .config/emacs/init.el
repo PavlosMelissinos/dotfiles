@@ -492,9 +492,9 @@
                             ("CNCL" . "IndianRed1")
                             ("BLOK" . "IndianRed1")))
   (org-todo-keywords '((sequence "TODO" "PROG" "BLOK" "CNCL" "DONE")))
-  (org-roam-v2-ack t)
   (org-special-ctrl-a/e t)
   :config
+  (setq org-roam-v2-ack t)
   (defvar yt-iframe-format
     ;; You may want to change your width and height.
     (concat "<iframe width=\"440\""
@@ -581,7 +581,7 @@
     (interactive "r")
     (narrow-to-region beg end)
     (org-html-export-to-html)
-    (browse-url (concat "/tmp/" (org-export-output-file-name ".html")))
+    (browse-url (concat temporary-file-directory (org-export-output-file-name ".html")))
     (widen))
 
   (set-face-attribute 'org-hide nil :foreground "DarkSlateGray")
@@ -1316,7 +1316,7 @@
   (setq make-backup-files nil) ;; no backups!
   (setq auto-save-default nil) ;; stop creating those #autosave# files
   (setq custom-file (concat user-emacs-directory "custom.el"))
-  (setq temporary-file-directory "/tmp") ;; necessary for tramp+babel
+  (setq temporary-file-directory "/tmp/") ;; necessary for tramp+babel
   ;;(load custom-file 'noerror)
   (column-number-mode t)
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -1341,7 +1341,7 @@
   ;; ========================================
   ;; Machine-specific config
 
-  (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
+  (setq auth-sources '("~/.config/emacs/.authinfo.gpg" "~/.config/emacs/.authinfo" "~/.netrc"))
 
   ;;custom-scratch-message
   (defun slurp (filePath)
