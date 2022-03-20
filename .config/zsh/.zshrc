@@ -100,7 +100,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-source $HOME/.antigen.zsh
+export ADOTDIR="$XDG_CACHE_HOME/antigen"
+source $ZDOTDIR/antigen.zsh
 
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh

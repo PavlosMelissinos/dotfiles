@@ -4,11 +4,12 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
 # Application homes
+export ADOTDIR="$XDG_CACHE_HOME/antigen"
 export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
 export AWS_SHARED_CREDENTIALS_FILE="$XDG_CONFIG_HOME"/aws/credentials
 export AWS_CONFIG_FILE="$XDG_CONFIG_HOME"/aws/config
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
-export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker 
+export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 export GUIX_PROFILE="$XDG_CONFIG_HOME/guix/current"
 export HISTFILE="$XDG_STATE_HOME"/zsh/history
 export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
