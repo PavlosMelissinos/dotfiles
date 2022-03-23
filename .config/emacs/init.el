@@ -29,8 +29,8 @@
         )
       package-archive-priorities
       '(("GNU ELPA"     . 10)
-        ("MELPA Stable" . 5)
-        ("MELPA"        . 0)))
+        ("MELPA"        . 5)
+        ("MELPA Stable" . 0)))
 
 ;; Initialize the packages, avoiding a re-initialization.
 
@@ -166,7 +166,6 @@
 (use-package clj-refactor
   :ensure t
   :after clojure
-  ;; :pin MELPA
   :diminish clj-refactor-mode
   :init
   (add-hook 'clojure-mode-hook (lambda ()
@@ -257,7 +256,6 @@
 
 (use-package cider
   :ensure t
-  ;;:pin MELPA
   :diminish (cider-mode . " ⓒ")
   :bind (:map cider-mode-map
          ("C-c M-o" . cider-repl-clear-buffer)
@@ -954,7 +952,6 @@
 ;;; See https://python-poetry.org/docs/managing-environments/ for virtual envs management
 (use-package poetry
   :ensure t
-  :pin MELPA
   :defer t
   :config
   (setq poetry-tracking-strategy 'switch-buffer)
@@ -1055,7 +1052,6 @@
 
 (use-package hydra
   :ensure t
-  :pin MELPA
   :init
   (global-set-key (kbd "C-`") 'hydra-windows/body)
 
@@ -1390,7 +1386,6 @@
 
   (use-package doom-themes
     :ensure t
-    :pin MELPA
     :config
     (require 'doom-themes)
     (if window-system
