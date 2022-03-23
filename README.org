@@ -1,0 +1,117 @@
+#+title: Dotfiles
+
+dotfiles for the following tools:
+* [[https://github.com/zsh-users/antigen][antigen]]
+* [[https://alacritty.org/][alacritty]]
+* [[https://www.gnu.org/software/emacs/][emacs]]
+* [[https://github.com/fennerm/flashfocus][flashfocus]]
+* [[https://gitlab.com/chinstrap/gammastep][gammastep]]
+* [[https://github.com/emersion/kanshi][kanshi]]
+* [[https://github.com/emersion/mako][mako]]
+* [[https://github.com/gpakosz/.tmux][oh-my-tmux]]
+* [[https://ohmyz.sh/][oh-my-zsh]]
+* [[https://github.com/jtheoof/swappy][swappy]]
+* [[https://swaywm.org/][sway]]
+* [[https://github.com/swaywm/swaylock][swaylock]]
+* [[https://github.com/Alexays/Waybar][waybar]]
+* [[https://github.com/ArtsyMacaw/wlogout][wlogout]]
+* [[https://hg.sr.ht/~scoopta/wofi][wofi]]
+* [[https://www.zsh.org/][zsh]]
+
+others (experimental):
+
+* [[https://guix.gnu.org/][guix]]
+
+* Dependencies
+  I should switch to a package manager that supports declarative package
+  definitions (e.g. nix/guix). Until then, I'm listing the requirements here.
+
+** Required binaries
+
+*** emacs
+*** sway
+*** swaylock
+*** swayidle
+*** waybar
+*** zsh
+
+** Optional binaries
+*** swaylock-effects
+**** `dnf copr enable eddsalkield/swaylock-effects`
+**** dnf install swaylock-effects
+
+* U2F auth
+  Heavily based on [[https://reddit.com/r/Fedora/comments/akck9m/authenticating_with_gdm_and_sudo_with_a_u2f/][this article]] and adapted from [[https://wiki.archlinux.org/index.php/Universal_2nd_Factor#Adding_a_key][the Arch guide]].
+
+  1. Install required packages:
+     ~sudo dnf install pamu2fcfg pam-u2f~
+  2. Generate the key mappings
+     ~pamu2fcfg > ~/.config/u2f_keys~
+
+     If you have multiple hardware keys, you need to run the following for every
+     subsequent key:
+     ~pamu2fcfg -n >> ~/.config/u2f_keys~
+
+  3. Move it so it can be used for centralized authentication:
+     ~sudo mv ~/.config/u2f_keys /etc/u2f_mappings~
+
+  4. To use it with GDM/GNOME, you need to edit this file:
+     ~sudo -e '/etc/pam.d/gdm-password'~
+
+     And add the following line underneath the `pam_selinux_permit.so` entry:
+     ~auth        sufficient    pam_u2f.so authfile=/etc/u2f_mappings cue~
+
+  5. And for sudo, it's a similar process; edit the following file:
+     ~sudo -e '/etc/pam.d/sudo'~
+
+     And add a similar looking line for line 2:
+     ~auth       sufficient   pam_u2f.so authfile=/etc/u2f_mappings cue~
+
+  6. swaylock:
+     ~sudo -e '/etc/pam.d/swaylock'~
+
+     and add the following line (before `auth include login`, if that's present):
+     ~auth sufficient pam_u2f.so authfile=/etc/u2f_mappings cue~
+
+     Press the key button and then enter to log-in
+
+** Guix
+
+*** On a new system
+
+    - Add all channels: ~guix pull -C ~~/.config/guix/channels.scm~
+    - Install packages defined in manifest: ~guix package -m ~~/.config/guix/packages.scm~
+
+
+*** Maintenance
+
+    - On a foreign distro:
+      - upgrade the build daemon by running:
+        ~sudo -i guix pull~
+      - if the distro uses systemd also run:
+        ~systemctl restart guix-daemon.service~
+      - don't forget to upgrade the guix channels sha every now and then
+
+
+** Do not forget
+
+   - ~/usr/share/applications/[...].desktop~ cannot be executed: Remote peer
+     disconnected
+     Open the desktop file, look for a ~DBusActivatable=true~ line and comment it
+     out
+     An alternative solution (running ~exec dbus-daemon --session
+     --address=unix:path=$XDG_RUNTIME_DIR/bus~) didn't seem to work for me...
+   - Unable to connect to ~/run/user/1000/sway-ipc.1000.3043.sock~
+     ~export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock~
+
+** Known issues
+
+  - sway
+    - coming back from sleep doesn't restore the laptop screen (it's all black)
+    - Reloading sway/returning from sleep causes firefox-wayland to crash
+    - waybar disappears every now and then: run `nohup waybar &` to restart it
+    - reloading sway sometimes does not load gammastep
+
+** TODO
+   - Get rid of ohmyzsh
+   - Get rid of antigen
