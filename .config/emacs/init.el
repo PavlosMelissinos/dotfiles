@@ -831,6 +831,9 @@
 (use-package undo-tree
   :ensure t
   :diminish undo-tree-mode
+  :init
+  (let ((undo-tree-history-directory (expand-file-name "undo-tree" user-emacs-directory)))
+    (setq undo-tree-history-directory-alist `(("." . ,undo-tree-history-directory))))
   :config
   (global-undo-tree-mode)
 
