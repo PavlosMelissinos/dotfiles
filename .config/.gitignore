@@ -15,8 +15,6 @@
 !guix/*
 !mako/
 !mako/*
-!redshift/
-!redshift/*
 !swappy/
 !swappy/*
 !sway/
