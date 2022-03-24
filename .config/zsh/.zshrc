@@ -97,8 +97,8 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+# alias zshconfig="mate ~/.config/zsh/.zshrc"
+# alias ohmyzsh="mate ~/.config/zsh/oh-my-zsh"
 
 export ADOTDIR="$XDG_CACHE_HOME/antigen"
 source $ZDOTDIR/antigen.zsh
