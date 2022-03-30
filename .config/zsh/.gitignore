@@ -1,4 +1,8 @@
+*
+
 *.zwc
+!scripts/
+!scripts/**
 .zcompdump*
 .zsh_history
 history
