@@ -11,6 +11,12 @@
 (setq-default fill-column 80)
 (setq save-abbrevs 'silently)
 
+;; ENV VARIABLES
+(setq emacs-config-home user-emacs-directory)
+(setq emacs-cache-home (expand-file-name "emacs/" (getenv "XDG_CACHE_HOME")))
+(setq emacs-data-home (expand-file-name "emacs/" (getenv "XDG_DATA_HOME")))
+(setq emacs-state-home (expand-file-name "emacs/" (getenv "XDG_STATE_HOME")))
+
 ;; ========================================
 ;; package
 
@@ -272,7 +278,7 @@
   (add-hook 'cider-mode-hook #'eldoc-mode)
   :custom
   (cider-prompt-for-symbol nil)
-  (cider-repl-history-file (concat user-emacs-directory "cider-history"))
+  (cider-repl-history-file (concat emacs-data-home "cider-history"))
   (cider-font-lock-dynamically nil)
   (cider-repl-wrap-history t)
   (cider-repl-history-size 3000)
@@ -642,6 +648,7 @@
               :target (file+head "%<%Y-%m-%d>.org"
                                  "#+title: %<%Y-%m-%d>\n"))))
           (package-check-signature nil)
+          (org-roam-db-location (concat emacs-state-home "org-roam.db"))
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
          ("C-c n g" . org-roam-graph)
@@ -668,7 +675,7 @@
   :ensure t
   :custom
   (jiralib-url "https://bare-square.atlassian.net")
-  (org-jira-working-dir "$XDG_DATA_HOME/org-jira")
+  (org-jira-working-dir (concat emacs-data-home "org-jira/"))
   ;;override request backend (curl) to fix [error] request--curl-sync: semaphore never called
   (request-backend 'url-retrieve)
   :bind ("C-c j s" . org-jira-get-summary))
@@ -832,7 +839,7 @@
   :ensure t
   :diminish undo-tree-mode
   :init
-  (let ((undo-tree-history-directory (expand-file-name "undo-tree" user-emacs-directory)))
+  (let ((undo-tree-history-directory (concat emacs-data-home "undo-tree")))
     (setq undo-tree-history-directory-alist `(("." . ,undo-tree-history-directory))))
   :config
   (global-undo-tree-mode)
@@ -1191,6 +1198,8 @@
   ;; ========================================
   ;; misc
 
+  (setq package-user-dir (concat emacs-cache-home "elpa"))
+
   ;;(require 'simple-copy)
 
   ;;global-custom-keys
@@ -1314,7 +1323,7 @@
   (setq ring-bell-function 'ignore)
   (setq make-backup-files nil) ;; no backups!
   (setq auto-save-default nil) ;; stop creating those #autosave# files
-  (setq custom-file (concat user-emacs-directory "custom.el"))
+  (setq custom-file (concat emacs-cache-home "custom.el"))
   (setq temporary-file-directory "/tmp/") ;; necessary for tramp+babel
   ;;(load custom-file 'noerror)
   (column-number-mode t)
