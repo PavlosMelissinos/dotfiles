@@ -55,10 +55,10 @@ gaps inner 5
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 #output * bg /usr/share/backgrounds/default.png fill
-exec_always ~/.azotebg
+exec_always $XDG_CONFIG_HOME/azotebg
 
-exec_always /usr/libexec/geoclue-2.0/demos/agent
-exec_always gammastep
+#exec_always /usr/libexec/geoclue-2.0/demos/agent
+#exec_always gammastep-indicator
 
 exec_always mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob
 
@@ -243,6 +243,9 @@ exec_always swayidle -w \
 #       middle_emulation enabled
    }
 
+  # Workaround for firefox bug:
+  # https://teddit.net/r/swaywm/comments/q1514z/can_i_avoid_crashing_firefox_on_sway_reload/
+  # NOTE: Avoid `input *`, consider replacing with input device id (didn't work)
    input * {
         xkb_layout "us,gr"
         xkb_options "grp:win_space_toggle"
