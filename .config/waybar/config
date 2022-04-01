@@ -4,9 +4,14 @@
     // "height": 20, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
     // Choose the order of the modules
-    "modules-left": ["sway/workspaces", "sway/window", "custom/media"],
+    "modules-left": ["sway/workspaces", "sway/window"
+    //, "custom/media"
+    ],
     "modules-center": ["clock", "custom/weather", "sway/mode"],
-    "modules-right": ["idle_inhibitor", "pulseaudio", "backlight", "network", "custom/vpn", "memory", "temperature", "battery", "custom/github", "tray", "sway/language", "custom/lockkeys", "custom/power"],
+    "modules-right": ["idle_inhibitor", "pulseaudio", "backlight", "network",
+    //"custom/vpn",
+    "memory", "temperature", "battery",
+    "custom/github", "tray", "sway/language", "custom/lockkeys", "custom/power"],
     "sway/workspaces": {
         "disable-scroll": true,
         "all-outputs": false,
