@@ -28,3 +28,7 @@ export PATH="$PATH:$CARGO_HOME/bin"
 
 #now
 #screenfetch
+
+if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty2" ]; then
+   exec sway
+fi
