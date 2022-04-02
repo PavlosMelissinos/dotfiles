@@ -1,20 +1,20 @@
 #+title: Dotfiles
 
 dotfiles for the following tools:
-* [[https://alacritty.org/][alacritty]]
-* [[https://www.gnu.org/software/emacs/][emacs]]
-* [[https://github.com/fennerm/flashfocus][flashfocus]]
-* [[https://gitlab.com/chinstrap/gammastep][gammastep]]
-* [[https://github.com/emersion/kanshi][kanshi]]
-* [[https://github.com/emersion/mako][mako]]
-* [[https://github.com/gpakosz/.tmux][oh-my-tmux]]
-* [[https://github.com/jtheoof/swappy][swappy]]
-* [[https://swaywm.org/][sway]]
-* [[https://github.com/swaywm/swaylock][swaylock]]
-* [[https://github.com/Alexays/Waybar][waybar]]
-* [[https://github.com/ArtsyMacaw/wlogout][wlogout]]
-* [[https://hg.sr.ht/~scoopta/wofi][wofi]]
-* [[https://www.zsh.org/][zsh]]
+- [[https://alacritty.org/][alacritty]]
+- [[https://www.gnu.org/software/emacs/][emacs]]
+- [[https://github.com/fennerm/flashfocus][flashfocus]]
+- [[https://gitlab.com/chinstrap/gammastep][gammastep]]
+- [[https://github.com/emersion/kanshi][kanshi]]
+- [[https://github.com/emersion/mako][mako]]
+- [[https://github.com/gpakosz/.tmux][oh-my-tmux]]
+- [[https://github.com/jtheoof/swappy][swappy]]
+- [[https://swaywm.org/][sway]]
+- [[https://github.com/swaywm/swaylock][swaylock]]
+- [[https://github.com/Alexays/Waybar][waybar]]
+- [[https://github.com/ArtsyMacaw/wlogout][wlogout]]
+- [[https://hg.sr.ht/~scoopta/wofi][wofi]]
+- [[https://www.zsh.org/][zsh]]
 
 others (experimental):
 
@@ -107,11 +107,16 @@ others (experimental):
   - sway
     - coming back from sleep doesn't restore the laptop screen (it's all black)
     - Reloading sway/returning from sleep causes firefox-wayland to crash
-    - waybar disappears every now and then: run `nohup waybar &` to restart it
+    - waybar disappears every now and then
+      - run `nohup waybar &` to restart it
+      - last incident on 2022-03-15
     - reloading sway sometimes does not load gammastep
 
 * TODO
 
- - Move kodi config files to $XDG_CONFIG_HOME
- - Move clj config files (deps.edn) to $XDG_CONFIG_HOME
  - Move tmux config files to $XDG_CONFIG_HOME
+ - Move Firefox config files to $XDG_CONFIG_HOME
+ - Move Thunderbird's config files to $XDG_CONFIG_HOME
+ - Move Kodi config files to $XDG_CONFIG_HOME
+   - Setting $KODI_HOME doesn't seem to be working, kodi still looks for ~/.kodi
+     and creates it if missing
