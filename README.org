@@ -18,7 +18,7 @@ dotfiles for the following tools:
 
 others (experimental):
 
-* [[https://guix.gnu.org/][guix]]
+- [[https://guix.gnu.org/][guix]]
 
 * Dependencies
   I should switch to a package manager that supports declarative package

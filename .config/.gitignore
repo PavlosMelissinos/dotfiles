@@ -23,6 +23,8 @@
 !sway/*
 !swaylock/
 !swaylock/*
+!tmux/
+!tmux/*
 !waybar/
 !waybar/*
 !wlogout/

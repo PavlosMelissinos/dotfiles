@@ -17,6 +17,7 @@ export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
 export PGPASSFILE="$XDG_CONFIG_HOME/pg/pgpass"
 export PYENV_ROOT="$XDG_DATA_HOME/pyenv"
+export TMUX_HOME="$XDG_CONFIG_HOME/tmux" # used by oh-my-tmux
 export TMUX_PLUGIN_MANAGER_PATH="$XDG_DATA_HOME/tmux/plugins"
 zstyle ':completion:*' cache-path $XDG_CACHE_HOME/zsh/zcompcache
 
