@@ -1,0 +1,3 @@
+[submodule ".config/clojure"]
+	path = .config/clojure
+	url = git@github.com:practicalli/clojure-deps-edn.git
