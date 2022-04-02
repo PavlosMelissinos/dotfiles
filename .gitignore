@@ -2,10 +2,8 @@
 
 !bin/
 !bin/pavolume
-!.clojure/
-!.clojure/*
 !.config/
-!.config/*
+!.config/**
 !.gitignore
 !.gitconfig
 !.tmux.conf

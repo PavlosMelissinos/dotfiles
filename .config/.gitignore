@@ -3,6 +3,8 @@
 
 !alacritty/
 !alacritty/*
+!clojure/
+!clojure/**
 !emacs/
 !emacs/**
 !flashfocus/
