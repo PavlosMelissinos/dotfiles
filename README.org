@@ -1,7 +1,6 @@
 #+title: Dotfiles
 
 dotfiles for the following tools:
-* [[https://github.com/zsh-users/antigen][antigen]]
 * [[https://alacritty.org/][alacritty]]
 * [[https://www.gnu.org/software/emacs/][emacs]]
 * [[https://github.com/fennerm/flashfocus][flashfocus]]
@@ -9,7 +8,6 @@ dotfiles for the following tools:
 * [[https://github.com/emersion/kanshi][kanshi]]
 * [[https://github.com/emersion/mako][mako]]
 * [[https://github.com/gpakosz/.tmux][oh-my-tmux]]
-* [[https://ohmyz.sh/][oh-my-zsh]]
 * [[https://github.com/jtheoof/swappy][swappy]]
 * [[https://swaywm.org/][sway]]
 * [[https://github.com/swaywm/swaylock][swaylock]]
@@ -111,7 +109,3 @@ others (experimental):
     - Reloading sway/returning from sleep causes firefox-wayland to crash
     - waybar disappears every now and then: run `nohup waybar &` to restart it
     - reloading sway sometimes does not load gammastep
-
-** TODO
-   - Get rid of ohmyzsh
-   - Get rid of antigen
