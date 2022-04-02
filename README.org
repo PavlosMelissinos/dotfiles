@@ -109,3 +109,9 @@ others (experimental):
     - Reloading sway/returning from sleep causes firefox-wayland to crash
     - waybar disappears every now and then: run `nohup waybar &` to restart it
     - reloading sway sometimes does not load gammastep
+
+* TODO
+
+ - Move kodi config files to $XDG_CONFIG_HOME
+ - Move clj config files (deps.edn) to $XDG_CONFIG_HOME
+ - Move tmux config files to $XDG_CONFIG_HOME

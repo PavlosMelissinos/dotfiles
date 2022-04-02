@@ -17,6 +17,8 @@
 (setq emacs-data-home (expand-file-name "emacs/" (getenv "XDG_DATA_HOME")))
 (setq emacs-state-home (expand-file-name "emacs/" (getenv "XDG_STATE_HOME")))
 
+;; other directories
+(setq package-user-dir (concat emacs-cache-home "elpa")) ;; do not litter user-emacs-directory with elpa cache
 ;; ========================================
 ;; package
 
@@ -1197,8 +1199,6 @@
 
   ;; ========================================
   ;; misc
-
-  (setq package-user-dir (concat emacs-cache-home "elpa"))
 
   ;;(require 'simple-copy)
 
