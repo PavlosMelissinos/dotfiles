@@ -7,10 +7,10 @@ dotfiles for the following tools:
 - [[https://gitlab.com/chinstrap/gammastep][gammastep]]
 - [[https://github.com/emersion/kanshi][kanshi]]
 - [[https://github.com/emersion/mako][mako]]
-- [[https://github.com/gpakosz/.tmux][oh-my-tmux]]
 - [[https://github.com/jtheoof/swappy][swappy]]
 - [[https://swaywm.org/][sway]]
 - [[https://github.com/swaywm/swaylock][swaylock]]
+- [[https://github.com/tmux/tmux][tmux]]
 - [[https://github.com/Alexays/Waybar][waybar]]
 - [[https://github.com/ArtsyMacaw/wlogout][wlogout]]
 - [[https://hg.sr.ht/~scoopta/wofi][wofi]]
@@ -114,7 +114,6 @@ others (experimental):
 
 * TODO
 
- - Move tmux config files to $XDG_CONFIG_HOME
  - Move Firefox config files to $XDG_CONFIG_HOME
  - Move Thunderbird's config files to $XDG_CONFIG_HOME
  - Move Kodi config files to $XDG_CONFIG_HOME
