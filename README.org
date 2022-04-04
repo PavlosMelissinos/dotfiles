@@ -107,15 +107,18 @@ others (experimental):
   - sway
     - coming back from sleep doesn't restore the laptop screen (it's all black)
     - Reloading sway/returning from sleep causes firefox-wayland to crash
+      - workaround: don't use `input *` to switch kb layout
     - waybar disappears every now and then
-      - run `nohup waybar &` to restart it
+      - "workaround": run `nohup waybar &` to restart it
       - last incident on 2022-03-15
     - reloading sway sometimes does not load gammastep
 
 * TODO
 
- - Move Firefox config files to $XDG_CONFIG_HOME
- - Move Thunderbird's config files to $XDG_CONFIG_HOME
- - Move Kodi config files to $XDG_CONFIG_HOME
+ - [mozilla] Move config files to $XDG_CONFIG_HOME
+   - Do for Thunderbird
+   - Do for Firefox
+ - [tmux] "SSH/Mosh aware username and hostname status line information" from oh-my-tmux
+ - [kodi] Move config files to $XDG_CONFIG_HOME
    - Setting $KODI_HOME doesn't seem to be working, kodi still looks for ~/.kodi
      and creates it if missing
