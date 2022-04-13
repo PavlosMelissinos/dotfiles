@@ -246,7 +246,17 @@ exec_always swayidle -w \
   # Workaround for firefox bug:
   # https://teddit.net/r/swaywm/comments/q1514z/can_i_avoid_crashing_firefox_on_sway_reload/
   # NOTE: Avoid `input *`, consider replacing with input device id (didn't work)
-   input * {
+   # input * {
+   #      xkb_layout "us,gr"
+   #      xkb_options "grp:win_space_toggle"
+   #      xkb_numlock enable
+   # }
+   input "9494:26:CM_Storm_Keyboard_--_QuickFire_XT" {
+        xkb_layout "us,gr"
+        xkb_options "grp:win_space_toggle"
+        xkb_numlock enable
+   }
+   input "1:1:AT_Translated_Set_2_keyboard" {
         xkb_layout "us,gr"
         xkb_options "grp:win_space_toggle"
         xkb_numlock enable
