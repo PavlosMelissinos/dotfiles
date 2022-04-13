@@ -57,8 +57,8 @@ gaps inner 5
 #output * bg /usr/share/backgrounds/default.png fill
 exec_always $XDG_CONFIG_HOME/azotebg
 
-#exec_always /usr/libexec/geoclue-2.0/demos/agent
-#exec_always gammastep-indicator
+exec_always /usr/libexec/geoclue-2.0/demos/agent
+exec_always gammastep-indicator
 
 exec_always mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob
 
