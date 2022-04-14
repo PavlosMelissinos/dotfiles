@@ -1,12 +1,9 @@
 *
 
 !bin/
-!bin/pavolume
+!.local/bin/pavolume
 !.config/
 !.config/**
 !.gitignore
 !.gitconfig
-!.tmux.conf
-!.tmux.conf.local
-!.antigen.zsh
 !README.org
