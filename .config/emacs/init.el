@@ -123,7 +123,8 @@
          ("C-x t" . clojure-jump-to-test)
          ("C-c C-w" . cider-eval-last-sexp-and-replace)
          ("C-c M-e" . cider-eval-print-last-sexp)
-         ("C-c j" . cider-jack-in-clj&cljs))
+         ("C-c j" . cider-jack-in-clj&cljs)
+         ("C-:" . personal/insert-comment))
   :mode (("\\.edn$" . clojure-mode)
          ("\\.repl$" . clojure-mode)
          ("\\.bb$" . clojure-mode))
@@ -133,6 +134,8 @@
 
   (custom-set-faces
    '(font-lock-doc-face ((t (:foreground "#5B6268" :slant normal)))))
+
+  (setq clojure-toplevel-inside-comment-form t)
 
   (defun ss/string-join (sep s)
     (mapconcat 'identity s sep))
@@ -162,12 +165,25 @@
     (find-file (toggle-test-path buffer-file-name)))
 
   (setq safe-local-variable-values
-	(quote
-	 ((eval define-clojure-indent
-		(snippet
-		 (quote defun))
-		(template
-		 (quote defun)))))))
+	      (quote
+	       ((eval define-clojure-indent
+		            (snippet
+		             (quote defun))
+		            (template
+		             (quote defun))))))
+
+  (defun personal/insert-comment ()
+    "Adds a rich comment block directly below the active top level form.
+     source: dpsutton, clojurians slack"
+    (interactive)
+    (end-of-defun)
+    (insert "\n")
+    (insert "(comment\n  )\n")
+    (clojure-backward-logical-sexp)
+    (forward-char 1)
+    (clojure-forward-logical-sexp)
+    (insert "\n")
+    (indent-according-to-mode)))
 
 (global-set-key (kbd "s-z") 'zprint)
 
