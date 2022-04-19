@@ -1,6 +1,7 @@
 *
 
-!bin/
+!.local/**
+!.local/bin/*
 !.local/bin/pavolume
 !.config/
 !.config/**
