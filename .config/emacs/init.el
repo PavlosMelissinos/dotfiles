@@ -793,7 +793,9 @@
 (use-package dired
   ;;:bind (("<^>" . (lambda () (find-alternate-file "..")))) ;;TODO
   :demand t
-  :custom (dired-dwim-target t)
+  :custom
+  (dired-dwim-target t)
+  (dired-kill-when-opening-new-dired-buffer t)
   :config
   (put 'dired-find-alternate-file 'disabled nil)
 
