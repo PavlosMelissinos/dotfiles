@@ -122,3 +122,4 @@ others (experimental):
  - [kodi] Move config files to $XDG_CONFIG_HOME
    - Setting $KODI_HOME doesn't seem to be working, kodi still looks for ~/.kodi
      and creates it if missing
+ - [zsh] completions aren't case-insensitive
