@@ -73,6 +73,12 @@ others (experimental):
 
      Press the key button and then enter to log-in
 
+** Poetry
+   All good, don't forget to [[https://python-poetry.org/docs/master/#enable-tab-completion-for-bash-fish-or-zsh][enable completions]]
+   As of 2022-04-22:
+   ~fpath+=$ZDOTDIR/zfunc~ (before compinit)
+   ~poetry completions zsh > $ZDOTDIR/zfunc/_poetry~
+
 ** Guix
 
 *** On a new system
