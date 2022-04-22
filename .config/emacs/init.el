@@ -12,10 +12,14 @@
 (setq save-abbrevs 'silently)
 
 ;; ENV VARIABLES
+(defun safe-getenv (env)
+  (if (bound-and-true-p exec-path-from-shell-getenv)
+    (exec-path-from-shell-getenv env)
+    (getenv env)))
 (setq emacs-config-home user-emacs-directory)
-(setq emacs-cache-home (expand-file-name "emacs/" (getenv "XDG_CACHE_HOME")))
-(setq emacs-data-home (expand-file-name "emacs/" (getenv "XDG_DATA_HOME")))
-(setq emacs-state-home (expand-file-name "emacs/" (getenv "XDG_STATE_HOME")))
+(setq emacs-cache-home (expand-file-name "emacs/" (or (safe-getenv "XDG_CACHE_HOME") "~/.cache")))
+(setq emacs-data-home (expand-file-name "emacs/" (or (safe-getenv "XDG_DATA_HOME") "~/.local/share")))
+(setq emacs-state-home (expand-file-name "emacs/" (or (safe-getenv "XDG_STATE_HOME") "~/.local/state")))
 
 ;; other directories
 (setq package-user-dir (concat emacs-cache-home "elpa")) ;; do not litter user-emacs-directory with elpa cache
@@ -26,7 +30,7 @@
 
 (defun init ()
   (interactive)
-  (find-file (concat user-emacs-directory "init.el")))
+  (find-file (concat emacs-config-home "init.el")))
 
 (setq package-archives
       '(("GNU ELPA"  . "https://elpa.gnu.org/packages/")
@@ -583,8 +587,7 @@
       (with-temp-buffer
         (insert-buffer-substring oldbuf start end)
         (goto-char (point-min))
-        ;; (replace-string " BLOK" " :alarm_clock:")
-        (replace-string " BLOK" " :todo-doing::alarm_clock:")
+        (replace-string " BLOK" " :todo-pause:")
         (goto-char (point-min))
         (replace-string " DONE" " :todo-done:")
         (goto-char (point-min))
