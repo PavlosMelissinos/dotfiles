@@ -827,24 +827,33 @@
   :diminish highlight-symbol-mode
   :ensure t
   ;;:no-require t
-  :hook ((lisp-mode . highlight-symbol-mode)
-         (emacs-lisp-mode . highlight-symbol-mode)
-         (scheme-mode . highlight-symbol-mode)
-         (cider-repl-mode . highlight-symbol-mode)
-         (clojure-mode . highlight-symbol-mode)
-         (python-mode . highlight-symbol-mode))
+  ;; :hook ((lisp-mode . highlight-symbol-mode)
+  ;;        (emacs-lisp-mode . highlight-symbol-mode)
+  ;;        (scheme-mode . highlight-symbol-mode)
+  ;;        (cider-repl-mode . highlight-symbol-mode)
+  ;;        (clojure-mode . highlight-symbol-mode)
+  ;;        (python-mode . highlight-symbol-mode))
   :init
   (global-set-key (kbd "C-,") 'highlight-symbol-prev)
   (global-set-key (kbd "C-.") 'highlight-symbol-next)
   :config
+  (setq highlight-symbol-mode t)
   (setq highlight-symbol-idle-delay 1)
   (setq highlight-symbol-on-navigation-p 't)
   (setq highlight-symbol-occurrence-message (quote (explicit)))
   (custom-set-faces
    '(highlight-symbol-face ((t (:foreground "gray100" :background "#9c7618" :weight semi-bold)))))
+
+  (add-hook 'find-file-hook 'my-hls-hook)
+
   (defun highlight-symbol-count (&optional symbol)
     "(Do not) Print the number of occurrences of symbol at point."
-    (interactive)))
+    (interactive))
+
+  (defun my-hls-hook ()
+    (when (featurep 'highlight-symbol)
+      (highlight-symbol-mode t)
+      (highlight-symbol-nav-mode t))))
 
 (use-package windmove
   :init
