@@ -95,6 +95,8 @@ others (experimental):
       - if the distro uses systemd also run:
         ~systemctl restart guix-daemon.service~
       - don't forget to upgrade the guix channels sha every now and then
+      - Fedora: Use `dnf history userinstalled` to see which packages have been
+        installed and to replace with guix packages
 
 
 ** Do not forget
@@ -107,6 +109,9 @@ others (experimental):
      --address=unix:path=$XDG_RUNTIME_DIR/bus~) didn't seem to work for me...
    - Unable to connect to ~/run/user/1000/sway-ipc.1000.3043.sock~
      ~export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock~
+   - Build fails with 8GB space on /tmp - No space left on device
+     ~mount -o remount,size=15G /tmp~
+     Adjust size to your needs
 
 ** Known issues
 
@@ -123,3 +128,6 @@ others (experimental):
   - [kodi] Doesn't use $XDG_CONFIG_HOME
     - Setting $KODI_HOME doesn't seem to be working, kodi still looks for ~/.kodi
       and creates it if missing
+  - [zsh] has to be installed on the fedora side as well, otherwise the OS
+    doesn't see the PATH to the guix version and reverts to bash.
+  - [swaylock] & guix: swaylock needs to be setuid to read /etc/shadow

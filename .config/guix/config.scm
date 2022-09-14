@@ -42,6 +42,15 @@
     ;;          (xorg-configuration
     ;;           (keyboard-layout keyboard-layout))))
     ;;   %desktop-services)
+   (modify-services %desktop-services
+                    (guix-service-type config => (guix-configuration
+                                                  (inherit config)
+                                                  (substitute-urls
+                                                   (append (list "https://substitutes.nonguix.org")
+                                                           %default-substitute-urls))
+                                                  (authorized-keys
+                                                   (append (list (local-file "./nonguix/signing-key.pub"))
+                                                           %default-authorized-guix-keys)))))
    (append
     %desktop-services
     (list (service openssh-service-type)

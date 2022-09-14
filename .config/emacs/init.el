@@ -1,4 +1,3 @@
-
 ;;early background to prevent white emacs blinding me
 (custom-set-faces
  '(default ((t (;;:foreground "white"
@@ -188,6 +187,13 @@
     (clojure-forward-logical-sexp)
     (insert "\n")
     (indent-according-to-mode)))
+
+(use-package scheme
+  :ensure t
+  :diminish (scheme-mode . "scm")
+  :defines scheme-mode-map
+  :bind (:map scheme-mode-map
+              ("C-c M-j" . run-guile)))
 
 (global-set-key (kbd "s-z") 'zprint)
 
@@ -658,18 +664,19 @@
 
 (use-package org-roam
   :ensure t
-  :custom (org-roam-directory "~/notes/roam")
-          (org-roam-dailies-directory "daily/")
-          (org-roam-dailies-capture-templates
-           '(("d" "default" entry
-              ;;#'org-roam-capture--get-point
-              "* %?"
-              :file-name "~/notes/daily/%<%Y-%m-%d>"
-              :head "#+title: %<%Y-%m-%d>\n\n"
-              :target (file+head "%<%Y-%m-%d>.org"
-                                 "#+title: %<%Y-%m-%d>\n"))))
-          (package-check-signature nil)
-          (org-roam-db-location (concat emacs-state-home "org-roam.db"))
+  :custom
+  (org-roam-directory "~/notes/roam")
+  (org-roam-dailies-directory "daily/")
+  (org-roam-dailies-capture-templates
+   '(("d" "default" entry
+      ;;#'org-roam-capture--get-point
+      "* %?"
+      :file-name "~/notes/daily/%<%Y-%m-%d>"
+      :head "#+title: %<%Y-%m-%d>\n\n"
+      :target (file+head "%<%Y-%m-%d>.org"
+                         "#+title: %<%Y-%m-%d>\n"))))
+  (package-check-signature nil)
+  (org-roam-db-location (concat emacs-state-home "org-roam.db"))
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
          ("C-c n g" . org-roam-graph)
@@ -1432,8 +1439,8 @@
     (require 'doom-themes)
     (if window-system
         (progn
-          ;;(load-theme 'doom-one t)
-          (load-theme 'doom-vibrant t)
+          (load-theme 'doom-one t)
+          ;;(load-theme 'doom-vibrant t)
           (scroll-bar-mode -1)
           (setq window-divider-default-right-width 1)
           (set-face-foreground 'vertical-border "#525070")))
