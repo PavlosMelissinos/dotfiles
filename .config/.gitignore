@@ -17,6 +17,8 @@
 !guix/*
 !mako/
 !mako/*
+!mpv/
+!mpv/*
 !swappy/
 !swappy/*
 !sway/
