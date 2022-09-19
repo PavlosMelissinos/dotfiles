@@ -1,3 +1,10 @@
+;; init.el --- My Emacs configuration
+;;; Commentary:
+
+;; WIP
+
+
+;;; Code:
 ;;early background to prevent white emacs blinding me
 (custom-set-faces
  '(default ((t (;;:foreground "white"
@@ -6,19 +13,22 @@
  '(bold ((t (:foreground "gold" :weight bold)))))
 
 (global-unset-key (kbd "C-z"))
-(setq mac-use-title-bar 't)
 (setq-default fill-column 80)
 (setq save-abbrevs 'silently)
 
 ;; ENV VARIABLES
 (defun safe-getenv (env)
+  "Provides a safe way to retrieve environment variables from ENV.
+
+Examples TODO."
   (if (bound-and-true-p exec-path-from-shell-getenv)
     (exec-path-from-shell-getenv env)
     (getenv env)))
-(setq emacs-config-home user-emacs-directory)
-(setq emacs-cache-home (expand-file-name "emacs/" (or (safe-getenv "XDG_CACHE_HOME") "~/.cache")))
-(setq emacs-data-home (expand-file-name "emacs/" (or (safe-getenv "XDG_DATA_HOME") "~/.local/share")))
-(setq emacs-state-home (expand-file-name "emacs/" (or (safe-getenv "XDG_STATE_HOME") "~/.local/state")))
+
+(defconst emacs-config-home user-emacs-directory)
+(defconst emacs-cache-home (expand-file-name "emacs/" (or (safe-getenv "XDG_CACHE_HOME") "~/.cache")))
+(defconst emacs-data-home (expand-file-name "emacs/" (or (safe-getenv "XDG_DATA_HOME") "~/.local/share")))
+(defconst emacs-state-home (expand-file-name "emacs/" (or (safe-getenv "XDG_STATE_HOME") "~/.local/state")))
 
 ;; other directories
 (setq package-user-dir (concat emacs-cache-home "elpa")) ;; do not litter user-emacs-directory with elpa cache
@@ -28,6 +38,7 @@
 ;;(setq debug-on-error 't)
 
 (defun init ()
+  "Edit your init file."
   (interactive)
   (find-file (concat emacs-config-home "init.el")))
 
@@ -113,7 +124,7 @@
 (use-package clojure-snippets
   :ensure t)
 
-(setq clojure-mode-map (make-keymap))
+(defvar clojure-mode-map (make-keymap))
 
 (use-package flycheck-clj-kondo
   :ensure t)
@@ -163,7 +174,7 @@
       (split-string path "/"))))
 
   (defun clojure-jump-to-test ()
-    "Jump to corresponding test buffer (or the corresponding src buffer if you're in a test.)"
+    "Jump from a source buffer to its corresponding test buffer and vice versa."
     (interactive)
     (find-file (toggle-test-path buffer-file-name)))
 
@@ -304,6 +315,28 @@
          )
   :init
   (add-hook 'cider-mode-hook #'eldoc-mode)
+
+  (defun macroexpand-replace ()
+    (interactive)
+    (let ((exp
+           (cider-sync-request:macroexpand
+            "macroexpand-1"
+            (cider-last-sexp))))
+      (backward-sexp)
+      (let ((bounds (bounds-of-thing-at-point 'sexp)))
+        (delete-region (car bounds) (cdr bounds))
+        (insert exp)
+        (indent-for-tab-command))))
+
+  (defun apply-fix-macro ()
+    (interactive)
+    (paredit-wrap-round)
+    (insert "fix ")
+    (forward-sexp)
+    (forward-char 1)
+    (macroexpand-replace)
+    (backward-sexp))
+
   :custom
   (cider-prompt-for-symbol nil)
   (cider-repl-history-file (concat emacs-data-home "cider-history"))
@@ -329,32 +362,12 @@
   :config
   (set-face-attribute 'cider-test-failure-face nil :background "#8c2020")
 
-  (defun macroexpand-replace ()
-    (interactive)
-    (let ((exp
-           (cider-sync-request:macroexpand
-            "macroexpand-1"
-            (cider-last-sexp))))
-      (backward-sexp)
-      (let ((bounds (bounds-of-thing-at-point 'sexp)))
-        (delete-region (car bounds) (cdr bounds))
-        (insert exp)
-        (indent-for-tab-command))))
-
-  (defun apply-fix-macro ()
-    (interactive)
-    (paredit-wrap-round)
-    (insert "fix ")
-    (forward-sexp)
-    (forward-char 1)
-    (macroexpand-replace)
-    (backward-sexp))
-
   (defun replace-not-in-strings (start end match replacement)
     "Only tested on single characters"
     (set-mark nil)
-    (let ((p (point)))
-      (setq pos start)
+    (let ((p (point))
+          (pos start))
+      ;;(setq pos start)
       (while (< pos end)
         (goto-char pos)
         (let ((faces (face-at-point t t)))
@@ -380,15 +393,15 @@
   :bind (:map projectile-mode-map
               ("C-c p" . 'projectile-command-map))
   :config
-  (setq projectile-mode-line '(:eval (format " P[%s]" (projectile-project-name)))
-    projectile-globally-ignored-files '("TAGS" ".nrepl-port")
-    projectile-globally-ignored-file-suffixes '("pyc")
-    projectile-globally-ignored-directories
+  (defconst projectile-mode-line '(:eval (format " P[%s]" (projectile-project-name))))
+  (defconst projectile-globally-ignored-files '("TAGS" ".nrepl-port"))
+  (defconst projectile-globally-ignored-file-suffixes '("pyc"))
+  (defconst projectile-globally-ignored-directories
     '(".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" "venv" "build"
       "vendor" "vendors" ".cabal-sandbox" "dist" ".vagrant" "node_modules"
-      "bower_components" ".bundle" ".stack-work")
-    projectile-completion-system 'ivy)
-  (projectile-global-mode nil))
+      "bower_components" ".bundle" ".stack-work"))
+  (defconst projectile-completion-system 'ivy)
+  (projectile-mode nil))
 
 (use-package terraform-mode
   :ensure t)
@@ -526,7 +539,7 @@
   (org-todo-keywords '((sequence "TODO" "PROG" "BLOK" "CNCL" "DONE")))
   (org-special-ctrl-a/e t)
   :config
-  (setq org-roam-v2-ack t)
+  (defconst org-roam-v2-ack t)
   (defvar yt-iframe-format
     ;; You may want to change your width and height.
     (concat "<iframe width=\"440\""
@@ -535,8 +548,9 @@
             " frameborder=\"0\""
             " allowfullscreen>%s</iframe>"))
 
-  (org-add-link-type
+  (org-link-set-parameters
    "yt"
+   :follow
    (lambda (handle)
      (browse-url
       (concat "https://www.youtube.com/embed/"
@@ -752,7 +766,8 @@
     (interactive (magit-find-file-read-args "Find file"))
     (let ((line (ss/current-line)))
       (magit-find-file rev (magit-current-file))
-      (goto-line line)
+      (goto-char (point-min))
+      (forward-line (1- line))
       (recenter-top-bottom)))
 
   ;; also see: git log -n 1 --pretty=format:%H -- my/file.c
@@ -765,7 +780,8 @@
       (if rev
           (progn
             (magit-find-file rev (magit-current-file))
-            (goto-line line)
+            (goto-char (point-min))
+            (forward-line (1- line))
             (recenter)
             (message (format "Switched to %s." magit-buffer-refname)))
         (message "Current file rev cannot be determined")))))
@@ -1130,6 +1146,7 @@
           (windmove-find-other-window 'up))
         (enlarge-window arg)
       (shrink-window arg)))
+
   (defun move-splitter-down (arg)
     "Move window splitter down."
     (interactive "p")
@@ -1372,12 +1389,12 @@
   (setq-default indent-tabs-mode nil)
   (setq-default default-tab-width 2)
   (setq-default tab-width 2)
-  (setq c-basic-offset 3)
-  (setq c-indent-level 3)
-  (setq c++-tab-always-indent nil)
-  (setq js-indent-level 2)
-  (setq lua-indent-level 2)
-  (setq css-indent-offset 2)
+  (setq-default c-basic-offset 3)
+  (setq-default c-indent-level 3)
+  (setq-default c++-tab-always-indent nil)
+  (setq-default js-indent-level 2)
+  (setq-default lua-indent-level 2)
+  (setq-default css-indent-offset 2)
 
   ;;greek support
   (setq default-input-method "greek")
@@ -1394,6 +1411,7 @@
     (with-temp-buffer
       (insert-file-contents filePath)
       (buffer-string)))
+
   (setq initial-scratch-message (slurp (concat user-emacs-directory "logo")))
 
   (defun unix-file ()
@@ -1429,9 +1447,6 @@
   (defun ss/copy-file-name ()
     (interactive)
     (kill-new (buffer-file-name)))
-
-
-
 
   (use-package doom-themes
     :ensure t
@@ -1482,8 +1497,8 @@
     (shell-command-on-region start end "jq -r ." nil 't))
 
   (pixel-scroll-mode)
-  (setq pixel-dead-time 0) ; Never go back to the old scrolling behaviour.
-  (setq pixel-resolution-fine-flag t) ; Scroll by number of pixels instead of lines (t = frame-char-height pixels).
+  (defvar pixel-dead-time 0) ; Never go back to the old scrolling behaviour.
+  (defvar pixel-resolution-fine-flag t) ; Scroll by number of pixels instead of lines (t = frame-char-height pixels).
   (setq mouse-wheel-scroll-amount '(1)) ; Distance in pixel-resolution to scroll each mouse wheel event.
   (setq mouse-wheel-progressive-speed nil)
 
@@ -1501,11 +1516,13 @@
   (put 'scroll-left 'disabled nil))
 
 (defun ss/truncate (str len)
+  "Truncate STR to LEN."
   (if (> (string-width str) len)
       (concat (substring str 0 len) "…")
     str))
 
 (defun ss/org-clock-get-clock-string ()
+  "Get clock string."
   (let ((clocked-time (org-clock-get-clocked-time))
         ;; affects performance, too expensive:
         ;; (clocked-time (save-excursion
@@ -1518,7 +1535,6 @@
     ;;             'face 'org-mode-line-clock)
     (propertize (ss/truncate (format "%s" org-clock-heading) 12)
                 'face 'org-mode-line-clock)))
-
 
 (use-package all-the-icons
   :demand t
@@ -1588,13 +1604,13 @@ respectively."
                     :overline nil
                     :underline nil)
 
-(setq elfeed-feeds
-      '("https://news.ycombinator.com/rss"
-        "https://grumpygamer.com/rss"
-        "https://lobste.rs/rss"
-        "https://blog.acolyer.org/feed/"
-        "https://www.retronator.com/rss"
-        "http://feeds.feedburner.com/stevelosh?format=xml"))
+(defconst elfeed-feeds
+  '("https://news.ycombinator.com/rss"
+    "https://grumpygamer.com/rss"
+    "https://lobste.rs/rss"
+    "https://blog.acolyer.org/feed/"
+    "https://www.retronator.com/rss"
+    "http://feeds.feedburner.com/stevelosh?format=xml"))
 
 (use-package keycast
   :ensure t
@@ -1645,4 +1661,7 @@ respectively."
 (use-package graphviz-dot-mode
   :ensure t
   :custom (graphviz-dot-dot-program "dot")
-          (graphviz-dot-auto-indent-on-semi nil))
+  (graphviz-dot-auto-indent-on-semi nil))
+
+(provide 'init)
+;;; init.el ends here
