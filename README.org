@@ -39,6 +39,15 @@ others (experimental):
 **** dnf install swaylock-effects
 
 * U2F auth
+
+** Supported services
+   - github.com
+   - gitlab.com
+   - porkbun.com
+   - namecheap.com
+   -
+
+** How to enable
   Heavily based on [[https://reddit.com/r/Fedora/comments/akck9m/authenticating_with_gdm_and_sudo_with_a_u2f/][this article]] and adapted from [[https://wiki.archlinux.org/index.php/Universal_2nd_Factor#Adding_a_key][the Arch guide]].
 
   1. Install required packages:
