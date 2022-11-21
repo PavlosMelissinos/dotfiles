@@ -720,7 +720,27 @@ Examples TODO."
   (org-jira-working-dir (concat emacs-data-home "org-jira/"))
   ;;override request backend (curl) to fix [error] request--curl-sync: semaphore never called
   (request-backend 'url-retrieve)
-  :bind ("C-c j s" . org-jira-get-summary))
+  (story-points-field 'customfield_10004)
+  :bind (("C-c j s" . org-jira-get-summary)
+         ("C-c j p" . org-jira-show-story-points)
+         ("C-c j P" . org-jira-insert-story-points))
+  :config
+  (defun org-jira-get-field (jira-id field)
+    (unless jira-id (error "ORG_JIRA_ERROR: JIRA-ID missing in org-jira-get-field!"))
+    (cdr (assoc field (assoc 'fields (car (org-jira-get-issue-by-id jira-id))))))
+
+  (defun org-jira-show-story-points ()
+    "Get issue story points from point"
+    (interactive)
+    (let ((jira-id (thing-at-point 'symbol)))
+      (message "%s" (org-jira-get-field jira-id story-points-field))))
+
+  (defun org-jira-insert-story-points ()
+    "Get issue story points from point and place next to issue id from jira"
+    (interactive)
+    (let ((jira-id (thing-at-point 'symbol)))
+      (forward-symbol 1)
+      (insert (format " - %s" (org-jira-get-field jira-id story-points-field))))))
 
 ;;; end of org
 
