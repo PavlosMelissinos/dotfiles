@@ -15,6 +15,8 @@
 !git/*
 !guix/
 !guix/*
+!home-manager/
+!home-manager/*
 !mako/
 !mako/*
 !mpv/

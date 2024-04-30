@@ -1,5 +1,5 @@
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+# eval "$(pyenv init -)"
+# eval "$(pyenv virtualenv-init -)"
 
 . "$GUIX_PROFILE/etc/profile"
 
@@ -17,15 +17,15 @@ autoload -Uz compinit && compinit
 # Some great examples of zstyle from Micah Elliott:
 # https://unix.stackexchange.com/a/214699
 
-# Do menu-driven completion.
-zstyle ':completion:*' menu select
-
-# partial completion suggestions
-zstyle ':completion:*' list-suffixes
-zstyle ':completion:*' expand prefix suffix
-
-# Ignore case
-zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' '+m:{A-Z}={a-z}'
+# # Do menu-driven completion.
+# zstyle ':completion:*' menu select
+#
+# # partial completion suggestions
+# zstyle ':completion:*' list-suffixes
+# zstyle ':completion:*' expand prefix suffix
+#
+# # Ignore case
+# zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' '+m:{A-Z}={a-z}'
 
 # key bindings
 typeset -g -A key
@@ -80,7 +80,7 @@ promptinit
 
 source $XDG_CONFIG_HOME/zsh/scripts/theme-and-appearance.zsh # for coloured output
 source $XDG_CONFIG_HOME/zsh/theme-agnosterp.zsh # stripped down version of agnosterj
-source $HOME/.guix-profile/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $HOME/.guix-profile/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+# source $HOME/.guix-profile/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# source $HOME/.guix-profile/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # eval "$(starship init zsh)"
