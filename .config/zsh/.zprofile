@@ -25,8 +25,8 @@ zstyle ':completion:*' cache-path $XDG_CACHE_HOME/zsh/zcompcache
 export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
-export PATH="$PATH:$HOME/.poetry/bin"
-export PATH="$PATH:$CARGO_HOME/bin"
+#export PATH="$PATH:$HOME/.poetry/bin"
+#export PATH="$PATH:$CARGO_HOME/bin"
 
 #now
 #screenfetch

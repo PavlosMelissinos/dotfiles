@@ -18,10 +18,6 @@
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = [
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
-
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
@@ -34,13 +30,15 @@
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
     # '')
-    pkgs.htop
+    pkgs.babashka
     pkgs.fortune
     pkgs.git
-    pkgs.babashka
+    pkgs.htop
+    pkgs.nodePackages.pyright
+    pkgs.powerline-fonts
+    pkgs.ripgrep
     pkgs.tmux
     pkgs.zsh
-    #pkgs.zstyle
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -76,15 +74,20 @@
   #
   home.sessionVariables = {
     EDITOR = "emacs";
+    XDG_CONFIG_HOME = "$HOME/.config";
+    XDG_CACHE_HOME = "$HOME/.cache";
+    XDG_DATA_HOME = "$HOME/.local/share";
+    XDG_STATE_HOME = "$HOME/.local/state";
+    TMUX_HOME="$HOME/.config/tmux"; # used by oh-my-tmux
   };
 
-  programs.emacs = {
-    enable = true;
-    extraPackages = epkgs: [
-      epkgs.nix-mode
-      epkgs.magit
-    ];
-  };
+  # programs.emacs = {
+  #   #enable = true;
+  #   # extraPackages = epkgs: [
+  #   #   epkgs.nix-mode
+  #   #   epkgs.magit
+  #   # ];
+  # };
 
   programs.git = {
     enable = true;
@@ -114,6 +117,40 @@
     syntaxHighlighting.enable = true;
     history.path = "${config.xdg.stateHome}/zsh/history";
     dotDir = ".config/zsh";
+    plugins = [
+      {
+        name = "theme-and-appearance";
+        file = ".config/zsh/scripts/theme-and-appearance.zsh";
+        src = builtins.fetchGit {
+          url = "https://github.com/PavlosMelissinos/dotfiles";
+          rev = "396ffbc99966dfebba044a60fa87fddb8b3008f6";
+        };
+      }
+      {
+        name = "theme-agnosterp";
+        file = ".config/zsh/theme-agnosterp.zsh";
+        src = builtins.fetchGit {
+          url = "https://github.com/PavlosMelissinos/dotfiles";
+          rev = "460b5f98b7ad33a0267c41f3fd66ebfe22190188";
+        };
+      }
+      {
+        name = "zsh-syntax-highlighting";
+        file = "zsh-syntax-highlighting.zsh";
+        src = builtins.fetchGit {
+          url = "https://github.com/zsh-users/zsh-syntax-highlighting";
+          rev = "e0165eaa730dd0fa321a6a6de74f092fe87630b0";
+        };
+      }
+      {
+        name = "zsh-autosuggestions";
+        file = "zsh-autosuggestions.zsh";
+        src = builtins.fetchGit {
+          url = "https://github.com/zsh-users/zsh-autosuggestions";
+          rev = "c3d4e576c9c86eac62884bd47c01f6faed043fc5";
+        };
+      }
+    ];
     initExtra = (builtins.readFile ./.zshrc);
   };
   #users.users.pavlos.shell = pkgs.zsh;
