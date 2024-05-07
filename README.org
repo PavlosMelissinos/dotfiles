@@ -18,6 +18,7 @@ dotfiles for the following tools:
 
 others (experimental):
 
+- nix
 - [[https://guix.gnu.org/][guix]]
 
 * Dependencies
@@ -88,6 +89,12 @@ others (experimental):
    ~fpath+=$ZDOTDIR/zfunc~ (before compinit)
    ~poetry completions zsh > $ZDOTDIR/zfunc/_poetry~
 
+** Nix
+
+*** home-manager
+
+~home-manager switch~ to apply a configuration
+
 ** Guix
 
 *** On a new system
@@ -106,6 +113,7 @@ others (experimental):
       - don't forget to upgrade the guix channels sha every now and then
       - Fedora: Use `dnf history userinstalled` to see which packages have been
         installed and to replace with guix packages
+      - Ubuntu: Use `apt list --installed` to see list of installed packages
 
 
 ** Do not forget
