@@ -1401,7 +1401,11 @@ Examples TODO."
   (setq temporary-file-directory "/tmp/") ;; necessary for tramp+babel
   ;;(load custom-file 'noerror)
   (column-number-mode t)
-  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+  (add-hook 'before-save-hook 'my-prog-nuke-trailing-whitespace)
+
+  (defun my-prog-nuke-trailing-whitespace ()
+    (when (derived-mode-p 'prog-mode)
+      (delete-trailing-whitespace)))
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
   (put 'narrow-to-region 'disabled nil)
 
