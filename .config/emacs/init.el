@@ -1064,11 +1064,11 @@ Examples TODO."
   :hook (python-mode . python-black-on-save-mode-enable-dwim))
 
 ;; Buffer formatting on save
-(use-package yapfify
-  :diminish yapf-mode
-  :ensure t
-  :defer t
-  :hook (python-mode . yapf-mode))
+;; (use-package yapfify
+;;   :diminish yapf-mode
+;;   :ensure t
+;;   :defer t
+;;   :hook (python-mode . yapf-mode))
 
 ;; numpy docstring for python
 (use-package numpydoc
