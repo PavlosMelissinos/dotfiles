@@ -18,7 +18,7 @@
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.shellAliases.pip = "noglob pip";
-  home.packages = [
+  home.packages = with pkgs; [
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
@@ -31,15 +31,22 @@
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
     # '')
-    pkgs.babashka
-    pkgs.fortune
-    pkgs.git
-    pkgs.htop
-    pkgs.nodePackages.pyright
-    pkgs.powerline-fonts
-    pkgs.ripgrep
-    pkgs.tmux
-    pkgs.zsh
+    awscli2
+    babashka
+    curl
+    flameshot
+    fortune
+    git
+    htop
+    nodePackages.pyright
+    powerline-fonts
+    (python312.withPackages(ps: with ps; [yapf]))
+    ripgrep
+    #slack
+    tmux
+    zsh
+    #docker
+    #docker-compose
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -79,7 +86,8 @@
     XDG_CACHE_HOME = "$HOME/.cache";
     XDG_DATA_HOME = "$HOME/.local/share";
     XDG_STATE_HOME = "$HOME/.local/state";
-    TMUX_HOME="$HOME/.config/tmux"; # used by oh-my-tmux
+    TMUX_HOME = "$HOME/.config/tmux"; # used by oh-my-tmux
+    NIXOS_OZONE_WL = "1";
   };
 
   # programs.emacs = {
@@ -161,5 +169,4 @@
     defaultCacheTtl = 1800;
     enableSshSupport = true;
   };
-
 }
