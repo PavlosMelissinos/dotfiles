@@ -8,3 +8,4 @@
 !.gitignore
 !.gitconfig
 !README.org
+!.aider.conf.yml

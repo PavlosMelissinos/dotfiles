@@ -33,20 +33,29 @@
     # '')
     awscli2
     babashka
+    clojure
     curl
     flameshot
     fortune
     git
+    gum
     htop
-    nodePackages.pyright
+    jdk21
+    libreoffice
+    nodejs_22
     powerline-fonts
+    pyright
     (python312.withPackages(ps: with ps; [yapf]))
+    qbittorrent
     ripgrep
-    #slack
+    # slack
+    # signal-desktop
+    spotify
+    # stremio  # Could not initialize GLX
     tmux
+    uv
+    vscodium
     zsh
-    #docker
-    #docker-compose
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -88,15 +97,17 @@
     XDG_STATE_HOME = "$HOME/.local/state";
     TMUX_HOME = "$HOME/.config/tmux"; # used by oh-my-tmux
     NIXOS_OZONE_WL = "1";
+    NIXPKGS_ALLOW_UNFREE = 1;
   };
 
-  # programs.emacs = {
-  #   #enable = true;
-  #   # extraPackages = epkgs: [
-  #   #   epkgs.nix-mode
-  #   #   epkgs.magit
-  #   # ];
-  # };
+  programs.emacs = {
+    enable = true;
+    package = pkgs.emacs-gtk;
+    extraPackages = epkgs: [
+      epkgs.nix-mode
+      epkgs.magit
+    ];
+  };
 
   programs.git = {
     enable = true;
@@ -164,9 +175,14 @@
   };
   #users.users.pavlos.shell = pkgs.zsh;
 
-  services.gpg-agent = {
-    enable = true;
-    defaultCacheTtl = 1800;
-    enableSshSupport = true;
-  };
+  # services.gpg-agent = {
+  #   enable = true;
+  #   defaultCacheTtl = 1800;
+  #   enableSshSupport = true;
+  #   # pinentryPackage = pkgs.pinentry-qt;
+  #   # pinentryPackage = pkgs.pinentry-gnome3;
+  #   # pinentryPackage = pkgs.pinentry-curses;
+  #   pinentryPackage = pkgs.pinentry;
+  #   # pinentryFlavor = "curses";
+  # };
 }
