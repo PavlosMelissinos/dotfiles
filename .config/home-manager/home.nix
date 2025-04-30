@@ -31,6 +31,8 @@
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
     # '')
+    apulse
+    audacity
     awscli2
     babashka
     clojure
@@ -52,6 +54,7 @@
     # signal-desktop
     spotify
     # stremio  # Could not initialize GLX
+    terraform
     tmux
     uv
     vscodium

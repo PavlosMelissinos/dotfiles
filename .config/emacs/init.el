@@ -670,6 +670,18 @@ Examples TODO."
                       `(org-document-title ((t (,@headline ,@ss/variable-font-tuple :height 1.5 :underline nil)))))))
 
 
+(use-package org-ai
+  :ensure t
+  :commands (org-ai-mode
+             org-ai-global-mode)
+  :init
+  (add-hook 'org-mode-hook #'org-ai-mode) ; enable org-ai in org-mode
+  (org-ai-global-mode) ; installs global keybindings on C-c M-a
+  :config
+  (setq org-ai-default-chat-model "gpt-4") ; if you are on the gpt-4 beta:
+  (org-ai-install-yasnippets)) ; if you are using yasnippet and want `ai` snippets
+
+
 (use-package org-tree-slide
   :ensure t
   ;; :bind (("<f12>" . org-tree-slide-mode)
@@ -714,6 +726,7 @@ Examples TODO."
   :hook (org-mode . (lambda () (org-superstar-mode 1))))
 
 (use-package org-jira
+  :defer t
   :ensure t
   :custom
   (jiralib-url "https://bare-square.atlassian.net")
@@ -749,6 +762,7 @@ Examples TODO."
 
 (use-package magit
   :ensure t
+  :defer t
   :diminish auto-revert-mode
   :custom-face
   (magit-blame-date ((t (:background "#404040" :foreground "#F2804F"))))
@@ -996,17 +1010,12 @@ Examples TODO."
               ("C-c C-k" . python-shell-send-buffer)
               ("C-x C-e" . python-shell-send-statement))
   :hook ((python-mode . (lambda ()
-                          (define-key python-mode-map "\"" 'electric-pair)
-                          (define-key python-mode-map "\'" 'electric-pair)
-                          (define-key python-mode-map "(" 'electric-pair)
-                          (define-key python-mode-map "[" 'electric-pair)
-                          (define-key python-mode-map "{" 'electric-pair)
                           (setq mode-name "Py"))))
   ;; Remove guess indent python message
-  :custom
-  (python-indent-guess-indent-offset-verbose nil)
-  (python-indent-offset 4)
   :config
+  (setq python-indent-guess-indent-offset-verbose nil)
+  (setq python-indent-guess-indent-offset nil)
+  (setq python-indent-offset 4)
   ;; Use IPython when available or fall back to regular Python
   (cond
    ((executable-find "ipython")
@@ -1016,11 +1025,9 @@ Examples TODO."
 	          python-shell-interpreter-args "-i --simple-prompt")))
    ((setq python-shell-interpreter "python")))
 
-  (defun electric-pair ()
-    "If at end of line, insert character pair without surrounding spaces.
-    Otherwise, just insert the typed character."
-    (interactive)
-    (if (eolp) (let (parens-require-spaces) (insert-pair)) (self-insert-command 1))))
+  (setq elpy-shell-echo-output t ; https://github.com/jorgenschaefer/elpy/issues/1550#issuecomment-574512892
+   )
+  )
 
 ;; Hide the modeline for inferior python processes (as well as R)
 (use-package inferior-python-mode
@@ -1031,16 +1038,6 @@ Examples TODO."
 (use-package hide-mode-line
   :ensure t
   :defer t)
-
-;;; Use poetry to manage packages and when to switch to virtualenvs
-;;; See https://python-poetry.org/ for more info
-;;; See https://python-poetry.org/docs/managing-environments/ for virtual envs management
-(use-package poetry
-  :ensure t
-  :defer t
-  :config
-  (setq poetry-tracking-strategy 'switch-buffer)
-  (setenv "WORKON_HOME" (expand-file-name "~/.cache/pypoetry/virtualenvs")))
 
 (use-package python-pytest
   :ensure t
@@ -1064,11 +1061,12 @@ Examples TODO."
   :hook (python-mode . python-black-on-save-mode-enable-dwim))
 
 ;; Buffer formatting on save
-;; (use-package yapfify
-;;   :diminish yapf-mode
-;;   :ensure t
-;;   :defer t
-;;   :hook (python-mode . yapf-mode))
+(use-package yapfify
+  :diminish yapf-mode
+  :ensure t
+  :defer t
+  ;;:hook (python-mode . yapf-mode)
+  )
 
 ;; numpy docstring for python
 (use-package numpydoc
@@ -1118,18 +1116,65 @@ Examples TODO."
 (use-package lsp-pyright
   :ensure t
   :defer t
+  :init
+  (when (executable-find "python3")
+    (setq lsp-pyright-python-executable-cmd "python3"))
   :custom
   (lsp-pyright-disable-language-service nil)
   (lsp-pyright-disable-organize-imports nil)
   (lsp-pyright-auto-import-completions t)
   (lsp-pyright-use-library-code-for-types nil)
   (lsp-pyright-diagnostic-mode "openFilesOnly")
-  (lsp-pyright-venv-path (expand-file-name "~/.cache/pypoetry/virtualenvs"))
   (lsp-completion-enable t)
   :hook ((python-mode . (lambda ()
-			                    (poetry-tracking-mode)
 			                    (require 'lsp-pyright)
 			                    (lsp-deferred)))))
+
+(use-package lsp-ui
+  :commands lsp-ui-mode
+  :ensure t
+  :custom-face
+  (lsp-ui-sideline-global ((t (:italic t))))
+  (lsp-ui-peek-highlight  ((t (:foreground unspecified :background unspecified :inherit isearch))))
+  :config
+  (with-eval-after-load 'evil
+    (add-hook 'buffer-list-update-hook
+              #'(lambda ()
+                  (when (bound-and-true-p lsp-ui-mode)
+                    (evil-define-key '(motion normal) 'local (kbd "K")
+                                     #'(lambda () (interactive) (lsp-ui-doc-glance) (ian/pulse-line)))))))
+  (setq lsp-ui-doc-enable nil)
+  (setq lsp-ui-doc-show-with-mouse nil)
+  (setq lsp-ui-doc-enhanced-markdown nil)
+  (setq lsp-ui-doc-delay 0.01)
+  (when (display-graphic-p)
+    (setq lsp-ui-doc-use-childframe t)
+    (setq lsp-ui-doc-text-scale-level -1.0)
+    (setq lsp-ui-doc-max-width 80)
+    (setq lsp-ui-doc-max-height 25)
+    (setq lsp-ui-doc-position 'at-point))
+  (setq lsp-ui-doc-include-signature t)
+  (setq lsp-ui-doc-border (face-foreground 'font-lock-comment-face))
+  (setq lsp-ui-sideline-diagnostic-max-line-length 80)
+  (setq lsp-ui-sideline-diagnostic-max-lines 2)
+  (setq lsp-ui-peek-always-show t)
+  (setq lsp-ui-sideline-delay 0.05))
+
+(use-package lsp-java
+  :after lsp)
+
+(use-package java
+  :ensure nil
+  :after lsp-java
+  :bind (:map java-mode-map ("C-c i" . lsp-java-add-import)))
+
+(use-package repl-driven-development
+  :ensure t
+  :config
+  (repl-driven-development [C-x C-j] java)       ;; e“X”ecute “j”ava
+  (repl-driven-development [C-x C-n] javascript) ;; e“X”ecute “n”odejs
+  ;;(repl-driven-development [C-x C-p] python)     ;; e“X”ecute “p”ython
+  (repl-driven-development [C-x C-t] terminal))  ;; e“X”ecute “t”erminal
 
 (use-package ess
   :ensure t
@@ -1270,6 +1315,7 @@ Examples TODO."
   ;;title bar
   (setq frame-title-format "%f (%m) %n")
   (setq ns-use-proxy-icon nil)
+  (setenv "GPG_AGENT_INFO" nil)
 
   ;; ========================================
   ;; misc
@@ -1413,10 +1459,11 @@ Examples TODO."
   (setq-default indent-tabs-mode nil)
   (setq-default default-tab-width 2)
   (setq-default tab-width 2)
-  (setq-default c-basic-offset 3)
-  (setq-default c-indent-level 3)
+  (setq-default c-basic-offset 4)
+  (setq-default c-indent-level 4)
+  (setq-default c-indent-level 4)
   (setq-default c++-tab-always-indent nil)
-  (setq-default js-indent-level 2)
+  (setq-default js-indent-level 4)
   (setq-default lua-indent-level 2)
   (setq-default css-indent-offset 2)
 
@@ -1538,6 +1585,28 @@ Examples TODO."
 
   ;;(setq debug-on-error t)
   (put 'scroll-left 'disabled nil))
+
+(add-to-list 'load-path (concat emacs-config-home "lisp/copilot.el"))
+
+(use-package copilot
+  ;; :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
+  ;; :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'copilot-mode)
+  (define-key copilot-mode-map (kbd "C-<tab>") 'copilot-accept-completion)
+  ;;(define-key copilot-mode-map "M-Y" 'copilot-accept-completion)
+  ;;(define-key copilot-mode-map "M-y" 'copilot-accept-completion-by-line)
+  (setq copilot-enable-predicates '(evil-insert-state-p copilot--buffer-changed))
+  )
+
+(use-package copilot-chat
+  :config
+  (define-key copilot-mode-map (kbd "C-c c e") 'copilot-chat-explain)
+  (define-key copilot-mode-map (kbd "C-c c r") 'copilot-chat-review)    ; Refactor region
+  (define-key copilot-mode-map (kbd "C-c c f") 'copilot-chat-fix)       ; Fix code in region
+  (define-key copilot-mode-map (kbd "C-c c c p") 'copilot-chat-custom-prompt-function)
+  (define-key copilot-mode-map (kbd "C-c c d") 'copilot-chat-doc)  ; Add documentation
+  )
 
 (defun ss/truncate (str len)
   "Truncate STR to LEN."
