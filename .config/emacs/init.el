@@ -49,10 +49,11 @@ Examples TODO."
 
         ;;("nongnu" . "https://elpa.nongnu.org/nongnu/")
         )
-      package-archive-priorities
-      '(("GNU ELPA"     . 10)
-        ("MELPA"        . 5)
-        ("MELPA Stable" . 0)))
+      ;; package-archive-priorities
+      ;; '(("GNU ELPA"     . 10)
+      ;;   ("MELPA"        . 5)
+      ;;   ("MELPA Stable" . 0))
+      )
 
 ;; Initialize the packages, avoiding a re-initialization.
 
@@ -154,30 +155,6 @@ Examples TODO."
   (defun ss/string-join (sep s)
     (mapconcat 'identity s sep))
 
-  (defun toggle-test-path (path)
-    (ss/string-join
-     "/"
-     (mapcar
-      (lambda (x)
-        (cond ((string-equal x "test") "src")
-              ((string-equal x "src") "test")
-
-              ((string-equal x "src-cljs") "test-cljs")
-              ((string-equal x "test-cljs") "src-cljs")
-
-              ((string-match "\\(.+\\)_test\\.clj\\(.?\\)" x)
-               (concat (match-string 1 x) ".clj" (match-string 2 x)))
-              ((string-match "\\(.+\\)\\.clj\\(.?\\)" x)
-               (concat (match-string 1 x) "_test.clj" (match-string 2 x)))
-
-              (t x)))
-      (split-string path "/"))))
-
-  (defun clojure-jump-to-test ()
-    "Jump from a source buffer to its corresponding test buffer and vice versa."
-    (interactive)
-    (find-file (toggle-test-path buffer-file-name)))
-
   (setq safe-local-variable-values
 	      (quote
 	       ((eval define-clojure-indent
@@ -242,10 +219,8 @@ Examples TODO."
          ("C-c d" . duplicate-sexp)
          ("M-{" . paredit-wrap-curly)
          ("M-[" . paredit-wrap-square)
-         ("<C-M-up>" . transpose-sexp-backward)
-         ("<C-M-down>" . transpose-sexp-forward)
-         ("<M-S-left>" . backward-sexp)
-         ("<M-S-right>" . forward-sexp))
+         ("<M-left>" . paredit-backward)
+         ("<M-right>" . paredit-forward))
   :init
   (defun duplicate-sexp ()
     "Duplicates the sexp at point."
@@ -255,19 +230,7 @@ Examples TODO."
       (backward-sexp)
       (let ((bounds (bounds-of-thing-at-point 'sexp)))
         (insert (concat (buffer-substring (car bounds) (cdr bounds)) "\n"))
-        (indent-for-tab-command))))
-
-  (defun transpose-sexp-forward ()
-    (interactive)
-    (forward-sexp)
-    (transpose-sexps 1)
-    (backward-sexp))
-
-  (defun transpose-sexp-backward ()
-    (interactive)
-    (forward-sexp)
-    (transpose-sexps -1)
-    (backward-sexp)))
+        (indent-for-tab-command)))))
 
 (use-package sgml-mode
   :bind (:map sgml-mode-map
@@ -311,22 +274,9 @@ Examples TODO."
          ("C-c C-x" . cider-ns-refresh)
          :map cider-start-map
          ("C-c C-x" . cider-ns-refresh)
-         ;;("<f12>" . apply-fix-macro)
          )
   :init
   (add-hook 'cider-mode-hook #'eldoc-mode)
-
-  (defun macroexpand-replace ()
-    (interactive)
-    (let ((exp
-           (cider-sync-request:macroexpand
-            "macroexpand-1"
-            (cider-last-sexp))))
-      (backward-sexp)
-      (let ((bounds (bounds-of-thing-at-point 'sexp)))
-        (delete-region (car bounds) (cdr bounds))
-        (insert exp)
-        (indent-for-tab-command))))
 
   (defun apply-fix-macro ()
     (interactive)
@@ -607,7 +557,7 @@ Examples TODO."
       (with-temp-buffer
         (insert-buffer-substring oldbuf start end)
         (goto-char (point-min))
-        (replace-string " BLOK" " :todo-pause:")
+        (replace-match " BLOK" " :todo-pause:")
         (goto-char (point-min))
         (replace-string " DONE" " :todo-done:")
         (goto-char (point-min))
@@ -770,41 +720,7 @@ Examples TODO."
                               (auto-fill-mode t))))
   :config
   (global-set-key (kbd "C-c C-g") 'magit-status)
-  (global-set-key (kbd "C-x g") 'magit-status)
-
-  (defun ss/current-line ()
-    (let ((start (point-min))
-	        (n (line-number-at-pos)))
-      (if (= start 1)
-	        n
-        (save-excursion
-	        (save-restriction
-	          (widen)
-	          (+ n (line-number-at-pos start) -1))))))
-
-  (defun ss/magit-find-file (rev file)
-    (interactive (magit-find-file-read-args "Find file"))
-    (let ((line (ss/current-line)))
-      (magit-find-file rev (magit-current-file))
-      (goto-char (point-min))
-      (forward-line (1- line))
-      (recenter-top-bottom)))
-
-  ;; also see: git log -n 1 --pretty=format:%H -- my/file.c
-  (defun ss/prev-magit-find-file ()
-    (interactive)
-    (let ((rev (if (not magit-buffer-refname)
-                   (car (magit-commit-parents (magit-rev-parse-safe "--branches")))
-                 (car (magit-commit-parents magit-buffer-refname))))
-          (line (ss/current-line)))
-      (if rev
-          (progn
-            (magit-find-file rev (magit-current-file))
-            (goto-char (point-min))
-            (forward-line (1- line))
-            (recenter)
-            (message (format "Switched to %s." magit-buffer-refname)))
-        (message "Current file rev cannot be determined")))))
+  (global-set-key (kbd "C-x g") 'magit-status))
 
 (use-package blamer
   :ensure t
@@ -861,10 +777,6 @@ Examples TODO."
 	    (when (eq 'dired-mode (buffer-local-value 'major-mode buffer))
 	      (kill-buffer buffer)))
 	  (buffer-list))))
-
-(use-package display-line-numbers
-  :init
-  (global-set-key (kbd "<f11>") 'display-line-numbers-mode))
 
 (use-package highlight-symbol
   :diminish highlight-symbol-mode
@@ -1280,6 +1192,7 @@ Examples TODO."
   (global-set-key (kbd "C-=") (lambda () (interactive) (text-scale-increase 0.5)))
   (global-set-key (kbd "C--") (lambda () (interactive) (text-scale-increase -0.5)))
   (global-set-key (kbd "C-0") (lambda () (interactive) (text-scale-increase 0)))
+  (global-set-key (kbd "<f11>") 'display-line-numbers-mode)
 
   ;;(global-set-key (kbd "<f1> SPC") 'mark-sexp)
 
@@ -1536,6 +1449,7 @@ Examples TODO."
     (save-excursion
       (shell-command-on-region beg end "sql-formatter-cli" nil t)))
 
+  (setf epg-pinentry-mode 'loopback) ;; asks for the passphrase in the minibuffer if emacs can't do the decryption
   ;;(setq debug-on-error t)
   (put 'scroll-left 'disabled nil))
 

@@ -46,7 +46,7 @@ others (experimental):
    - gitlab.com
    - porkbun.com
    - namecheap.com
-   -
+   - bitwarden.com
 
 ** How to enable
   Heavily based on [[https://reddit.com/r/Fedora/comments/akck9m/authenticating_with_gdm_and_sudo_with_a_u2f/][this article]] and adapted from [[https://wiki.archlinux.org/index.php/Universal_2nd_Factor#Adding_a_key][the Arch guide]].
@@ -102,6 +102,13 @@ others (experimental):
     - Add all channels: ~guix pull -C ~~/.config/guix/channels.scm~
     - Install packages defined in manifest: ~guix package -m ~~/.config/guix/packages.scm~
 
+*** On a new system that requires nonfree drivers
+
+    - https://systemcrafters.net/craft-your-system-with-guix/full-system-install/
+    - https://trop.in/rde/
+      - Guix distribution with sane choices (sway, alacritty, zsh, pipewire,
+        mpv, emacs)
+
 
 *** Maintenance
 
@@ -114,21 +121,6 @@ others (experimental):
       - Fedora: Use `dnf history userinstalled` to see which packages have been
         installed and to replace with guix packages
       - Ubuntu: Use `apt list --installed` to see list of installed packages
-
-
-** Do not forget
-
-   - ~/usr/share/applications/[...].desktop~ cannot be executed: Remote peer
-     disconnected
-     Open the desktop file, look for a ~DBusActivatable=true~ line and comment it
-     out
-     An alternative solution (running ~exec dbus-daemon --session
-     --address=unix:path=$XDG_RUNTIME_DIR/bus~) didn't seem to work for me...
-   - Unable to connect to ~/run/user/1000/sway-ipc.1000.3043.sock~
-     ~export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock~
-   - Build fails with 8GB space on /tmp - No space left on device
-     ~mount -o remount,size=15G /tmp~
-     Adjust size to your needs
 
 ** Known issues
 
@@ -148,3 +140,21 @@ others (experimental):
   - [zsh] has to be installed on the fedora side as well, otherwise the OS
     doesn't see the PATH to the guix version and reverts to bash.
   - [swaylock] & guix: swaylock needs to be setuid to read /etc/shadow
+  - [guix] steam doesn't work
+
+** Runbook
+
+   - error: failed to connect to `/var/guix/daemon-socket/socket': Connection refused
+     - On systemctl: ~systemctl restart guix-daemon.service~
+   - ~/usr/share/applications/[...].desktop~ cannot be executed: Remote peer
+     disconnected
+     Open the desktop file, look for a ~DBusActivatable=true~ line and comment it
+     out
+     An alternative solution (running ~exec dbus-daemon --session
+     --address=unix:path=$XDG_RUNTIME_DIR/bus~) didn't seem to work for me...
+   - Unable to connect to ~/run/user/1000/sway-ipc.1000.3043.sock~
+     ~export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock~
+
+   - Build fails with 8GB space on /tmp - No space left on device
+     ~mount -o remount,size=15G /tmp~
+     Adjust size to your needs
