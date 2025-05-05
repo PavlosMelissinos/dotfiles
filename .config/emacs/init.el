@@ -278,63 +278,26 @@ Examples TODO."
   :init
   (add-hook 'cider-mode-hook #'eldoc-mode)
 
-  (defun apply-fix-macro ()
-    (interactive)
-    (paredit-wrap-round)
-    (insert "fix ")
-    (forward-sexp)
-    (forward-char 1)
-    (macroexpand-replace)
-    (backward-sexp))
-
-  :custom
-  (cider-prompt-for-symbol nil)
-  (cider-repl-history-file (concat emacs-data-home "cider-history"))
-  (cider-font-lock-dynamically nil)
-  (cider-repl-wrap-history t)
-  (cider-repl-history-size 3000)
-  (cider-repl-buffer-size-limit 100000)
-  (cider-show-error-buffer 'except-in-repl)
-  (cider-repl-display-help-banner nil)
-  (cider-inject-dependencies-at-jack-in t)
-  (nrepl-prompt-to-kill-server-buffer-on-quit nil)
-  (cider-repl-result-prefix ";; => ")
+  :config
+  (setq cider-repl-history-file (concat emacs-data-home "cider-history"))
+  (setq cider-font-lock-dynamically nil)
+  (setq cider-repl-history-size 10000)
+  (setq cider-repl-buffer-size-limit 100000)
+  (setq cider-show-error-buffer 'except-in-repl)
+  (setq cider-inject-dependencies-at-jack-in t)
+  (setq nrepl-prompt-to-kill-server-buffer-on-quit nil)
+  (setq cider-repl-result-prefix ";; => ")
 
   ;; Try to replicate this workflow: https://github.com/clojure-emacs/cider/issues/2617
-  (cider-invert-insert-eval-p t)
-  (cider-repl-pop-to-buffer-on-connect nil)
+  (setq cider-invert-insert-eval-p t)
+  (setq cider-repl-pop-to-buffer-on-connect nil)
 
-  (clojure-quick-sexp
+  (setq clojure-quick-sexp
    '("(dev/reset)" "(user/fix)" "(use 'clojure.repl)"
      "(use 'clojure.tools.trace)" "(use 'clojure.pprint)"
      "(dev/start-cljs-figwheel)"))
 
-  :config
-  (set-face-attribute 'cider-test-failure-face nil :background "#8c2020")
-
-  (defun replace-not-in-strings (start end match replacement)
-    "Only tested on single characters"
-    (set-mark nil)
-    (let ((p (point))
-          (pos start))
-      ;;(setq pos start)
-      (while (< pos end)
-        (goto-char pos)
-        (let ((faces (face-at-point t t)))
-          (princ faces)
-          (princ "\n")
-          (cond ((member 'font-lock-string-face faces)
-                 (princ "case 1\n")
-                 (setq pos (1+ pos)))
-
-                ((string-equal match (buffer-substring pos (1+ pos)))
-                 (princ "case 2\n")
-                 (delete-char 1)
-                 (insert replacement)
-                 (setq pos (1+ pos)))
-
-                (:else (setq pos (1+ pos))))))
-      (goto-char p))))
+  (set-face-attribute 'cider-test-failure-face nil :background "#8c2020"))
 
 (use-package projectile
   :diminish projectile-mode
