@@ -5,7 +5,7 @@
 (list
  (channel
   (name 'guix)
-  (url "https://git.savannah.gnu.org/git/guix.git")
+  (url "git://git.savannah.gnu.org/guix.git")
   ;; (commit
   ;;  "31c9f0e30108bc9845df85e9b3f440d53b002409")
   (introduction
