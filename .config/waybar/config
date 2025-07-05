@@ -47,10 +47,10 @@
     "clock": {
         // "timezone": "Europe/Athens",
         "interval": 20,
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt>{calendar}</tt>",
+        "tooltip-format": "<tt>{calendar}</tt>",
         //"format": "{:%H:%M:%S}C",
-        "format": "{:%Y-%m-%d | %H:%M}",
-        "on-click": "gnome-calendar"
+        "format": "{:%Y-%m-%d | %H:%M}"
+        //"on-click": "gnome-calendar"
         //"format-alt": "{:%Y-%m-%d}"
     },
     "cpu": {
