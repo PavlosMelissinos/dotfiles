@@ -965,19 +965,55 @@ Examples TODO."
   :defines (lsp-keymap-prefix lsp-mode-map)
   :init
   (setq lsp-keymap-prefix "C-c l")
-  :custom
-  (lsp-keep-workspace-alive nil)
-  (lsp-auto-guess-root nil)
-  (lsp-eldoc-enable-hover nil)
-  (lsp-signature-auto-activate nil)
-  (lsp-completion-enable t)
-  (gc-cons-threshold 1600000)
-  (read-process-output-max (* 1024 1024))
   :hook ((python-mode . lsp-deferred)
+         (java-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred)
   :bind (:map lsp-mode-map
-	      ("M-<RET>" . lsp-execute-code-action)))
+        ("M-<RET>" . lsp-execute-code-action))
+  :config
+  (setq gc-cons-threshold 1600000
+        lsp-auto-guess-root nil
+        lsp-completion-enable t
+        lsp-completion-enable-additional-text-edit nil
+        lsp-eldoc-enable-hover nil
+        lsp-enable-snippet t
+        lsp-enable-symbol-highlighting t
+        lsp-enable-links t
+        lsp-keep-workspace-alive nil
+        lsp-restart 'auto-restart
+        lsp-signature-auto-activate nil
+        read-process-output-max (* 1024 1024))
+  :commands lsp)
+
+(use-package lsp-ui
+  :commands lsp-ui-mode
+  :config
+  (setq lsp-ui-doc-enable t
+        lsp-ui-doc-show-with-cursor t
+        lsp-ui-doc-delay 0.5
+        lsp-ui-doc-position 'at-point
+        lsp-ui-sideline-enable t
+        lsp-ui-sideline-show-hover nil
+        lsp-ui-sideline-show-code-actions t
+        lsp-ui-peek-enable t
+        lsp-ui-peek-show-directory t))
+
+(use-package lsp-java
+  :config
+  (setq lsp-java-server-install-dir (expand-file-name "~/.config/emacs/eclipse.jdt.ls/server/")
+        lsp-java-workspace-dir (expand-file-name "~/.emacs.d/workspace/")
+        lsp-java-workspace-cache-dir (expand-file-name "~/.config/emacs/workspace/.metadata/.plugins/org.eclipse.core.resources/.projects/")
+        lsp-java-vmargs '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Dsun.zip.disableMemoryMapping=true" "-Xmx4G" "-Xms1G")
+        lsp-java-import-maven-enabled t
+        lsp-java-import-gradle-enabled t
+        lsp-java-maven-download-sources t
+        lsp-java-format-enabled t
+        lsp-java-format-on-type-enabled t
+        lsp-java-save-actions-organize-imports t
+        lsp-java-completion-enabled t
+        lsp-java-completion-overwrite t
+        lsp-java-completion-guess-method-arguments t))
 
 ;; Debugger
 (use-package dap-mode
