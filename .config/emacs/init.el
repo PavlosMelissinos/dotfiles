@@ -1021,7 +1021,27 @@ Examples TODO."
   :defer t
   :after lsp-mode
   :config
-  (dap-auto-configure-mode))
+  (dap-auto-configure-mode)
+  (dap-ui-mode 1)
+  (dap-tooltip-mode 1)
+  (tooltip-mode 1)
+  (dap-ui-controls-mode 1)
+
+  ;; Java debugging
+  (require 'dap-java)
+
+  ;; Key bindings for debugging
+  :bind
+  ("C-c d d" . dap-debug)
+  ("C-c d l" . dap-debug-last)
+  ("C-c d r" . dap-debug-recent)
+  ("C-c d b" . dap-breakpoint-toggle)
+  ("C-c d n" . dap-next)
+  ("C-c d s" . dap-step-in)
+  ("C-c d o" . dsp-step-out)
+  ("C-c d c" . dap-continue)
+  ("C-c d e" . dap-eval-region)
+  ("C-c d q" . dap-disconnect))
 
 ;;; See https://emacs-lsp.github.io/lsp-mode/ for more info
 ;;; Dependency:
