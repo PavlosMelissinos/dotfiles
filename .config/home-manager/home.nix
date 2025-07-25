@@ -17,6 +17,7 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+    "claude-code"
     "spotify"
   ];
 
@@ -38,9 +39,11 @@
     # '')
     awscli2
     babashka
+    claude-code
     clojure
     curl
     flameshot
+    firefox
     fortune
     git
     gum
