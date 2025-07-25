@@ -59,6 +59,7 @@
     # slack
     # signal-desktop
     spotify
+    swaylock-effects
     # stremio  # Could not initialize GLX
     tmux
     uv
@@ -98,6 +99,7 @@
   #  /etc/profiles/per-user/pavlos/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
+    BROWSER = "firefox";
     EDITOR = "emacs";
     XDG_CONFIG_HOME = "$HOME/.config";
     XDG_CACHE_HOME = "$HOME/.cache";
@@ -139,6 +141,18 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  programs.swaylock = {
+    enable = true;
+    settings = {
+      color = "808080";
+      font-size = 24;
+      indicator-idle-visible = false;
+      indicator-radius = 100;
+      line-color = "ffffff";
+      show-failed-attempts = true;
+    };
+  };
 
   programs.zsh = {
     enable = true;
