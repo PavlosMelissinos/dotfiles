@@ -5,6 +5,9 @@ eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
+# Add home-manager to PATH
+export PATH="$HOME/.nix-profile/bin:$PATH"
+
 . "$GUIX_PROFILE/etc/profile"
 
 # tab completion

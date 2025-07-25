@@ -171,7 +171,7 @@
         };
       }
     ];
-    initExtra = (builtins.readFile ./.zshrc);
+    initContent = (builtins.readFile ./.zshrc);
   };
   #users.users.pavlos.shell = pkgs.zsh;
 
