@@ -106,6 +106,8 @@
     TMUX_HOME = "$HOME/.config/tmux"; # used by oh-my-tmux
     NIXOS_OZONE_WL = "1";
     NIXPKGS_ALLOW_UNFREE = 1;
+    LANG="en_US.UTF-8";
+    LC_ALL="en_US.UTF-8";
   };
 
   programs.emacs = {
@@ -193,4 +195,86 @@
   #   pinentryPackage = pkgs.pinentry;
   #   # pinentryFlavor = "curses";
   # };
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      # Web browsing - using Firefox Nightly as your default
+      "x-scheme-handler/http" = "firefox.desktop";
+      "x-scheme-handler/https" = "firefox.desktop";
+      "x-scheme-handler/ftp" = "firefox.desktop";
+      "x-scheme-handler/chrome" = "firefox.desktop";
+      "text/html" = "firefox.desktop";
+      "application/x-extension-htm" = "firefox.desktop";
+      "application/x-extension-html" = "firefox.desktop";
+      "application/x-extension-shtml" = "firefox.desktop";
+      "application/xhtml+xml" = "firefox.desktop";
+      "application/x-extension-xhtml" = "firefox.desktop";
+      "application/x-extension-xht" = "firefox.desktop";
+
+      # Video files - using Celluloid as default
+      "video/mp4" = "io.github.celluloid_player.Celluloid.desktop";
+      "video/mpeg" = "io.github.celluloid_player.Celluloid.desktop";
+
+      # Email
+      "x-scheme-handler/mailto" = "userapp-Daily-HMC2R1.desktop";
+      "message/rfc822" = "userapp-Daily-HMC2R1.desktop";
+      "x-scheme-handler/mid" = "userapp-Daily-HMC2R1.desktop";
+
+      # News/RSS
+      "x-scheme-handler/news" = "userapp-Daily-SYH9Q1.desktop";
+      "x-scheme-handler/snews" = "userapp-Daily-SYH9Q1.desktop";
+      "x-scheme-handler/nntp" = "userapp-Daily-SYH9Q1.desktop";
+      "x-scheme-handler/feed" = "userapp-Daily-GT38Q1.desktop";
+      "application/rss+xml" = "userapp-Daily-GT38Q1.desktop";
+      "application/x-extension-rss" = "userapp-Daily-GT38Q1.desktop";
+
+      # Calendar
+      "x-scheme-handler/webcal" = "userapp-Daily-8YM9Q1.desktop";
+      "text/calendar" = "userapp-Daily-8YM9Q1.desktop";
+      "application/x-extension-ics" = "userapp-Daily-8YM9Q1.desktop";
+      "x-scheme-handler/webcals" = "userapp-Daily-8YM9Q1.desktop";
+
+      # Social/Communication
+      "x-scheme-handler/tootle" = "com.github.bleakgrey.tootle.desktop";
+      "x-scheme-handler/viber" = "viber.desktop";
+
+      # Archives
+      "application/zip" = "libreoffice-startcenter.desktop";
+    };
+
+    associations.added = {
+      # Web browsers alternatives
+      "x-scheme-handler/http" = [
+        "firefox.desktop"
+        "firefox-wayland.desktop"
+      ];
+      "x-scheme-handler/https" = [
+        "firefox.desktop"
+        "firefox-wayland.desktop"
+      ];
+      "text/html" = [
+        "firefox.desktop"
+        "firefox-wayland.desktop"
+      ];
+
+      # Video players alternatives
+      "video/mp4" = [
+        "io.github.celluloid_player.Celluloid.desktop"
+        "mpv.desktop"
+        "vlc.desktop"
+      ];
+      "video/x-matroska" = [
+        "mpv.desktop"
+        "io.github.celluloid_player.Celluloid.desktop"
+      ];
+
+      # Image viewers
+      "image/jpeg" = [
+        "imv-dir.desktop"
+        "swappy.desktop"
+        "imv.desktop"
+      ];
+    };
+  };
 }
