@@ -1,4 +1,4 @@
-;; init.el --- My Emacs configuration
+;; init.el --- My Emacs configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 
 ;; WIP
@@ -126,6 +126,12 @@ Examples TODO."
   :ensure t)
 
 (defvar clojure-mode-map (make-keymap))
+
+(use-package flycheck
+  :init (global-flycheck-mode)
+  :config
+  (setq flycheck-check-syntax-automatically '(save mode-enabled)
+        flycheck-display-errors-delay 0.3))
 
 (use-package flycheck-clj-kondo
   :ensure t)
@@ -314,6 +320,8 @@ Examples TODO."
       "vendor" "vendors" ".cabal-sandbox" "dist" ".vagrant" "node_modules"
       "bower_components" ".bundle" ".stack-work"))
   (defconst projectile-completion-system 'ivy)
+  (defconst projectile-remember-window-configs t)
+  (defconst projectile-use-git-grep t)
   (projectile-mode nil))
 
 (use-package terraform-mode
@@ -326,6 +334,9 @@ Examples TODO."
   (yas-global-mode 1)
   (add-to-list 'yas-snippet-dirs (concat user-emacs-directory "snippets"))
   (yas-load-directory (concat user-emacs-directory "snippets")))
+
+(use-package yasnippet-snippets
+  :after yasnippet)
 
 (use-package dockerfile-mode
   :ensure t
@@ -415,7 +426,7 @@ Examples TODO."
          ("<S-return>" . org-insert-subheading)
          ("<s-return>" . org-insert-subheading)
          ("C-c a" . org-agenda)
-         ("C-c s" . ss/standup))
+         ("C-c s" . ss/standup-slack))
   :init
   (font-lock-add-keywords 'org-mode
                           '(("^ +\\([-*]\\) " . (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "→"))))
@@ -514,7 +525,7 @@ Examples TODO."
   ;;   (org-force-self-insert "|")
   ;;   (multiple-cursors-mode))
 
-  (defun ss/standup (start end)
+  (defun ss/standup-slack (start end)
     (interactive "r")
     (let ((oldbuf (current-buffer)))
       (with-temp-buffer
@@ -522,17 +533,17 @@ Examples TODO."
         (goto-char (point-min))
         (replace-match " BLOK" " :todo-pause:")
         (goto-char (point-min))
-        (replace-string " DONE" " :todo-done:")
+        (replace-match " DONE" " :todo-done:")
         (goto-char (point-min))
-        (replace-string " PROG" " :todo-doing:")
+        (replace-match " PROG" " :todo-doing:")
         (goto-char (point-min))
-        (replace-string " CNCL" " :todo-cancel:")
+        (replace-match " CNCL" " :todo-cancel:")
         (goto-char (point-min))
-        (replace-string " TODO" " :todo:")
+        (replace-match " TODO" " :todo:")
         (goto-char (point-min))
-        (replace-regexp "^\\* " "") ; remove header stars and space
+        (replace-match "^\\* " "") ; remove header stars and space
         (goto-char (point-min))
-        (replace-regexp "^\\*" "") ; remove item stars
+        (replace-match "^\\*" "") ; remove item stars
         (kill-ring-save (point-min) (point-max)))))
 
   (defun ss/html-from-org (beg end)
@@ -955,6 +966,38 @@ Examples TODO."
   :bind (:map python-mode-map
               ("C-c C-n" . numpydoc-generate)))
 
+
+;;;========================================
+;;; Java
+;;;========================================
+
+(use-package maven-test-mode
+  :config
+  (add-hook 'java-mode-hook 'maven-test-mode))
+
+;; Gradle integration
+(use-package gradle-mode
+  :config
+  (add-hook 'java-mode-hook 'gradle-mode))
+
+;; XML support for Maven/Gradle files
+(use-package nxml-mode
+  :mode (("\\.xml\\'" . nxml-mode)
+         ("\\.pom\\'" . nxml-mode))
+  :config
+  (setq nxml-child-indent 2
+        nxml-attribute-indent 2))
+
+;; JSON support
+(use-package json-mode
+  :mode "\\.json\\'")
+
+;; Shows a transient menu for the selected prefix after some delay
+(use-package which-key
+  :init (which-key-mode)
+  :config
+  (setq which-key-idle-delay 3))
+
 ;;; `lsp-mode` proper
 ;;; The config should be relatively agnostic up to here
 
@@ -969,8 +1012,7 @@ Examples TODO."
          (java-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred)
-  :bind (:map lsp-mode-map
-        ("M-<RET>" . lsp-execute-code-action))
+  :bind (:map lsp-mode-map ("M-<RET>" . lsp-execute-code-action))
   :config
   (setq gc-cons-threshold 1600000
         lsp-auto-guess-root nil
@@ -1015,6 +1057,8 @@ Examples TODO."
         lsp-java-completion-overwrite t
         lsp-java-completion-guess-method-arguments t))
 
+(use-package java-spring-boot)
+
 ;; Debugger
 (use-package dap-mode
   :ensure t
@@ -1043,9 +1087,27 @@ Examples TODO."
   ("C-c d e" . dap-eval-region)
   ("C-c d q" . dap-disconnect))
 
+;;;========================================
+;;; AI
+;;;========================================
+
+;; for eat terminal backend:
+(use-package eat
+  :ensure t)
+
+;; for vterm terminal backend:
+(use-package vterm
+  :ensure t)
+
+;; install claude-code.el
+(use-package claude-code
+  :ensure t
+  :vc (:url "https://github.com/stevemolitor/claude-code.el" :rev :newest)
+  :config (claude-code-mode)
+  :bind-keymap ("C-c c" . claude-code-command-map))
+
+
 ;;; See https://emacs-lsp.github.io/lsp-mode/ for more info
-;;; Dependency:
-;;;  npm i -g pyright
 (use-package lsp-pyright
   :ensure t
   :defer t
@@ -1109,9 +1171,10 @@ Examples TODO."
                       :background "#073642")
 
   (defun remove-window-move-indicator ()
-    (if ss/window-move-remap-cookie
-        (face-remap-remove-relative
-         ss/window-move-remap-cookie)))
+    "Remove the window move visual indicator."
+    (when ss/window-move-remap-cookie
+      (face-remap-remove-relative ss/window-move-remap-cookie)
+      (setq ss/window-move-remap-cookie nil)))
 
   (defun add-window-move-indicator ()
     (setq
@@ -1119,6 +1182,8 @@ Examples TODO."
      (face-remap-add-relative 'default 'move-window-buffer-face)))
 
   (defun window-move (direction)
+    "Move to window in DIRECTION and update visual indicator.
+DIRECTION can be \\='up, \\='down, \\='left, or \\='right."
     (let ((fun (cond ((eq direction 'up) 'windmove-up)
                      ((eq direction 'down) 'windmove-down)
                      ((eq direction 'left) 'windmove-left)
@@ -1244,6 +1309,14 @@ Examples TODO."
   (defun pound ()
     (interactive)
     (insert "£"))
+
+  (defun usd ()
+    (interactive)
+    (insert "$"))
+
+  (defun dollar ()
+    (interactive)
+    (insert "$"))
 
   ;; camelcase
 
