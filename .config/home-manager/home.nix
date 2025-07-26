@@ -71,16 +71,8 @@
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
-
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
+    # Swaylock config in native format
+    ".config/swaylock/config".source = ./configs/swaylock/config;
   };
 
   # Home Manager can also manage your environment variables through
@@ -111,7 +103,22 @@
     NIXPKGS_ALLOW_UNFREE = 1;
     LANG="en_US.UTF-8";
     LC_ALL="en_US.UTF-8";
+
+    # PyEnv configuration
+    PYENV_ROOT = "$XDG_DATA_HOME/pyenv";
+
+    # Guix profile location
+    GUIX_PROFILE = "$HOME/.config/guix/current";
   };
+
+  # Clean PATH management through home-manager
+  home.sessionPath = [
+    "$HOME/.local/bin"                 # Local binaries (highest priority)
+    "$PYENV_ROOT/bin"                  # PyEnv
+    "$HOME/.config/guix/current/bin"   # Guix current
+    "$HOME/.guix-profile/bin"          # Guix profile
+    "$HOME/.guix-profile/sbin"         # Guix sbin
+  ];
 
   programs.emacs = {
     enable = true;
@@ -147,17 +154,8 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  programs.swaylock = {
-    enable = true;
-    settings = {
-      color = "808080";
-      font-size = 24;
-      indicator-idle-visible = false;
-      indicator-radius = 100;
-      line-color = "ffffff";
-      show-failed-attempts = true;
-    };
-  };
+  # Enable swaylock but manage config file manually via home.file
+  programs.swaylock.enable = true;
 
   programs.zsh = {
     enable = true;

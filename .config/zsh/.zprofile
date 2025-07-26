@@ -17,14 +17,13 @@ export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
 #export KODI_HOME="$XDG_CONFIG_HOME/kodi" #doesn't seem to be working
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
 export PGPASSFILE="$XDG_CONFIG_HOME/pg/pgpass"
-export PYENV_ROOT="$XDG_DATA_HOME/pyenv"
+# PYENV_ROOT now set by home-manager sessionVariables
 export TMUX_HOME="$XDG_CONFIG_HOME/tmux" # used by oh-my-tmux
 export TMUX_PLUGIN_MANAGER_PATH="$XDG_DATA_HOME/tmux/plugins"
 zstyle ':completion:*' cache-path $XDG_CACHE_HOME/zsh/zcompcache
 
-export PATH="$PATH:$HOME/.local/bin"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
+# PATH management now handled by home-manager sessionVariables
+# PyEnv path initialization moved to home-manager
 #export PATH="$PATH:$HOME/.poetry/bin"
 #export PATH="$PATH:$CARGO_HOME/bin"
 

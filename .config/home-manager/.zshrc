@@ -1,14 +1,13 @@
-export PYENV_ROOT="$XDG_DATA_HOME/pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
+# PyEnv setup (only once, managed by home-manager sessionVariables)
+if [[ -d "$PYENV_ROOT" ]] && command -v pyenv >/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+fi
 
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-
-# Add home-manager to PATH
-export PATH="$HOME/.nix-profile/bin:$PATH"
-
-. "$GUIX_PROFILE/etc/profile"
+# Source Guix profile if available (PATH is managed by sessionVariables)
+if [[ -n "$GUIX_PROFILE" && -f "$GUIX_PROFILE/etc/profile" ]]; then
+    . "$GUIX_PROFILE/etc/profile"
+fi
 
 # tab completion
 fpath=($ZDOTDIR/zfunc $fpath)
