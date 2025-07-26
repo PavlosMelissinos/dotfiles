@@ -114,12 +114,11 @@
   };
 
   # Clean PATH management through home-manager
+  # Note: Guix paths are added by system /etc/profile.d/guix.sh
   home.sessionPath = [
     "$HOME/.local/bin"                 # Local binaries (highest priority)
     "$PYENV_ROOT/bin"                  # PyEnv
-    "$HOME/.config/guix/current/bin"   # Guix current
-    "$HOME/.guix-profile/bin"          # Guix profile
-    "$HOME/.guix-profile/sbin"         # Guix sbin
+    # Guix paths omitted - handled by system profile.d
   ];
 
   programs.emacs = {
