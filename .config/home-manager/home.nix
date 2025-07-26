@@ -57,8 +57,8 @@
     (python312.withPackages(ps: with ps; [yapf requests]))
     qbittorrent
     ripgrep
+    signal-desktop
     # slack
-    # signal-desktop
     spotify
     swaylock
     #swaylock-effects
@@ -66,6 +66,7 @@
     tmux
     uv
     vscodium
+    xdg-utils
     zsh
   ];
 
