@@ -53,7 +53,7 @@
     nodejs_22
     powerline-fonts
     pyright
-    (python312.withPackages(ps: with ps; [yapf]))
+    (python312.withPackages(ps: with ps; [yapf requests]))
     qbittorrent
     ripgrep
     # slack

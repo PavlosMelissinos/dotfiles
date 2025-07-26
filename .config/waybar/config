@@ -46,6 +46,7 @@
     },
     "clock": {
         // "timezone": "Europe/Athens",
+        "locale": "C",
         "interval": 20,
         "tooltip-format": "<tt>{calendar}</tt>",
         //"format": "{:%H:%M:%S}C",
