@@ -50,6 +50,7 @@
     htop
     jdk21
     libreoffice
+    logrotate
     nodejs_22
     powerline-fonts
     pyright
@@ -212,6 +213,107 @@
   #   pinentryPackage = pkgs.pinentry;
   #   # pinentryFlavor = "curses";
   # };
+
+  # Declarative logrotate configuration managed as home files
+  home.file.".config/logrotate/logrotate.conf" = {
+    text = ''
+      # Personal logrotate configuration
+
+      # Slack logs
+      ${config.home.homeDirectory}/.config/Slack/logs/*.log {
+          size 5M
+          rotate 3
+          compress
+          delaycompress
+          missingok
+          notifempty
+          create 644 ${config.home.username} ${config.home.username}
+      }
+
+      # Antigen debug log
+      ${config.home.homeDirectory}/.cache/antigen/debug.log {
+          size 1M
+          rotate 3
+          compress
+          delaycompress
+          missingok
+          notifempty
+          create 644 ${config.home.username} ${config.home.username}
+          postrotate
+              # Truncate to prevent excessive growth
+              if [ -f ${config.home.homeDirectory}/.cache/antigen/debug.log ]; then
+                  tail -n 5000 ${config.home.homeDirectory}/.cache/antigen/debug.log > ${config.home.homeDirectory}/.cache/antigen/debug.log.tmp
+                  mv ${config.home.homeDirectory}/.cache/antigen/debug.log.tmp ${config.home.homeDirectory}/.cache/antigen/debug.log
+              fi
+          endscript
+      }
+
+      # Emacs logs (if they exist, they should be in .cache according to XDG)
+      ${config.home.homeDirectory}/.cache/emacs/*.log {
+          size 2M
+          rotate 2
+          compress
+          delaycompress
+          missingok
+          notifempty
+          create 644 ${config.home.username} ${config.home.username}
+      }
+    '';
+  };
+
+  # Systemd user services for automated maintenance
+  systemd.user.services.log-cleanup = {
+    Unit = {
+      Description = "Daily log rotation and system cleanup";
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.writeShellScript "log-cleanup" ''
+        set -euo pipefail
+
+        echo "[$(date)] Starting automated log cleanup"
+
+        # Run logrotate first
+        ${pkgs.logrotate}/bin/logrotate -s ${config.home.homeDirectory}/.local/state/logrotate.state ${config.home.homeDirectory}/.config/logrotate/logrotate.conf 2>/dev/null || true
+
+        # Slack log management - truncate files that are still too large
+        find ${config.home.homeDirectory}/.config/Slack/logs -name "*.log" -size +5M -exec sh -c 'tail -c 1048576 "$1" > "$1.tmp" && mv "$1.tmp" "$1"' _ {} \; 2>/dev/null || true
+
+        # Clean old cache files
+        find ${config.home.homeDirectory}/.cache -name "*.tmp" -mtime +7 -delete 2>/dev/null || true
+        find ${config.home.homeDirectory}/.cache -name "*.log" -size +10M -mtime +30 -delete 2>/dev/null || true
+
+        # Clean trash (keep files less than 30 days old)
+        find ${config.home.homeDirectory}/.local/share/Trash/files -mtime +30 -delete 2>/dev/null || true
+        find ${config.home.homeDirectory}/.local/share/Trash/info -mtime +30 -delete 2>/dev/null || true
+
+        # Vacuum SQLite databases to reclaim space
+        for db in $(find ${config.home.homeDirectory}/.config -name "*.db" -o -name "*.sqlite" 2>/dev/null); do
+          ${pkgs.sqlite}/bin/sqlite3 "$db" "VACUUM;" 2>/dev/null || true
+        done
+
+        echo "[$(date)] Automated log cleanup completed"
+      ''}";
+      StandardOutput = "journal";
+      StandardError = "journal";
+    };
+  };
+
+  systemd.user.timers.log-cleanup = {
+    Unit = {
+      Description = "Run log cleanup daily at random time";
+      Requires = [ "log-cleanup.service" ];
+    };
+    Timer = {
+      OnCalendar = "daily";
+      RandomizedDelaySec = "30m";
+      Persistent = true;
+    };
+    Install = {
+      WantedBy = [ "timers.target" ];
+    };
+  };
 
   xdg.mimeApps = {
     enable = true;
