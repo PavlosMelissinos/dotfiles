@@ -22,3 +22,8 @@ request
 tramp
 transient/
 url/
+
+# Auto-generated files that should not be tracked
+eclipse.jdt.ls/
+forge-database-*.sql
+projects
