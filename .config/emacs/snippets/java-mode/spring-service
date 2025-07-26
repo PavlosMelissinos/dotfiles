@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: Spring Service
+# key: sservice
+# --
+@Service
+public class ${1:$(capitalize (file-name-base))}Service {
+
+    $0
+}

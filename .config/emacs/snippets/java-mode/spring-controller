@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: Spring REST Controller
+# key: scontroller
+# --
+@RestController
+@RequestMapping("${1:/api}")
+public class ${2:$(capitalize (file-name-base))}Controller {
+
+    @GetMapping
+    public ResponseEntity<${3:String}> ${4:getAll}() {
+        $0
+        return ResponseEntity.ok().build();
+    }
+}
