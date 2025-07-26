@@ -59,7 +59,8 @@
     # slack
     # signal-desktop
     spotify
-    swaylock-effects
+    swaylock
+    #swaylock-effects
     # stremio  # Could not initialize GLX
     tmux
     uv
@@ -119,6 +120,10 @@
       epkgs.nix-mode
       epkgs.magit
     ];
+  };
+
+  programs.firefox = {
+    enable = true;
   };
 
   programs.git = {
