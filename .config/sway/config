@@ -61,12 +61,22 @@ exec_always $XDG_CONFIG_HOME/azotebg
 exec_always ~/.guix-profile/libexec/geoclue-2.0/demos/agent
 exec gammastep-indicator
 
+exec_always export XCURSOR_SIZE=24
+exec_always export XCURSOR_THEME=Adwaita
+exec_always export XCURSOR_SIZE_MULTIPLIER=1.5
+
+exec_always export GDK_SCALE=0
+exec_always export GDK_DPI_SCALE=1.0
+# Let the compositor handle scaling
+exec_always export GDK_BACKEND=wayland
+
 exec_always {
     mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob
     flashfocus
     mako
     gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
-    gsettings set org.gnome.desktop.interface cursor-size 24
+    gsettings set org.gnome.desktop.interface cursor-size 32
+    gsettings set org.gnome.desktop.interface scaling-factor 1
 }
 
 set $monitor1 eDP-1
@@ -197,8 +207,15 @@ for_window [app_id="emacs"] {
 }
 
 assign [title="main-term"] workspace 2
+assign [title="main-browser"] workspace 3
+
+# Make Signal compatible with xdg-open
+exec systemctl --user import-environment WAYLAND_DISPLAY XDG_SESSION_TYPE
+
 exec $term -t main-term
 exec emacs
+exec firefox -t main-browser
+exec signal-desktop
 
 # Clamshell mode
 
@@ -480,4 +497,6 @@ bar {
     swaybar_command waybar
 }
 
-seat seat0 xcursor_theme Adwaita 24
+seat * xcursor_theme Adwaita 32
+
+# include ~/.config/sway/cursor/cursor.conf
