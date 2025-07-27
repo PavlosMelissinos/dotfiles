@@ -65,24 +65,24 @@ environments and simplified maintenance.
 * 📋 Component Overview
 
 ** Desktop Environment
-| Component | Purpose | Configuration |
-|-----------+---------+---------------|
-| [[https://swaywm.org/][Sway]] | Wayland compositor & tiling WM | =.config/sway/config= |
-| [[https://github.com/Alexays/Waybar][Waybar]] | Status bar | =.config/waybar/= |
-| [[https://hg.sr.ht/~scoopta/wofi][Wofi]] | Application launcher | =.config/wofi/= |
-| [[https://github.com/emersion/mako][Mako]] | Notification daemon | =.config/mako/= |
-| [[https://github.com/swaywm/swaylock][Swaylock]] | Screen locker (U2F support) | =.config/swaylock/= |
-| [[https://github.com/emersion/kanshi][Kanshi]] | Multi-monitor management | =.config/kanshi/= |
-| [[https://gitlab.com/chinstrap/gammastep][Gammastep]] | Blue light filter | Configured via home-manager |
+| Component | Purpose                        | Configuration               |
+|-----------+--------------------------------+-----------------------------|
+| [[https://swaywm.org/][Sway]]      | Wayland compositor & tiling WM | =.config/sway/config=         |
+| [[https://github.com/Alexays/Waybar][Waybar]]    | Status bar                     | =.config/waybar/=             |
+| [[https://hg.sr.ht/~scoopta/wofi][Wofi]]      | Application launcher           | =.config/wofi/=               |
+| [[https://github.com/emersion/mako][Mako]]      | Notification daemon            | =.config/mako/=               |
+| [[https://github.com/swaywm/swaylock][Swaylock]]  | Screen locker (U2F support)    | =.config/swaylock/=           |
+| [[https://github.com/emersion/kanshi][Kanshi]]    | Multi-monitor management       | =.config/kanshi/=             |
+| [[https://gitlab.com/chinstrap/gammastep][Gammastep]] | Blue light filter              | Configured via home-manager |
 
 ** Development Tools
-| Tool | Purpose | Configuration |
-|------+---------+---------------|
-| [[https://www.gnu.org/software/emacs/][Emacs]] | Primary editor (XDG compliant) | =.config/emacs/init.el= |
-| [[https://alacritty.org/][Alacritty]] | Terminal emulator | =.config/alacritty/= |
-| [[https://www.zsh.org/][Zsh]] | Shell with custom theme | =.config/zsh/= |
-| [[https://github.com/tmux/tmux][Tmux]] | Terminal multiplexer | =.config/tmux/= |
-| Git | Version control | Managed via home-manager |
+| Tool      | Purpose                        | Configuration            |
+|-----------+--------------------------------+--------------------------|
+| [[https://www.gnu.org/software/emacs/][Emacs]]     | Primary editor (XDG compliant) | =.config/emacs/init.el=    |
+| [[https://alacritty.org/][Alacritty]] | Terminal emulator              | =.config/alacritty/=       |
+| [[https://www.zsh.org/][Zsh]]       | Shell with custom theme        | =.config/zsh/=             |
+| [[https://github.com/tmux/tmux][Tmux]]      | Terminal multiplexer           | =.config/tmux/=            |
+| Git       | Version control                | Managed via home-manager |
 
 ** Package Management
 - *Primary*: home-manager/Nix (ALL user packages - 95+)
@@ -179,6 +179,9 @@ All significant architectural decisions are documented in =docs/architecture/adr
 - [[docs/architecture/adr/0002-sway-window-manager-wayland-first.md][ADR-0002]]: Sway Window Manager with Wayland-First Desktop Environment
 - [[docs/architecture/adr/0003-xdg-directory-compliance.md][ADR-0003]]: XDG Base Directory Specification Compliance
 - [[docs/architecture/adr/0004-u2f-hardware-key-authentication.md][ADR-0004]]: U2F Hardware Key Authentication
+- [[docs/architecture/adr/0005-line-length-text-formatting-standards.md][ADR-0005]]: Line Length and Text Formatting Standards
+- [[docs/architecture/adr/0006-trailing-whitespace-policy.md][ADR-0006]]: Trailing Whitespace Policy
+- [[docs/architecture/adr/0007-git-commit-message-standards.md][ADR-0007]]: Git Commit Message Standards
 
 ** Additional Documentation
 - =CLAUDE.md= - Guidance for AI assistant sessions

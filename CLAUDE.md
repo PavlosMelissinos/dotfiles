@@ -15,16 +15,19 @@ terminal applications, and various GUI tools.
 ### home-manager (Nix) - SOLE PACKAGE MANAGER
 - Configuration: `.config/home-manager/home.nix`
 - Apply changes: `home-manager switch`
-- **Manages 95+ packages**: ALL development tools, desktop applications, Wayland environment, system libraries
+- **Manages 95+ packages**: ALL development tools, desktop applications,
+  Wayland environment, system libraries
 - Integrated configuration management for git, zsh, emacs, firefox
 - Allows unfree packages (claude-code, spotify, steam)
 - **Complete package management solution - use for ALL package installations**
 
 ### Guix (ELIMINATED)
 - **Status**: Completely eliminated as of 2025-07-27
-- Package manifest: `.config/guix/packages.scm` (empty - `(specifications->manifest (list))`)
+- Package manifest: `.config/guix/packages.scm`
+  (empty - `(specifications->manifest (list))`)
 - **Migration Complete**: All packages moved to home-manager/Nix
-- **Note**: Guix daemon may still be present but no packages are managed through it
+- **Note**: Guix daemon may still be present but no packages are
+  managed through it
 
 ## Key Configuration Files
 
@@ -119,12 +122,17 @@ home-manager switch
 - Major architectural changes that affect session prompts
 - Package management or tooling changes that impact workflow
 
+#### Code Quality Standards
+- **Line Length**: Follow [ADR-0005](docs/architecture/adr/0005-line-length-text-formatting-standards.md) - limit lines to 80 characters
+- **Trailing Whitespace**: Follow [ADR-0006](docs/architecture/adr/0006-trailing-whitespace-policy.md) - remove all trailing whitespace
+- **Git Commits**: Follow [ADR-0007](docs/architecture/adr/0007-git-commit-message-standards.md) - use imperative mood, 50/72 rule
+
 #### Commit Message Format
 Follow imperative mood (complete: "If applied, this commit will ___"):
 ```bash
 git commit -m "Add feature X to improve Y
 
-- Reference ADR-XXX if applicable  
+- Reference ADR-XXX if applicable
 - Include rationale for architectural changes
 - Explain why change was needed, not how
 
@@ -138,6 +146,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 - Limit subject to 50 characters, capitalize, no period
 - Body explains "what" and "why", not "how"
 - Reference ADRs when making architectural decisions
+- Follow [ADR-0007](docs/architecture/adr/0007-git-commit-message-standards.md) for complete standards
 
 ### Package Management Hierarchy (Current)
 ```
