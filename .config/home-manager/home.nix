@@ -111,6 +111,8 @@
     godot
     steam
     yt-dlp
+    element-desktop
+    dbeaver-bin
 
     # Remaining packages
     xfce.thunar

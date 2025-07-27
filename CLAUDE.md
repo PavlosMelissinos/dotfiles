@@ -166,9 +166,8 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 │  └─ Hardware firmware                           │
 └─────────────────────────────────────────────────┘
 ┌─ SANDBOXED ─────────────────────────────────────┐
-│  Flatpak (Minimal - special cases only)         │
-│  ├─ Element (Matrix client)                     │
-│  └─ DBeaver Community                           │
+│  Flatpak (ELIMINATED - 2025-07-27)              │
+│  └─ No packages remaining                       │
 └─────────────────────────────────────────────────┘
 ```
 
