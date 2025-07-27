@@ -113,6 +113,10 @@
     yt-dlp
     element-desktop
     dbeaver-bin
+    appimage-run
+    mesa
+    libGL
+    libglvnd
 
     # Remaining packages
     xfce.thunar
@@ -424,7 +428,7 @@
 
       # Social/Communication
       "x-scheme-handler/tootle" = "com.github.bleakgrey.tootle.desktop";
-      "x-scheme-handler/viber" = "viber.desktop";
+      # "x-scheme-handler/viber" = "viber.desktop";  # Disabled - using AppImage
 
       # Archives
       "application/zip" = "libreoffice-startcenter.desktop";

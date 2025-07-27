@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Viber (AppImage)
+Comment=Viber VoIP and messenger
+Exec=/home/pavlos/.local/bin/viber.AppImage %u
+Path=/home/pavlos/.local/bin/
+Icon=viber
+Terminal=false
+Type=Application
+Categories=Network;InstantMessaging;P2P;
+MimeType=x-scheme-handler/viber;
+StartupWMClass=ViberPC
