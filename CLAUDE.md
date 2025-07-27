@@ -12,15 +12,18 @@ terminal applications, and various GUI tools.
 
 ## Package Management & Configuration
 
-### home-manager (Nix)
+### home-manager (Nix) - PRIMARY
 - Configuration: `.config/home-manager/home.nix`
 - Apply changes: `home-manager switch`
-- Packages are managed declaratively through Nix
-- Allows unfree packages (claude-code, spotify)
+- **Manages 58+ packages**: development tools, desktop applications, Wayland environment
+- Integrated configuration management for git, zsh, emacs, firefox
+- Allows unfree packages (claude-code, spotify, steam)
+- **Use this for all new package installations**
 
-### Guix (Alternative/Experimental)
+### Guix (Specialized/Minimal)
 - Channel config: `.config/guix/channels.scm`
-- Package manifest: `.config/guix/packages.scm`
+- Package manifest: `.config/guix/packages.scm` (reduced to ~27 packages)
+- **Limited to**: system integration packages, specialized Emacs packages, unique utilities
 - Apply channels: `guix pull -C ~/.config/guix/channels.scm`
 - Install packages: `guix package -m ~/.config/guix/packages.scm`
 - Upgrade daemon: `sudo -i guix pull && systemctl restart guix-daemon.service`
@@ -56,11 +59,11 @@ swaymsg reload
 
 ### Package Management
 ```bash
-# Install packages via home-manager
+# Primary: Install packages via home-manager (RECOMMENDED)
 # Edit .config/home-manager/home.nix, then:
 home-manager switch
 
-# Install packages via Guix
+# Secondary: Install specialized packages via Guix (only when needed)
 guix package -m ~/.config/guix/packages.scm
 ```
 

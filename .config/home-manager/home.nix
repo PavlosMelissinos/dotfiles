@@ -19,6 +19,9 @@
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
     "claude-code"
     "spotify"
+    "steam"
+    "steam-unwrapped"
+    "steam-run"
   ];
 
   # The home.packages option allows you to install Nix packages into your
@@ -93,6 +96,23 @@
     wlogout
     swappy
     wf-recorder
+    
+    # Desktop applications migrated from Guix
+    vlc
+    mpv
+    strawberry
+    evince
+    imagemagick
+    imv
+    nomacs
+    font-manager
+    nyxt
+    thunderbird
+    pidgin
+    godot
+    steam
+    yt-dlp
+    # thunar - will add separately
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
