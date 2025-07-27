@@ -111,10 +111,16 @@ home-manager switch
 - **Reference existing ADRs** when making related decisions
 
 #### Git Workflow
+- **ALWAYS commit changes** - This is mandatory after completing any implementation work
 - **Commit after each milestone** - don't batch commits across major implementation phases
 - **Update CLAUDE.md** if user requests deviate from documented architecture
 - **Include ADR updates** in commits when architectural decisions change
 - **Use descriptive commit messages** that reference ADR numbers when applicable
+- **Standard commit workflow**:
+  1. Run `git status` and `git diff` to review changes
+  2. Stage files with `git add <files>`
+  3. Commit with proper message format (see commit message standards below)
+  4. Verify with `git status` to ensure clean working tree
 
 #### When to Update CLAUDE.md
 - User requests significantly different approach than documented
@@ -128,9 +134,9 @@ home-manager switch
 - **Git Commits**: Follow [ADR-0007](docs/architecture/adr/0007-git-commit-message-standards.md) - use imperative mood, 50/72 rule
 
 #### Commit Message Format
-Follow imperative mood (complete: "If applied, this commit will ___"):
+Follow imperative mood with tool/component prefix:
 ```bash
-git commit -m "Add feature X to improve Y
+git commit -m "[tool] Add feature X to improve Y
 
 - Reference ADR-XXX if applicable
 - Include rationale for architectural changes
@@ -142,11 +148,20 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
 
 **Rules:**
-- Start with imperative verb (Add, Fix, Update, Remove, Refactor)
+- **REQUIRED PREFIX**: Start with `[tool]` where tool is the primary component
+  (e.g. `[home-manager]`, `[sway]`, `[waybar]`, `[docs]`, `[git]`)
+- Use imperative verb after prefix (Add, Fix, Update, Remove, Refactor)
 - Limit subject to 50 characters, capitalize, no period
 - Body explains "what" and "why", not "how"
 - Reference ADRs when making architectural decisions
-- Follow [ADR-0007](docs/architecture/adr/0007-git-commit-message-standards.md) for complete standards
+- Follow [ADR-0007](docs/architecture/adr/0007-git-commit-message-standards.md)
+  for complete standards
+
+**Common Prefixes:**
+- `[home-manager]` - Package management, home.nix changes
+- `[sway]` - Window manager configuration
+- `[docs]` - Documentation updates (CLAUDE.md, README, etc.)
+- `[git]` - Git configuration and workflow changes
 
 ### Package Management Hierarchy (Current)
 ```
