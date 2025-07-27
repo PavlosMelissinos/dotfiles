@@ -38,9 +38,9 @@ environments and simplified maintenance.
 │  └─ Hardware firmware                           │
 └─────────────────────────────────────────────────┘
 ┌─ SANDBOXED ─────────────────────────────────────┐
-│  Flatpak (Minimal - special cases only)         │
-│  ├─ Element (Matrix client)                     │
-│  └─ DBeaver Community                           │
+│  Flatpak (Platform runtimes only)               │
+│  ├─ No user applications installed              │
+│  └─ System platform dependencies only           │
 └─────────────────────────────────────────────────┘
 #+end_example
 
@@ -71,7 +71,7 @@ environments and simplified maintenance.
 | [[https://github.com/Alexays/Waybar][Waybar]]    | Status bar                     | =.config/waybar/=             |
 | [[https://hg.sr.ht/~scoopta/wofi][Wofi]]      | Application launcher           | =.config/wofi/=               |
 | [[https://github.com/emersion/mako][Mako]]      | Notification daemon            | =.config/mako/=               |
-| [[https://github.com/swaywm/swaylock][Swaylock]]  | Screen locker (U2F support)    | =.config/swaylock/=           |
+| [[https://github.com/swaywm/swaylock][Swaylock]]  | Screen locker (DISABLED)       | =.config/swaylock/= (unused) |
 | [[https://github.com/emersion/kanshi][Kanshi]]    | Multi-monitor management       | =.config/kanshi/=             |
 | [[https://gitlab.com/chinstrap/gammastep][Gammastep]] | Blue light filter              | Configured via home-manager |
 
@@ -87,7 +87,7 @@ environments and simplified maintenance.
 ** Package Management
 - *Primary*: home-manager/Nix (ALL user packages - 95+)
 - *System*: DNF/RPM (kernel, drivers, system services only)
-- *Sandboxed*: Flatpak (minimal - special cases only)
+- *Sandboxed*: Flatpak (platform runtimes only, no user applications)
 
 * 🔐 Security Features
 
@@ -95,7 +95,7 @@ environments and simplified maintenance.
 Configured for enhanced security across:
 - GDM/GNOME login
 - sudo administrative tasks
-- Swaylock screen unlock
+- ~~Swaylock screen unlock~~ (currently disabled due to unlock issues)
 - Web services (GitHub, GitLab, cloud providers)
 
 See [[docs/architecture/adr/0004-u2f-hardware-key-authentication.md][ADR-0004]] for implementation details.
@@ -200,6 +200,12 @@ All significant architectural decisions are documented in =docs/architecture/adr
 - *Legacy compatibility*: Some applications may require XWayland for proper
   operation
 
+** Security & Authentication
+- *Swaylock disabled*: Screen locker disabled due to unlock failures with
+  home-manager/Nix version
+- *Alternative*: Currently relying on system-level screen locking only
+- *Status*: Investigating alternative screen lock solutions
+
 ** Viber Messaging (AppImage)
 - *Package status*: nixpkgs viber package broken due to libxml2 compatibility
   (GitHub Issue #421440)
@@ -208,6 +214,12 @@ All significant architectural decisions are documented in =docs/architecture/adr
   - Notifications appear in center of screen instead of configured position
   - Uses Viber's purple branding/colors instead of system mako theme
   - Functional but doesn't fully integrate with desktop notification styling
+
+** Package Management Status
+- *Guix elimination incomplete*: 74 packages still installed despite documentation
+  claiming complete elimination
+- *Impact*: Mixed package management creates complexity and potential conflicts
+- *Recommendation*: Complete the Guix elimination or document hybrid approach
 
 ** Troubleshooting
 #+begin_src bash

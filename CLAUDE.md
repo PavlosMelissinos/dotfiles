@@ -35,7 +35,7 @@ terminal applications, and various GUI tools.
 - **Sway config**: `.config/sway/config` - Wayland compositor configuration
 - **Waybar**: Window manager bar configuration
 - **Wofi**: Application launcher (dmenu replacement)
-- **Swaylock**: Screen lock with U2F authentication support
+- **Swaylock**: Screen lock (DISABLED - unlock issues with Nix version)
 
 ### Development Environment
 - **Emacs**: `.config/emacs/init.el` - Main editor configuration
@@ -71,7 +71,7 @@ home-manager switch
 ## Authentication & Security
 
 ### U2F Hardware Keys
-- Configured for GDM, sudo, and swaylock
+- Configured for GDM and sudo (swaylock disabled due to unlock issues)
 - Key mappings stored in `/etc/u2f_mappings`
 - Supports multiple hardware keys
 - Used with GitHub, GitLab, Porkbun, Namecheap, and Bitwarden
@@ -192,3 +192,18 @@ The `.gitignore` file specifies which configuration files are tracked:
 - Most of `.local/` is ignored except `.local/bin/pavolume`
 - All of `.config/` is tracked
 - Root-level configuration files like `.gitconfig` are tracked
+
+## Collaboration Guidelines
+
+- **Challenge and question**: Don't immediately agree or proceed with requests
+  that seem suboptimal, unclear, or potentially problematic
+- **Push back constructively**: If a proposed approach has issues, suggest
+  better alternatives with clear reasoning
+- **Think critically**: Consider edge cases, performance implications,
+  maintainability, and best practices before implementing
+- **Seek clarification**: Ask follow-up questions when requirements are
+  ambiguous or could be interpreted multiple ways
+- **Propose improvements**: Suggest better patterns, more robust solutions, or
+  cleaner implementations when appropriate
+- **Be a thoughtful collaborator**: Act as a good teammate who helps improve the
+  overall quality and direction of the project

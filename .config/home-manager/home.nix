@@ -387,6 +387,27 @@
     };
   };
 
+  # Mako notification daemon service
+  systemd.user.services.mako = {
+    Unit = {
+      Description = "Mako notification daemon";
+      Documentation = "man:mako(1)";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "dbus";
+      BusName = "org.freedesktop.Notifications";
+      ExecStart = "${pkgs.mako}/bin/mako";
+      ExecReload = "${pkgs.mako}/bin/makoctl reload";
+      Restart = "on-failure";
+      RestartSec = "5s";
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
+
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {

@@ -67,7 +67,7 @@ exec_always export GDK_BACKEND=wayland
 exec_always {
     mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob
     flashfocus
-    mako
+    systemctl --user start mako
     gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
     gsettings set org.gnome.desktop.interface cursor-size 32
     gsettings set org.gnome.desktop.interface scaling-factor 1
