@@ -80,6 +80,19 @@
     openssl
     guile
     rlwrap
+
+    # Wayland/Sway desktop environment components migrated from Guix
+    waybar
+    mako
+    swayidle
+    kanshi
+    brightnessctl
+    wob
+    playerctl
+    gammastep
+    wlogout
+    swappy
+    wf-recorder
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
