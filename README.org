@@ -138,7 +138,7 @@ All applications are configured to respect XDG directories where possible:
 home-manager switch
 
 # System updates (base OS only):
-sudo dnf update
+sudo dnf upgrade --refresh
 
 # Check package status:
 ls ~/.nix-profile/bin/ | wc -l  # Count available binaries
@@ -200,6 +200,15 @@ All significant architectural decisions are documented in =docs/architecture/adr
 - *Legacy compatibility*: Some applications may require XWayland for proper
   operation
 
+** Viber Messaging (AppImage)
+- *Package status*: nixpkgs viber package broken due to libxml2 compatibility
+  (GitHub Issue #421440)
+- *Solution*: Using official Viber AppImage with launcher script
+- *Notification issues*:
+  - Notifications appear in center of screen instead of configured position
+  - Uses Viber's purple branding/colors instead of system mako theme
+  - Functional but doesn't fully integrate with desktop notification styling
+
 ** Troubleshooting
 #+begin_src bash
 # Sway IPC socket issues:
@@ -213,7 +222,7 @@ sudo mount -o remount,size=15G /tmp
 
 ** Regular Tasks
 - Run =home-manager switch= after configuration changes
-- Periodic =sudo dnf update= for system packages
+- Periodic =sudo dnf upgrade --refresh= for system packages
 - Monitor =~/.nix-profile/bin/= for binary availability
 - Update ADRs when making architectural changes
 
