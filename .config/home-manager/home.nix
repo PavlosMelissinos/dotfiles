@@ -47,6 +47,7 @@
     fortune
     git
     gum
+    handbrake
     htop
     jdk21
     libreoffice
@@ -69,6 +70,16 @@
     wofi
     xdg-utils
     zsh
+
+    # Development tools migrated from Guix
+    rustc
+    cargo
+    cmake
+    meson
+    nix
+    openssl
+    guile
+    rlwrap
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
