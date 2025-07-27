@@ -1,8 +1,7 @@
 # ADR-0001: Complete Package Manager Consolidation
 
-**Status**: ✅ Accepted and Implemented
-**Date**: 2025-01-27
-**Deciders**: System Administrator
+**Date**: 2025-07-27
+**Status**: Accepted
 
 ## Context
 
@@ -20,7 +19,8 @@ This led to:
 
 ## Decision
 
-**Consolidate ALL user package management under home-manager/Nix, completely eliminating Guix.**
+We will consolidate ALL user package management under home-manager/Nix,
+completely eliminating Guix.
 
 ### Migration Strategy
 1. **Stage 1**: Migrate development tools (rust, cmake, meson, etc.)
