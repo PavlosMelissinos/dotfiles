@@ -12,21 +12,19 @@ terminal applications, and various GUI tools.
 
 ## Package Management & Configuration
 
-### home-manager (Nix) - PRIMARY
+### home-manager (Nix) - SOLE PACKAGE MANAGER
 - Configuration: `.config/home-manager/home.nix`
 - Apply changes: `home-manager switch`
-- **Manages 58+ packages**: development tools, desktop applications, Wayland environment
+- **Manages 95+ packages**: ALL development tools, desktop applications, Wayland environment, system libraries
 - Integrated configuration management for git, zsh, emacs, firefox
 - Allows unfree packages (claude-code, spotify, steam)
-- **Use this for all new package installations**
+- **Complete package management solution - use for ALL package installations**
 
-### Guix (Specialized/Minimal)
-- Channel config: `.config/guix/channels.scm`
-- Package manifest: `.config/guix/packages.scm` (reduced to ~27 packages)
-- **Limited to**: system integration packages, specialized Emacs packages, unique utilities
-- Apply channels: `guix pull -C ~/.config/guix/channels.scm`
-- Install packages: `guix package -m ~/.config/guix/packages.scm`
-- Upgrade daemon: `sudo -i guix pull && systemctl restart guix-daemon.service`
+### Guix (ELIMINATED)
+- **Status**: Completely eliminated as of 2025-07-27
+- Package manifest: `.config/guix/packages.scm` (empty - `(specifications->manifest (list))`)
+- **Migration Complete**: All packages moved to home-manager/Nix
+- **Note**: Guix daemon may still be present but no packages are managed through it
 
 ## Key Configuration Files
 
@@ -47,11 +45,11 @@ terminal applications, and various GUI tools.
 
 ### System Management
 ```bash
-# Apply home-manager configuration
+# Apply home-manager configuration (primary package management)
 home-manager switch
 
-# Restart Guix daemon (if using Guix)
-sudo systemctl restart guix-daemon.service
+# System package updates (DNF for base system only)
+sudo dnf update
 
 # Reload Sway configuration
 swaymsg reload
@@ -59,12 +57,12 @@ swaymsg reload
 
 ### Package Management
 ```bash
-# Primary: Install packages via home-manager (RECOMMENDED)
+# ONLY package management method (since 2025-07-27)
 # Edit .config/home-manager/home.nix, then:
 home-manager switch
 
-# Secondary: Install specialized packages via Guix (only when needed)
-guix package -m ~/.config/guix/packages.scm
+# Legacy Guix commands (NO LONGER USED)
+# All packages migrated to home-manager - Guix eliminated
 ```
 
 ## Authentication & Security
@@ -93,6 +91,70 @@ guix package -m ~/.config/guix/packages.scm
 - Firefox-wayland crashes when reloading sway/returning from sleep
 - Waybar occasionally disappears (restart with `nohup waybar &`)
 - Some applications don't respect XDG directories (Firefox, Thunderbird, Kodi)
+
+## Architecture Decisions & Process
+
+### ADR Management
+- **Location**: All Architecture Decision Records are stored in `docs/architecture/adr/`
+- **Current ADRs**: See `docs/architecture/adr/README.md` for complete index
+- **Example**: [ADR-001: Package Manager Consolidation](docs/architecture/adr/0001-package-manager-consolidation.md)
+
+### For Future Claude Code Sessions
+
+#### Planning & Decision Making
+- **ALWAYS create new ADRs** for significant architectural changes during planning phases
+- **Use TodoWrite tool** to track implementation progress for complex changes
+- **Supersede existing ADRs** if requirements change or better approaches are identified
+- **Reference existing ADRs** when making related decisions
+
+#### Git Workflow
+- **Commit after each milestone** - don't batch commits across major implementation phases
+- **Update CLAUDE.md** if user requests deviate from documented architecture
+- **Include ADR updates** in commits when architectural decisions change
+- **Use descriptive commit messages** that reference ADR numbers when applicable
+
+#### When to Update CLAUDE.md
+- User requests significantly different approach than documented
+- New recurring patterns emerge that future sessions should know
+- Major architectural changes that affect session prompts
+- Package management or tooling changes that impact workflow
+
+#### Commit Message Format
+```bash
+git commit -m "Brief description of change
+
+- Reference ADR-XXX if applicable
+- Include 'Update CLAUDE.md' if session guidance changes
+- Mention if this supersedes previous decisions
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+### Package Management Hierarchy (Current)
+```
+┌─ USER SPACE ────────────────────────────────────┐
+│  home-manager/Nix (PRIMARY & ONLY)              │
+│  ├─ Development Tools (rust, node, python...)   │
+│  ├─ Desktop Environment (sway, waybar, mako...) │
+│  ├─ Applications (firefox, vlc, steam...)       │
+│  ├─ System Libraries (fonts, certificates...)   │
+│  └─ Configuration Management (git, zsh, emacs)  │
+└─────────────────────────────────────────────────┘
+┌─ SYSTEM SPACE ──────────────────────────────────┐
+│  DNF/RPM (System packages only)                 │
+│  ├─ Kernel and drivers                          │
+│  ├─ System services (systemd, etc.)             │
+│  ├─ Core libraries (glibc, etc.)                │
+│  └─ Hardware firmware                           │
+└─────────────────────────────────────────────────┘
+┌─ SANDBOXED ─────────────────────────────────────┐
+│  Flatpak (Minimal - special cases only)         │
+│  ├─ Element (Matrix client)                     │
+│  └─ DBeaver Community                           │
+└─────────────────────────────────────────────────┘
+```
 
 ## File Monitoring
 

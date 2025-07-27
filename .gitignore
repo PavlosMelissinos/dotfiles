@@ -5,6 +5,8 @@
 !.local/bin/pavolume
 !.config/
 !.config/**
+!docs/
+!docs/**
 !.gitignore
 !.gitconfig
 !README.org
