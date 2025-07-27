@@ -47,7 +47,6 @@
     curl
     flameshot
     firefox
-    fortune
     git
     gum
     handbrake
@@ -74,7 +73,7 @@
     xdg-utils
     zsh
 
-    # Development tools migrated from Guix
+    # Development tools
     rustc
     cargo
     cmake
@@ -84,7 +83,7 @@
     guile
     rlwrap
 
-    # Wayland/Sway desktop environment components migrated from Guix
+    # Wayland/Sway desktop environment components
     waybar
     mako
     swayidle
@@ -96,8 +95,8 @@
     wlogout
     swappy
     wf-recorder
-    
-    # Desktop applications migrated from Guix
+
+    # Desktop applications
     vlc
     mpv
     strawberry
@@ -112,7 +111,33 @@
     godot
     steam
     yt-dlp
-    # thunar - will add separately
+
+    # Remaining packages
+    xfce.thunar
+    qt6.qtbase
+    geoclue2
+    docker-compose
+    gnome-control-center
+    motion
+    pavucontrol
+    bsdgames
+    mc
+    xorg.xeyes
+    iftop
+    pv
+    lilypond
+
+    # System libraries and fonts
+    fontconfig
+    cacert  # replaces nss-certs
+    glibcLocales
+    dejavu_fonts  # replaces font-dejavu
+    liberation_ttf  # replaces font-liberation
+    font-awesome  # replaces font-awesome
+    freefont_ttf  # replaces font-gnu-freefont
+    # pth - not needed in modern systems
+    # glibc - system-provided
+    # font-ghostscript - not essential
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -153,18 +178,13 @@
 
     # PyEnv configuration
     PYENV_ROOT = "$XDG_DATA_HOME/pyenv";
-
-    # Guix profile location
-    GUIX_PROFILE = "$HOME/.config/guix/current";
   };
 
   # Clean PATH management through home-manager
-  # Note: Guix paths are added by system /etc/profile.d/guix.sh
   home.sessionPath = [
-    "$HOME/.nix-profile/bin"           # Nix profile binaries (home-manager packages)
-    "$HOME/.local/bin"                 # Local binaries (highest priority)
+    "$HOME/.nix-profile/bin"           # Nix profile binaries (home-manager packages) - HIGHEST PRIORITY
+    "$HOME/.local/bin"                 # Local binaries
     "$PYENV_ROOT/bin"                  # PyEnv
-    # Guix paths omitted - handled by system profile.d
   ];
 
   programs.emacs = {
