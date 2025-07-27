@@ -1,163 +1,230 @@
-#+title: Dotfiles
+#+title: Personal Dotfiles - Wayland Desktop Environment
+#+author: Pavlos Melissinos
+#+date: 2025-07-27
 
-dotfiles for the following tools:
-- [[https://alacritty.org/][alacritty]]
-- [[https://www.gnu.org/software/emacs/][emacs]]
-- [[https://github.com/fennerm/flashfocus][flashfocus]]
-- [[https://gitlab.com/chinstrap/gammastep][gammastep]]
-- [[https://github.com/emersion/kanshi][kanshi]]
-- [[https://github.com/emersion/mako][mako]]
-- [[https://github.com/jtheoof/swappy][swappy]]
-- [[https://swaywm.org/][sway]]
-- [[https://github.com/swaywm/swaylock][swaylock]]
-- [[https://github.com/tmux/tmux][tmux]]
-- [[https://github.com/Alexays/Waybar][waybar]]
-- [[https://github.com/ArtsyMacaw/wlogout][wlogout]]
-- [[https://hg.sr.ht/~scoopta/wofi][wofi]]
-- [[https://www.zsh.org/][zsh]]
+A personal dotfiles repository for a modern Linux desktop environment using Sway
+(Wayland compositor) with declarative package management through
+home-manager/Nix.
 
-others (experimental):
+* Overview
 
-- nix
-- [[https://guix.gnu.org/][guix]]
+This repository contains configuration files for a complete Wayland-first
+desktop environment optimized for development work. All user packages are
+managed declaratively through home-manager/Nix, providing reproducible
+environments and simplified maintenance.
 
-* Dependencies
-  I should switch to a package manager that supports declarative package
-  definitions (e.g. nix/guix). Until then, I'm listing the requirements here.
+** Key Features
+- 🏗️ *Wayland-first desktop* with Sway tiling window manager
+- 📦 *Declarative package management* with home-manager/Nix (95+ packages)
+- 🔐 *U2F hardware key authentication* for system and web services
+- 📁 *XDG Base Directory compliance* for clean home directory organization
+- 🔄 *Reproducible environments* with complete configuration in version control
 
-** Required binaries
+** Architecture
+#+begin_example
+┌─ USER SPACE ────────────────────────────────────┐
+│  home-manager/Nix (PRIMARY & ONLY)              │
+│  ├─ Development Tools (rust, node, python...)   │
+│  ├─ Desktop Environment (sway, waybar, mako...) │
+│  ├─ Applications (firefox, vlc, steam...)       │
+│  ├─ System Libraries (fonts, certificates...)   │
+│  └─ Configuration Management (git, zsh, emacs)  │
+└─────────────────────────────────────────────────┘
+┌─ SYSTEM SPACE ──────────────────────────────────┐
+│  DNF/RPM (System packages only)                 │
+│  ├─ Kernel and drivers                          │
+│  ├─ System services (systemd, etc.)             │
+│  ├─ Core libraries (glibc, etc.)                │
+│  └─ Hardware firmware                           │
+└─────────────────────────────────────────────────┘
+┌─ SANDBOXED ─────────────────────────────────────┐
+│  Flatpak (Minimal - special cases only)         │
+│  ├─ Element (Matrix client)                     │
+│  └─ DBeaver Community                           │
+└─────────────────────────────────────────────────┘
+#+end_example
 
-*** emacs
-*** sway
-*** swaylock
-*** swayidle
-*** waybar
-*** zsh
+* 🚀 Quick Start
 
-** Optional binaries
-*** swaylock-effects
-**** `dnf copr enable eddsalkield/swaylock-effects`
-**** dnf install swaylock-effects
+** Prerequisites
+- Fedora-based Linux system (or compatible)
+- Nix package manager installed
+- home-manager configured
 
-* U2F auth
+** Installation
+1. Clone this repository to your home directory
+2. Apply home-manager configuration:
+   #+begin_src bash
+   home-manager switch
+   #+end_src
+3. Reload Sway configuration:
+   #+begin_src bash
+   swaymsg reload
+   #+end_src
 
-** Supported services
-   - github.com
-   - gitlab.com
-   - porkbun.com
-   - namecheap.com
-   - bitwarden.com
+* 📋 Component Overview
 
-** How to enable
-  Heavily based on [[https://reddit.com/r/Fedora/comments/akck9m/authenticating_with_gdm_and_sudo_with_a_u2f/][this article]] and adapted from [[https://wiki.archlinux.org/index.php/Universal_2nd_Factor#Adding_a_key][the Arch guide]].
+** Desktop Environment
+| Component | Purpose | Configuration |
+|-----------+---------+---------------|
+| [[https://swaywm.org/][Sway]] | Wayland compositor & tiling WM | =.config/sway/config= |
+| [[https://github.com/Alexays/Waybar][Waybar]] | Status bar | =.config/waybar/= |
+| [[https://hg.sr.ht/~scoopta/wofi][Wofi]] | Application launcher | =.config/wofi/= |
+| [[https://github.com/emersion/mako][Mako]] | Notification daemon | =.config/mako/= |
+| [[https://github.com/swaywm/swaylock][Swaylock]] | Screen locker (U2F support) | =.config/swaylock/= |
+| [[https://github.com/emersion/kanshi][Kanshi]] | Multi-monitor management | =.config/kanshi/= |
+| [[https://gitlab.com/chinstrap/gammastep][Gammastep]] | Blue light filter | Configured via home-manager |
 
-  1. Install required packages:
-     ~sudo dnf install pamu2fcfg pam-u2f~
-  2. Generate the key mappings
-     ~pamu2fcfg > ~/.config/u2f_keys~
+** Development Tools
+| Tool | Purpose | Configuration |
+|------+---------+---------------|
+| [[https://www.gnu.org/software/emacs/][Emacs]] | Primary editor (XDG compliant) | =.config/emacs/init.el= |
+| [[https://alacritty.org/][Alacritty]] | Terminal emulator | =.config/alacritty/= |
+| [[https://www.zsh.org/][Zsh]] | Shell with custom theme | =.config/zsh/= |
+| [[https://github.com/tmux/tmux][Tmux]] | Terminal multiplexer | =.config/tmux/= |
+| Git | Version control | Managed via home-manager |
 
-     If you have multiple hardware keys, you need to run the following for every
-     subsequent key:
-     ~pamu2fcfg -n >> ~/.config/u2f_keys~
+** Package Management
+- *Primary*: home-manager/Nix (ALL user packages - 95+)
+- *System*: DNF/RPM (kernel, drivers, system services only)
+- *Sandboxed*: Flatpak (minimal - special cases only)
 
-  3. Move it so it can be used for centralized authentication:
-     ~sudo mv ~/.config/u2f_keys /etc/u2f_mappings~
+* 🔐 Security Features
 
-  4. To use it with GDM/GNOME, you need to edit this file:
-     ~sudo -e '/etc/pam.d/gdm-password'~
+** U2F Hardware Key Authentication
+Configured for enhanced security across:
+- GDM/GNOME login
+- sudo administrative tasks
+- Swaylock screen unlock
+- Web services (GitHub, GitLab, cloud providers)
 
-     And add the following line underneath the `pam_selinux_permit.so` entry:
-     ~auth        sufficient    pam_u2f.so authfile=/etc/u2f_mappings cue~
+See [[docs/architecture/adr/0004-u2f-hardware-key-authentication.md][ADR-0004]] for implementation details.
 
-  5. And for sudo, it's a similar process; edit the following file:
-     ~sudo -e '/etc/pam.d/sudo'~
+** Supported Services
+- GitHub, GitLab
+- Porkbun, Namecheap (domain management)
+- Bitwarden (password management)
+- AWS and other cloud providers
 
-     And add a similar looking line for line 2:
-     ~auth       sufficient   pam_u2f.so authfile=/etc/u2f_mappings cue~
+* 📁 File Organization
 
-  6. swaylock:
-     ~sudo -e '/etc/pam.d/swaylock'~
+** XDG Base Directory Compliance
+All applications are configured to respect XDG directories where possible:
+- =~/.config/= - Application configuration
+- =~/.cache/= - Non-essential cached data
+- =~/.local/share/= - Application data files
+- =~/.local/state/= - Application state data
 
-     and add the following line (before `auth include login`, if that's present):
-     ~auth sufficient pam_u2f.so authfile=/etc/u2f_mappings cue~
+** Repository Structure
+#+begin_example
+.
+├── .config/              # Application configurations
+│   ├── home-manager/     # Nix package & config management
+│   ├── sway/             # Window manager configuration
+│   ├── waybar/           # Status bar configuration
+│   ├── emacs/            # Editor configuration
+│   └── zsh/              # Shell configuration
+├── docs/                 # Documentation & ADRs
+│   └── architecture/adr/ # Architecture Decision Records
+├── CLAUDE.md             # AI assistant guidance
+└── README.org            # This file
+#+end_example
 
-     Press the key button and then enter to log-in
+* 🛠️ Development Workflow
 
-** Poetry
-   All good, don't forget to [[https://python-poetry.org/docs/master/#enable-tab-completion-for-bash-fish-or-zsh][enable completions]]
-   As of 2022-04-22:
-   ~fpath+=$ZDOTDIR/zfunc~ (before compinit)
-   ~poetry completions zsh > $ZDOTDIR/zfunc/_poetry~
+** Package Management
+#+begin_src bash
+# Install new packages: Edit .config/home-manager/home.nix, then:
+home-manager switch
 
-** Nix
+# System updates (base OS only):
+sudo dnf update
 
-*** home-manager
+# Check package status:
+ls ~/.nix-profile/bin/ | wc -l  # Count available binaries
+#+end_src
 
-~nix-channel --update~ to get new references to the installed nix channels
-(similar to apt update)
+** Configuration Updates
+#+begin_src bash
+# Apply home-manager changes:
+home-manager switch
 
-~home-manager switch~ to apply a configuration (similar to apt upgrade)
+# Reload Sway:
+swaymsg reload
 
-** Guix
+# Restart Waybar (if needed):
+nohup waybar &
+#+end_src
 
-*** On a new system
+** Git Workflow
+#+begin_src bash
+# Commit configuration changes:
+git add .config/ docs/
+git commit -m "Description of changes
 
-    - Add all channels: ~guix pull -C ~~/.config/guix/channels.scm~
-    - Install packages defined in manifest: ~guix package -m ~~/.config/guix/packages.scm~
+🤖 Generated with [Claude Code](https://claude.ai/code)
 
-*** On a new system that requires nonfree drivers
+Co-Authored-By: Claude <noreply@anthropic.com>"
+#+end_src
 
-    - https://systemcrafters.net/craft-your-system-with-guix/full-system-install/
-    - https://trop.in/rde/
-      - Guix distribution with sane choices (sway, alacritty, zsh, pipewire,
-        mpv, emacs)
+* 📚 Documentation
 
+** Architecture Decision Records (ADRs)
+All significant architectural decisions are documented in =docs/architecture/adr/=:
+- [[docs/architecture/adr/0000-record-architecture-decisions.md][ADR-0000]]: Record Architecture Decisions
+- [[docs/architecture/adr/0001-package-manager-consolidation.md][ADR-0001]]: Complete Package Manager Consolidation
+- [[docs/architecture/adr/0002-sway-window-manager-wayland-first.md][ADR-0002]]: Sway Window Manager with Wayland-First Desktop Environment
+- [[docs/architecture/adr/0003-xdg-directory-compliance.md][ADR-0003]]: XDG Base Directory Specification Compliance
+- [[docs/architecture/adr/0004-u2f-hardware-key-authentication.md][ADR-0004]]: U2F Hardware Key Authentication
 
-*** Maintenance
+** Additional Documentation
+- =CLAUDE.md= - Guidance for AI assistant sessions
+- Package reports and migration documentation available in root directory
 
-    - On a foreign distro:
-      - upgrade the build daemon by running:
-        ~sudo -i guix pull~
-      - if the distro uses systemd also run:
-        ~systemctl restart guix-daemon.service~
-      - don't forget to upgrade the guix channels sha every now and then
-      - Fedora: Use `dnf repoquery --userinstalled` to see which packages have been
-        installed and to replace with guix packages
-      - Ubuntu: Use `apt list --installed` to see list of installed packages
+* ⚠️ Known Issues & Workarounds
 
-** Known issues
+** Desktop Environment
+- *Sleep recovery*: Laptop screen may not restore after sleep (Sway limitation)
+- *Firefox crashes*: Occasional crashes when reloading Sway or returning from
+  sleep
+- *Waybar disappears*: Restart with =nohup waybar &= if status bar disappears
 
-  - [sway] Coming back from sleep doesn't restore the laptop screen (it's all black)
-  - [sway] Reloading sway/returning from sleep causes firefox-wayland to crash
-    - workaround: don't use `input *` to switch kb layout
-  - [waybar] Disappears every now and then
-    - "workaround": run `nohup waybar &` to restart it
-    - last incident on 2022-03-15
-  - [sway] reloading sway sometimes does not load gammastep
-  - [firefox] Doesn't use $XDG_CONFIG_HOME
-  - [thunderbird] Doesn't use $XDG_CONFIG_HOME
-  - [tmux] "SSH/Mosh aware username and hostname status line information" from oh-my-tmux
-  - [kodi] Doesn't use $XDG_CONFIG_HOME
-    - Setting $KODI_HOME doesn't seem to be working, kodi still looks for ~/.kodi
-      and creates it if missing
-  - [zsh] has to be installed on the fedora side as well, otherwise the OS
-    doesn't see the PATH to the guix version and reverts to bash.
-  - [swaylock] & guix: swaylock needs to be setuid to read /etc/shadow
-  - [guix] steam doesn't work
+** Application Limitations
+- *Non-XDG applications*: Firefox, Thunderbird, Kodi don't respect XDG directories
+- *Legacy compatibility*: Some applications may require XWayland for proper
+  operation
 
-** Runbook
+** Troubleshooting
+#+begin_src bash
+# Sway IPC socket issues:
+export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock
 
-   - error: failed to connect to `/var/guix/daemon-socket/socket': Connection refused
-     - On systemctl: ~systemctl restart guix-daemon.service~
-   - ~/usr/share/applications/[...].desktop~ cannot be executed: Remote peer
-     disconnected
-     Open the desktop file, look for a ~DBusActivatable=true~ line and comment it
-     out
-     An alternative solution (running ~exec dbus-daemon --session
-     --address=unix:path=$XDG_RUNTIME_DIR/bus~) didn't seem to work for me...
-   - Unable to connect to ~/run/user/1000/sway-ipc.1000.3043.sock~
-     ~export SWAYSOCK=/run/user/$(id -u)/sway-ipc.$(id -u).$(pgrep -x sway).sock~
+# Temporary build space (if /tmp is full):
+sudo mount -o remount,size=15G /tmp
+#+end_src
 
-   - Build fails with 8GB space on /tmp - No space left on device
-     ~mount -o remount,size=15G /tmp~
-     Adjust size to your needs
+* 🔄 Maintenance
+
+** Regular Tasks
+- Run =home-manager switch= after configuration changes
+- Periodic =sudo dnf update= for system packages
+- Monitor =~/.nix-profile/bin/= for binary availability
+- Update ADRs when making architectural changes
+
+** Backup Strategy
+- Configuration files are tracked in git
+- XDG compliance allows selective backup (exclude cache directories)
+- Complete user environment reproducible from =home.nix=
+
+* 📈 System Status
+
+*Last major update*: 2025-07-27 - Complete package manager consolidation
+*Packages managed*: 95+ via home-manager/Nix
+*Architecture*: Wayland-first with modern security features
+*Reproducibility*: Complete user environment captured in version control
+
+---
+
+*This repository represents a fully consolidated, reproducible desktop
+ environment optimized for development productivity and modern security
+ practices.*
