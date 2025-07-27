@@ -60,7 +60,7 @@
     signal-desktop
     # slack
     spotify
-    swaylock
+    #swaylock
     #swaylock-effects
     # stremio  # Could not initialize GLX
     tmux
@@ -73,10 +73,10 @@
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
-  home.file = {
-    # Swaylock config in native format
-    ".config/swaylock/config".source = ./configs/swaylock/config;
-  };
+  # home.file = {
+  #   # Swaylock config in native format
+  #   ".config/swaylock/config".source = ./configs/swaylock/config;
+  # };
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. These will be explicitly sourced when using a
@@ -158,7 +158,7 @@
   programs.home-manager.enable = true;
 
   # Enable swaylock but manage config file manually via home.file
-  programs.swaylock.enable = true;
+  # programs.swaylock.enable = true;
 
   programs.zsh = {
     enable = true;
