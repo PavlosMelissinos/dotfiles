@@ -192,23 +192,17 @@ workspace 6 {
     output $monitor1
 }
 
-for_window [app_id="Kodi"] {
-    move to workspace 6
-}
-
-for_window [app_id="emacs"] {
-    move to workspace 4
-}
-
-assign [title="main-term"] workspace 2
-assign [title="main-browser"] workspace 3
+for_window [app_id="Alacritty" title=".*main-term.*"] move to workspace 2
+for_window [app_id="firefox" con_mark=""] mark --add main-firefox, move to workspace 3
+for_window [app_id="Kodi"] move to workspace 6
+for_window [app_id="emacs"] move to workspace 4
 
 # Make Signal compatible with xdg-open
 exec systemctl --user import-environment WAYLAND_DISPLAY XDG_SESSION_TYPE PATH
 
 exec $term -t main-term
 exec emacs
-exec firefox -t main-browser
+exec firefox
 exec signal-desktop
 
 # Clamshell mode
