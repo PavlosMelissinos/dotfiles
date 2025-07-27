@@ -66,6 +66,7 @@
     tmux
     uv
     vscodium
+    wofi
     xdg-utils
     zsh
   ];
@@ -116,6 +117,7 @@
   # Clean PATH management through home-manager
   # Note: Guix paths are added by system /etc/profile.d/guix.sh
   home.sessionPath = [
+    "$HOME/.nix-profile/bin"           # Nix profile binaries (home-manager packages)
     "$HOME/.local/bin"                 # Local binaries (highest priority)
     "$PYENV_ROOT/bin"                  # PyEnv
     # Guix paths omitted - handled by system profile.d

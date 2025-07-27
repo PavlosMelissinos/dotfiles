@@ -93,7 +93,10 @@ others (experimental):
 
 *** home-manager
 
-~home-manager switch~ to apply a configuration
+~nix-channel --update~ to get new references to the installed nix channels
+(similar to apt update)
+
+~home-manager switch~ to apply a configuration (similar to apt upgrade)
 
 ** Guix
 
@@ -118,7 +121,7 @@ others (experimental):
       - if the distro uses systemd also run:
         ~systemctl restart guix-daemon.service~
       - don't forget to upgrade the guix channels sha every now and then
-      - Fedora: Use `dnf history userinstalled` to see which packages have been
+      - Fedora: Use `dnf repoquery --userinstalled` to see which packages have been
         installed and to replace with guix packages
       - Ubuntu: Use `apt list --installed` to see list of installed packages
 

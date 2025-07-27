@@ -1,9 +1,3 @@
-# Default config for sway
-#
-# Copy this to ~/.config/sway/config and edit it to your liking.
-#
-# Read `man 5 sway` for a complete reference.
-
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
@@ -19,7 +13,7 @@ set $term alacritty
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 #set $menu dmenu_path | dmenu | xargs swaymsg exec --
-set $menu dmenu_path | wofi --show drun | xargs swaymsg exec --
+set $menu wofi --show drun | xargs swaymsg exec --
 
 #set $MOZ_ENABLE_WAYLAND 1
 set $QT_WAYLAND_FORCE_DPI physical
@@ -210,7 +204,7 @@ assign [title="main-term"] workspace 2
 assign [title="main-browser"] workspace 3
 
 # Make Signal compatible with xdg-open
-exec systemctl --user import-environment WAYLAND_DISPLAY XDG_SESSION_TYPE
+exec systemctl --user import-environment WAYLAND_DISPLAY XDG_SESSION_TYPE PATH
 
 exec $term -t main-term
 exec emacs

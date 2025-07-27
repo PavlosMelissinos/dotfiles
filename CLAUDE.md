@@ -1,10 +1,14 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with
+code in this repository.
 
 ## Project Overview
 
-This is a personal dotfiles repository for a Linux desktop environment using Sway (Wayland compositor), managed through home-manager (Nix) and traditional configuration files. The system is configured for development work with Emacs, terminal applications, and various GUI tools.
+This is a personal dotfiles repository for a Linux desktop environment using
+Sway (Wayland compositor), managed through home-manager (Nix) and traditional
+configuration files. The system is configured for development work with Emacs,
+terminal applications, and various GUI tools.
 
 ## Package Management & Configuration
 

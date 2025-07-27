@@ -33,3 +33,4 @@ zstyle ':completion:*' cache-path $XDG_CACHE_HOME/zsh/zcompcache
 if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty2" ]; then
    exec sway
 fi
+export XDG_DATA_DIRS="$HOME/.local/share:$XDG_DATA_DIRS"
