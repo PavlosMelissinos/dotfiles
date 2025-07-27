@@ -120,17 +120,24 @@ home-manager switch
 - Package management or tooling changes that impact workflow
 
 #### Commit Message Format
+Follow imperative mood (complete: "If applied, this commit will ___"):
 ```bash
-git commit -m "Brief description of change
+git commit -m "Add feature X to improve Y
 
-- Reference ADR-XXX if applicable
-- Include 'Update CLAUDE.md' if session guidance changes
-- Mention if this supersedes previous decisions
+- Reference ADR-XXX if applicable  
+- Include rationale for architectural changes
+- Explain why change was needed, not how
 
 🤖 Generated with [Claude Code](https://claude.ai/code)
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
+
+**Rules:**
+- Start with imperative verb (Add, Fix, Update, Remove, Refactor)
+- Limit subject to 50 characters, capitalize, no period
+- Body explains "what" and "why", not "how"
+- Reference ADRs when making architectural decisions
 
 ### Package Management Hierarchy (Current)
 ```

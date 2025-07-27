@@ -160,7 +160,10 @@ nohup waybar &
 #+begin_src bash
 # Commit configuration changes:
 git add .config/ docs/
-git commit -m "Description of changes
+git commit -m "Add feature X to improve Y
+
+Explain why change was needed and context.
+Reference ADR-XXX if architectural decision.
 
 🤖 Generated with [Claude Code](https://claude.ai/code)
 
