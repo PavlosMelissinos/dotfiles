@@ -71,7 +71,7 @@ environments and simplified maintenance.
 | [[https://github.com/Alexays/Waybar][Waybar]]    | Status bar                     | =.config/waybar/=             |
 | [[https://hg.sr.ht/~scoopta/wofi][Wofi]]      | Application launcher           | =.config/wofi/=               |
 | [[https://github.com/emersion/mako][Mako]]      | Notification daemon            | =.config/mako/=               |
-| [[https://github.com/swaywm/swaylock][Swaylock]]  | Screen locker (DISABLED)       | =.config/swaylock/= (unused) |
+| [[https://github.com/swaywm/swaylock][Swaylock]]  | Screen locker (DISABLED)       | =.config/swaylock/= (unused)  |
 | [[https://github.com/emersion/kanshi][Kanshi]]    | Multi-monitor management       | =.config/kanshi/=             |
 | [[https://gitlab.com/chinstrap/gammastep][Gammastep]] | Blue light filter              | Configured via home-manager |
 
@@ -216,10 +216,12 @@ All significant architectural decisions are documented in =docs/architecture/adr
   - Functional but doesn't fully integrate with desktop notification styling
 
 ** Package Management Status
-- *Guix elimination incomplete*: 74 packages still installed despite documentation
-  claiming complete elimination
+- *Guix elimination incomplete*: 74 packages still installed despite empty manifest
+  (`.config/guix/packages.scm` emptied but packages persist in user profile)
+- *Root cause*: Guix packages remain until explicitly removed with `guix package --remove`
 - *Impact*: Mixed package management creates complexity and potential conflicts
-- *Recommendation*: Complete the Guix elimination or document hybrid approach
+- *Options*: Either complete removal via `guix package --delete-generations` or 
+  document hybrid approach with clear package boundaries
 
 ** Troubleshooting
 #+begin_src bash

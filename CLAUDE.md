@@ -21,13 +21,15 @@ terminal applications, and various GUI tools.
 - Allows unfree packages (claude-code, spotify, steam)
 - **Complete package management solution - use for ALL package installations**
 
-### Guix (ELIMINATED)
-- **Status**: Completely eliminated as of 2025-07-27
+### Guix (PARTIALLY ELIMINATED)
+- **Status**: Package manifest emptied as of 2025-07-27, but packages remain installed
 - Package manifest: `.config/guix/packages.scm`
   (empty - `(specifications->manifest (list))`)
-- **Migration Complete**: All packages moved to home-manager/Nix
-- **Note**: Guix daemon may still be present but no packages are
-  managed through it
+- **Current Reality**: 74 packages still installed in user profile despite empty manifest
+- **Issue**: Guix packages persist until explicitly removed with `guix package --remove`
+- **Recommendation**: Complete removal requires `guix package --remove` for each package
+  or `guix package --delete-generations` to clear profile entirely
+- **Impact**: Mixed package management creates potential conflicts and complexity
 
 ## Key Configuration Files
 
@@ -127,6 +129,27 @@ home-manager switch
 - New recurring patterns emerge that future sessions should know
 - Major architectural changes that affect session prompts
 - Package management or tooling changes that impact workflow
+
+#### Claude Code Sudo Command Execution Issues
+**Problem**: Claude Code cannot execute sudo commands due to password/authentication requirements
+- **Error Pattern**: Commands requiring sudo fail when executed directly via Bash tool
+- **Root Cause**: Interactive password prompts cannot be handled in non-interactive sessions
+- **User Feedback**: "Claude has issues running commands that require superuser privileges"
+
+**Required Workflow**:
+1. **Identify sudo commands needed** (e.g., `sudo dnf remove viber`, `sudo mount -o remount`)
+2. **Tell user which commands to run** - provide exact command syntax
+3. **Wait for user confirmation** that command completed successfully
+4. **Verify completion** using non-sudo commands before proceeding
+5. **Never attempt direct sudo execution** via Bash tool
+
+**Commands That Require This Workflow**:
+- Package management: `sudo dnf install/remove/update`
+- System configuration: `sudo mount`, `sudo systemctl --system`
+- File operations in system directories: `sudo cp`, `sudo mv`, `sudo rm`
+- Network/hardware configuration requiring root privileges
+
+**Note for Future Sessions**: Always ask user to execute sudo commands manually rather than attempting direct execution
 
 #### Code Quality Standards
 - **Line Length**: Follow [ADR-0005](docs/architecture/adr/0005-line-length-text-formatting-standards.md) - limit lines to 80 characters
