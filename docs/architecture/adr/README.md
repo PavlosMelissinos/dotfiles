@@ -25,6 +25,7 @@ We follow the standard ADR format from Michael Nygard's "Documenting Architectur
 | [0005](./0005-line-length-text-formatting-standards.md) | Line Length and Text Formatting Standards                  | Accepted | 2025-07-27 |
 | [0006](./0006-trailing-whitespace-policy.md)            | Trailing Whitespace Policy                                 | Accepted | 2025-07-27 |
 | [0007](./0007-git-commit-message-standards.md)          | Git Commit Message Standards                               | Accepted | 2025-07-27 |
+| [0008](./0008-viber-appimage-packaging-solution.md)     | Viber AppImage Packaging Solution                          | Accepted | 2025-07-28 |
 
 ## ADR Process
 
