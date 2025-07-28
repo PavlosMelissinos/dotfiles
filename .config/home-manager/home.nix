@@ -344,7 +344,20 @@
       ExecStart = "${pkgs.writeShellScript "log-cleanup" ''
         set -euo pipefail
 
-        echo "[$(date)] Starting automated log cleanup"
+        # Cache size limits (in MB)
+        CACHE_LIMIT_TOTAL=2048      # 2GB total cache size limit
+        CACHE_LIMIT_DIR=512         # 512MB per directory limit
+        CACHE_WARNING_THRESHOLD=1536 # Warn at 1.5GB usage
+
+        echo "[$(date)] Starting automated log cleanup with cache monitoring"
+
+        # Monitor cache size before cleanup
+        cache_size_mb=$(du -sm ${config.home.homeDirectory}/.cache 2>/dev/null | cut -f1 || echo "0")
+        echo "Cache directory size: ''${cache_size_mb}MB"
+
+        if [ "$cache_size_mb" -gt "$CACHE_WARNING_THRESHOLD" ]; then
+          echo "WARNING: Cache size ($cache_size_mb MB) exceeds warning threshold ($CACHE_WARNING_THRESHOLD MB)"
+        fi
 
         # Run logrotate first
         ${pkgs.logrotate}/bin/logrotate -s ${config.home.homeDirectory}/.local/state/logrotate.state ${config.home.homeDirectory}/.config/logrotate/logrotate.conf 2>/dev/null || true
@@ -352,9 +365,46 @@
         # Slack log management - truncate files that are still too large
         find ${config.home.homeDirectory}/.config/Slack/logs -name "*.log" -size +5M -exec sh -c 'tail -c 1048576 "$1" > "$1.tmp" && mv "$1.tmp" "$1"' _ {} \; 2>/dev/null || true
 
-        # Clean old cache files
+        # Enhanced cache cleanup with size monitoring
+        echo "Starting cache cleanup phase..."
+
+        # Clean temporary files first
         find ${config.home.homeDirectory}/.cache -name "*.tmp" -mtime +7 -delete 2>/dev/null || true
         find ${config.home.homeDirectory}/.cache -name "*.log" -size +10M -mtime +30 -delete 2>/dev/null || true
+
+        # Monitor individual cache directories that exceed size limits
+        for cache_dir in ${config.home.homeDirectory}/.cache/*/; do
+          if [ -d "$cache_dir" ]; then
+            dir_size_mb=$(du -sm "$cache_dir" 2>/dev/null | cut -f1 || echo "0")
+            dir_name=$(basename "$cache_dir")
+
+            if [ "$dir_size_mb" -gt "$CACHE_LIMIT_DIR" ]; then
+              echo "Directory $dir_name exceeds limit: ''${dir_size_mb}MB > ''${CACHE_LIMIT_DIR}MB"
+
+              # Clean old files more aggressively for oversized directories
+              find "$cache_dir" -type f -mtime +14 -delete 2>/dev/null || true
+              find "$cache_dir" -type f -size +50M -mtime +7 -delete 2>/dev/null || true
+
+              # Re-check size after cleanup
+              new_size_mb=$(du -sm "$cache_dir" 2>/dev/null | cut -f1 || echo "0")
+              echo "Directory $dir_name after cleanup: ''${new_size_mb}MB"
+            fi
+          fi
+        done
+
+        # If total cache still exceeds limit, perform aggressive cleanup
+        cache_size_after_mb=$(du -sm ${config.home.homeDirectory}/.cache 2>/dev/null | cut -f1 || echo "0")
+        if [ "$cache_size_after_mb" -gt "$CACHE_LIMIT_TOTAL" ]; then
+          echo "Cache still exceeds total limit ($cache_size_after_mb MB > $CACHE_LIMIT_TOTAL MB), performing aggressive cleanup"
+
+          # Remove files older than 3 days from oversized cache
+          find ${config.home.homeDirectory}/.cache -type f -mtime +3 -delete 2>/dev/null || true
+          # Remove large files older than 1 day
+          find ${config.home.homeDirectory}/.cache -type f -size +20M -mtime +1 -delete 2>/dev/null || true
+
+          final_cache_size_mb=$(du -sm ${config.home.homeDirectory}/.cache 2>/dev/null | cut -f1 || echo "0")
+          echo "Final cache size after aggressive cleanup: ''${final_cache_size_mb}MB"
+        fi
 
         # Clean trash (keep files less than 30 days old)
         find ${config.home.homeDirectory}/.local/share/Trash/files -mtime +30 -delete 2>/dev/null || true
@@ -365,7 +415,12 @@
           ${pkgs.sqlite}/bin/sqlite3 "$db" "VACUUM;" 2>/dev/null || true
         done
 
-        echo "[$(date)] Automated log cleanup completed"
+        # Final cache size report
+        final_total_mb=$(du -sm ${config.home.homeDirectory}/.cache 2>/dev/null | cut -f1 || echo "0")
+        space_freed=$((cache_size_mb - final_total_mb))
+        echo "Cache cleanup summary: freed ''${space_freed}MB (''${cache_size_mb}MB -> ''${final_total_mb}MB)"
+
+        echo "[$(date)] Automated log cleanup completed with cache monitoring"
       ''}";
       StandardOutput = "journal";
       StandardError = "journal";
@@ -405,6 +460,109 @@
     };
     Install = {
       WantedBy = [ "graphical-session.target" ];
+    };
+  };
+
+  # Health monitoring service for critical user services
+  systemd.user.services.service-health-check = {
+    Unit = {
+      Description = "Monitor health of critical user services";
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.writeShellScript "service-health-check" ''
+        set -eo pipefail
+
+        echo "[$(date)] Starting service health check"
+
+        # List of critical services to monitor
+        services="mako.service log-cleanup.timer"
+
+        # Health check results
+        healthy=0
+        unhealthy=0
+        total=0
+
+        for service in $services; do
+          echo "Checking service: $service"
+          total=$((total + 1))
+
+          # Get service status
+          if status=$(systemctl --user is-active "$service" 2>/dev/null); then
+            case "$status" in
+              "active")
+                echo "✓ $service is active"
+                healthy=$((healthy + 1))
+                ;;
+              "inactive")
+                echo "- $service is inactive (normal for timers)"
+                healthy=$((healthy + 1))
+                ;;
+              "failed")
+                echo "✗ $service has failed"
+                unhealthy=$((unhealthy + 1))
+
+                # Try to restart failed services (not timers)
+                if echo "$service" | grep -q "\.service$"; then
+                  echo "Attempting to restart $service"
+                  if systemctl --user restart "$service" 2>/dev/null; then
+                    if new_status=$(systemctl --user is-active "$service" 2>/dev/null); then
+                      echo "Restart succeeded: $service is now $new_status"
+                      if [ "$new_status" = "active" ]; then
+                        healthy=$((healthy + 1))
+                        unhealthy=$((unhealthy - 1))
+                      fi
+                    fi
+                  else
+                    echo "Restart failed for $service"
+                  fi
+                fi
+                ;;
+              *)
+                echo "? $service status: $status"
+                unhealthy=$((unhealthy + 1))
+                ;;
+            esac
+          else
+            echo "! $service: not found or inaccessible"
+            unhealthy=$((unhealthy + 1))
+          fi
+
+          echo ""
+        done
+
+        # Summary report
+        echo "=== Health Check Summary ==="
+        echo "Total services: $total"
+        echo "Healthy: $healthy"
+        echo "Unhealthy: $unhealthy"
+
+        if [ "$unhealthy" -eq 0 ]; then
+          echo "✓ All services are healthy"
+        else
+          echo "⚠ $unhealthy service(s) need attention"
+        fi
+
+        echo "[$(date)] Service health check completed"
+      ''}";
+      StandardOutput = "journal";
+      StandardError = "journal";
+    };
+  };
+
+  # Timer for regular health checks
+  systemd.user.timers.service-health-check = {
+    Unit = {
+      Description = "Run service health check every 30 minutes";
+      Requires = [ "service-health-check.service" ];
+    };
+    Timer = {
+      OnCalendar = "*:0/30";  # Every 30 minutes
+      Persistent = true;
+    };
+    Install = {
+      WantedBy = [ "timers.target" ];
     };
   };
 
