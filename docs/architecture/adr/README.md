@@ -18,7 +18,7 @@ We follow the standard ADR format from Michael Nygard's "Documenting Architectur
 | ADR                                                     | Title                                                      | Status   | Date       |
 |---------------------------------------------------------|------------------------------------------------------------|----------|------------|
 | [0000](./0000-record-architecture-decisions.md)         | Record Architecture Decisions                              | Accepted | 2025-07-27 |
-| [0001](./0001-package-manager-consolidation.md)         | Complete Package Manager Consolidation                     | Accepted | 2025-07-27 |
+| [0001](./0001-package-manager-consolidation.md)         | Complete Package Manager Consolidation                     | Superseded | 2025-07-27 |
 | [0002](./0002-sway-window-manager-wayland-first.md)     | Sway Window Manager with Wayland-First Desktop Environment | Accepted | 2025-07-27 |
 | [0003](./0003-xdg-directory-compliance.md)              | XDG Base Directory Specification Compliance                | Accepted | 2025-07-27 |
 | [0004](./0004-u2f-hardware-key-authentication.md)       | U2F Hardware Key Authentication                            | Accepted | 2025-07-27 |
@@ -26,6 +26,7 @@ We follow the standard ADR format from Michael Nygard's "Documenting Architectur
 | [0006](./0006-trailing-whitespace-policy.md)            | Trailing Whitespace Policy                                 | Accepted | 2025-07-27 |
 | [0007](./0007-git-commit-message-standards.md)          | Git Commit Message Standards                               | Accepted | 2025-07-27 |
 | [0008](./0008-viber-appimage-packaging-solution.md)     | Viber AppImage Packaging Solution                          | Accepted | 2025-07-28 |
+| [0009](./0009-complete-guix-elimination.md)             | Complete Guix Package Manager Elimination                 | Accepted | 2025-08-06 |
 
 ## ADR Process
 

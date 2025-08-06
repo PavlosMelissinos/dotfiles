@@ -1,7 +1,7 @@
 # ADR-0001: Complete Package Manager Consolidation
 
 **Date**: 2025-07-27
-**Status**: Accepted
+**Status**: Superseded by ADR-0009
 
 ## Context
 
