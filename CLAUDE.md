@@ -21,15 +21,12 @@ terminal applications, and various GUI tools.
 - Allows unfree packages (claude-code, spotify, steam)
 - **Complete package management solution - use for ALL package installations**
 
-### Guix (PARTIALLY ELIMINATED)
-- **Status**: Package manifest emptied as of 2025-07-27, but packages remain installed
-- Package manifest: `.config/guix/packages.scm`
-  (empty - `(specifications->manifest (list))`)
-- **Current Reality**: 74 packages still installed in user profile despite empty manifest
-- **Issue**: Guix packages persist until explicitly removed with `guix package --remove`
-- **Recommendation**: Complete removal requires `guix package --remove` for each package
-  or `guix package --delete-generations` to clear profile entirely
-- **Impact**: Mixed package management creates potential conflicts and complexity
+### Guix (COMPLETELY ELIMINATED)
+- **Status**: Fully removed as of 2025-08-06
+- All packages, profiles, and system directories removed
+- Environment variables cleaned from shell configuration
+- Daemon stopped and disabled permanently
+- **Result**: Clean home-manager-only package management achieved
 
 ## Key Configuration Files
 

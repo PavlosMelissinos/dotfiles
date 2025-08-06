@@ -4,10 +4,7 @@ if [[ -d "$PYENV_ROOT" ]] && command -v pyenv >/dev/null 2>&1; then
     eval "$(pyenv virtualenv-init -)"
 fi
 
-# Source Guix profile if available (PATH is managed by sessionVariables)
-if [[ -n "$GUIX_PROFILE" && -f "$GUIX_PROFILE/etc/profile" ]]; then
-    . "$GUIX_PROFILE/etc/profile"
-fi
+# Guix profile sourcing removed - migrated to home-manager
 
 # tab completion
 fpath=($ZDOTDIR/zfunc $fpath)
