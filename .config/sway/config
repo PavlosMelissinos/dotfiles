@@ -57,7 +57,7 @@ exec gammastep-indicator
 
 exec_always export XCURSOR_SIZE=24
 exec_always export XCURSOR_THEME=Adwaita
-exec_always export XCURSOR_SIZE_MULTIPLIER=1.5
+exec_always export XCURSOR_SIZE_MULTIPLIER=1
 
 exec_always export GDK_SCALE=0
 exec_always export GDK_DPI_SCALE=1.0
@@ -69,7 +69,7 @@ exec_always {
     flashfocus
     systemctl --user start mako
     gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
-    gsettings set org.gnome.desktop.interface cursor-size 32
+    gsettings set org.gnome.desktop.interface cursor-size 24
     gsettings set org.gnome.desktop.interface scaling-factor 1
 }
 
@@ -485,6 +485,6 @@ bar {
     swaybar_command waybar
 }
 
-seat * xcursor_theme Adwaita 32
+seat * xcursor_theme Adwaita 24
 
 # include ~/.config/sway/cursor/cursor.conf
