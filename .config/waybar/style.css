@@ -8,17 +8,32 @@
     /*transform-origin: center;*/
     /*transform: scale(1.25);*/
     min-height: 0;
-    color: white;
+    color: #eee;
 }
 
 window#waybar {
-    background: teal;
-    color: white;
+    background: #222;
+    color: #eee;
 }
 
 #window {
     font-weight: bold;
     /*font-family: "Ubuntu";*/
+}
+
+window menu {
+  background-color: #222;   /* dark background */
+  color: #eee;              /* light text */
+}
+
+window menu menuitem {
+  background-color: transparent;
+  color: inherit;
+}
+
+window menu menuitem:hover {
+  background-color: #444;   /* hover background */
+  color: #fff;
 }
 
 #workspaces {
