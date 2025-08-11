@@ -9,8 +9,8 @@
 !emacs/**
 !flashfocus/
 !flashfocus/*
-!gammastep/
-!gammastep/*
+#!gammastep/
+#!gammastep/*
 !git/
 !git/*
 !guix/

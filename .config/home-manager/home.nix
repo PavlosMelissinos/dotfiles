@@ -53,6 +53,7 @@
     htop
     jdk21
     libreoffice
+    jq  # For location detection in gammastep service
     logrotate
     nodejs_22
     powerline-fonts
@@ -559,6 +560,95 @@
     };
     Timer = {
       OnCalendar = "*:0/30";  # Every 30 minutes
+      Persistent = true;
+    };
+    Install = {
+      WantedBy = [ "timers.target" ];
+    };
+  };
+
+  # Gammastep service with automatic location detection
+  services.gammastep = {
+    enable = true;
+    provider = "manual";
+    latitude = 40.7;  # Default coordinates (auto-updated)
+    longitude = -74.0;
+    temperature = {
+      day = 5700;
+      night = 3500;
+    };
+    settings = {
+      general = {
+        adjustment-method = "wayland";  # Perfect for your Sway setup
+        fade = 1;
+        brightness-day = "1.0";
+        brightness-night = "0.8";
+      };
+    };
+  };
+
+  # Automatic location detection service
+  systemd.user.services.gammastep-location-update = {
+    Unit = {
+      Description = "Update gammastep location automatically";
+      After = [ "network-online.target" ];
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.writeShellScript "update-gammastep-location" ''
+        set -euo pipefail
+
+        echo "[$(date)] Updating gammastep location"
+
+        if GEOINFO=$(${pkgs.curl}/bin/curl -s --connect-timeout 10 "https://ipapi.co/json/"); then
+          LATITUDE=$(echo "$GEOINFO" | ${pkgs.jq}/bin/jq -r '.latitude // empty')
+          LONGITUDE=$(echo "$GEOINFO" | ${pkgs.jq}/bin/jq -r '.longitude // empty')
+          CITY=$(echo "$GEOINFO" | ${pkgs.jq}/bin/jq -r '.city // empty')
+
+          if [ -n "$LATITUDE" ] && [ -n "$LONGITUDE" ] && [ "$LATITUDE" != "null" ] && [ "$LONGITUDE" != "null" ]; then
+            echo "Detected location: $CITY ($LATITUDE, $LONGITUDE)"
+
+            mkdir -p ${config.home.homeDirectory}/.config/gammastep
+            cat > ${config.home.homeDirectory}/.config/gammastep/config.ini << EOF
+[general]
+temp-day=5500
+temp-night=3700
+adjustment-method=wayland
+fade=1
+
+[manual]
+lat=$LATITUDE
+lon=$LONGITUDE
+EOF
+
+            if systemctl --user is-active --quiet gammastep.service; then
+              systemctl --user restart gammastep.service
+            fi
+
+            echo "Gammastep location updated successfully"
+          else
+            echo "Invalid location data received"
+            exit 1
+          fi
+        else
+          echo "Failed to fetch location data - using existing configuration"
+          exit 1
+        fi
+      ''}";
+      StandardOutput = "journal";
+      StandardError = "journal";
+    };
+  };
+
+  # Weekly location updates (handles travel)
+  systemd.user.timers.gammastep-location-update = {
+    Unit = {
+      Description = "Update location weekly";
+      Requires = [ "gammastep-location-update.service" ];
+    };
+    Timer = {
+      OnCalendar = "weekly";
+      RandomizedDelaySec = "2h";
       Persistent = true;
     };
     Install = {
