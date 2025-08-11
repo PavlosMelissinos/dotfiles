@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, nixgl, ... }:
 
 
 {
@@ -16,6 +16,10 @@
   # release notes.
   home.stateVersion = "23.11"; # Please read the comment before changing.
 
+  # nixGL configuration for hardware acceleration
+  nixGL.packages = nixgl.packages;
+  nixGL.defaultWrapper = "mesa";
+  nixGL.installScripts = [ "mesa" ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
@@ -123,6 +127,31 @@
     steam
     strawberry
     thunderbird
+    # Viber with nixGL and custom link handling
+    (let
+      xdg-open-firefox = pkgs.writeShellScriptBin "xdg-open" ''
+        # Clean environment for Firefox to avoid library conflicts
+        exec env -i \
+          HOME="$HOME" \
+          USER="$USER" \
+          DISPLAY="$DISPLAY" \
+          WAYLAND_DISPLAY="$WAYLAND_DISPLAY" \
+          XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
+          PATH="/home/pavlos/.nix-profile/bin:/usr/bin:/bin" \
+          /home/pavlos/.nix-profile/bin/firefox "$@"
+      '';
+    in
+    config.lib.nixGL.wrap (pkgs.writeShellScriptBin "viber" ''
+      # Add custom xdg-open to PATH for link handling
+      export PATH="${xdg-open-firefox}/bin:$PATH"
+      # Try direct AppImage execution first (better fonts)
+      if /home/pavlos/.local/bin/viber.AppImage "$@" < /dev/null; then
+        exit 0
+      else
+        # Fallback to appimage-run if direct execution fails
+        exec appimage-run /home/pavlos/.local/bin/viber.AppImage "$@" < /dev/null
+      fi
+    ''))
     vlc
     zathura
 
