@@ -191,14 +191,14 @@
   home.file = {
     # Swaylock config in native format
     # ".config/swaylock/config".source = ./configs/swaylock/config;
-    
+
     # Viber desktop entry
     ".local/share/applications/viber.desktop".text = ''
       [Desktop Entry]
       Name=Viber
       Comment=Free calls, text and picture sharing with anyone, anywhere!
       Exec=${config.home.profileDirectory}/bin/viber %U
-      Icon=viber
+      Icon=${config.home.homeDirectory}/.local/share/icons/viber.png
       Terminal=false
       Type=Application
       Categories=Network;InstantMessaging;
@@ -206,6 +206,34 @@
       StartupWMClass=ViberPC
       StartupNotify=true
     '';
+
+    # Viber icon extracted from AppImage
+    ".local/share/icons/viber.png".source =
+      let
+        viberAppImage = builtins.fetchurl {
+          url = "file:///home/pavlos/.local/bin/viber.AppImage";
+          sha256 = "sha256-jwsePK1l/WI+stDNpAD1t2Obr1BwpNDP0nzkIDfGGoA=";
+        };
+
+        extracted = pkgs.appimageTools.extract {
+          src = viberAppImage;
+          pname = "viber";
+          version = "1.0";
+        };
+
+        # Search the extracted directory for a matching PNG
+        iconCandidates =
+          builtins.filter
+            (p: builtins.match ".*[Vv]iber.*\\.png" p != null)
+            (builtins.attrNames (builtins.readDir extracted));
+
+        iconPath =
+          if iconCandidates != [] then
+            "${extracted}/${builtins.head iconCandidates}"
+          else
+            throw "No Viber icon found in AppImage";
+      in
+        iconPath;
   };
 
   # Home Manager can also manage your environment variables through
