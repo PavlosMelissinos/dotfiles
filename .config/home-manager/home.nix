@@ -276,7 +276,7 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     history.path = "${config.xdg.stateHome}/zsh/history";
-    dotDir = ".config/zsh";
+    dotDir = "${config.xdg.configHome}/zsh";
     plugins = [
       {
         name = "theme-and-appearance";
