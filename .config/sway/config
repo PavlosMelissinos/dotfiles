@@ -196,6 +196,7 @@ assign [app_id="emacs"] workspace 4
 assign [app_id="firefox"] workspace 3
 assign [app_id="Kodi"] workspace 6
 assign [app_id="signal"] workspace 3
+assign [instance="Viber"] workspace 3
 assign [app_id="Alacritty" title=".*main-term.*"] workspace 2
 
 # Make Signal compatible with xdg-open
