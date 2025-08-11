@@ -40,111 +40,119 @@
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
     # '')
-    awscli2
-    babashka
-    claude-code
-    clojure
     curl
     flameshot
     firefox
-    git
-    gum
-    handbrake
     htop
-    jdk21
-    libreoffice
     jq  # For location detection in gammastep service
     logrotate
     nodejs_22
     powerline-fonts
-    pyright
-    (python312.withPackages(ps: with ps; [yapf requests]))
-    qbittorrent
     ripgrep
-    signal-desktop
-    # slack
-    spotify
-    #swaylock
-    #swaylock-effects
-    # stremio  # Could not initialize GLX
     tmux
-    uv
-    vscodium
-    wofi
     xdg-utils
+    yt-dlp
     zsh
 
     # Development tools
-    rustc
+    awscli2
+    babashka
     cargo
+    claude-code
+    clojure
     cmake
+    docker-compose
+    git
+    guile
+    gum
+    jdk21
     meson
     nix
+    # nixgl.packages.${system}.nixGLIntel
     openssl
-    guile
+    pyright
+    (python312.withPackages(ps: with ps; [yapf requests]))
     rlwrap
+    rustc
+    uv
+    vscodium
 
     # Wayland/Sway desktop environment components
-    waybar
-    mako
-    swayidle
-    kanshi
     brightnessctl
-    wob
-    playerctl
     gammastep
-    wlogout
+    kanshi
+    mako
+    playerctl
     swappy
+    swayidle
+    #swaylock
+    #swaylock-effects
+    waybar
     wf-recorder
+    wlogout
+    wob
+    wofi
 
     # Desktop applications
-    vlc
-    mpv
-    strawberry
+    appimage-run
+    dbeaver-bin
+    element-desktop
     evince
+    font-manager
+    godot
+    handbrake
     imagemagick
     imv
-    nomacs
-    font-manager
-    nyxt
-    thunderbird
-    pidgin
-    godot
-    steam
-    yt-dlp
-    element-desktop
-    dbeaver-bin
-    appimage-run
-    mesa
-    libGL
     libglvnd
+    libGL
+    libreoffice
+    lilypond
+    mesa
+    mpv
+    musescore
+    nomacs
+    nyxt
+    pidgin
+    qbittorrent
+    signal-desktop
+    # slack
+    spotify
+    # stremio  # Could not initialize GLX
+    steam
+    strawberry
+    thunderbird
+    vlc
+    zathura
+
+
+    # Audio/MIDI support
+    alsa-lib
+    alsa-plugins
+    fluidsynth
+    pavucontrol
+    qjackctl
+    soundfont-fluid
 
     # Remaining packages
-    xfce.thunar
-    qt6.qtbase
-    geoclue2
-    docker-compose
-    gnome-control-center
-    motion
-    pavucontrol
     bsdgames
-    mc
-    xorg.xeyes
+    geoclue2
+    gnome-control-center
     iftop
+    mc
+    motion
     pv
-    lilypond
+    qt6.qtbase
+    xfce.thunar
+    xorg.xeyes
 
     # System libraries and fonts
-    fontconfig
     cacert  # replaces nss-certs
-    glibcLocales
     dejavu_fonts  # replaces font-dejavu
-    liberation_ttf  # replaces font-liberation
-    font-awesome  # replaces font-awesome
+    font-awesome
+    fontconfig
     freefont_ttf  # replaces font-gnu-freefont
-    # pth - not needed in modern systems
-    # glibc - system-provided
-    # font-ghostscript - not essential
+    glibcLocales
+    liberation_ttf  # replaces font-liberation
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
