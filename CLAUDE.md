@@ -99,13 +99,16 @@ nix flake lock --update-input nixpkgs
 ### Application-Specific Solutions
 
 #### Viber (Messaging)
-- **Approach**: nixGL-wrapped AppImage with optimized configuration
+- **Approach**: nixGL-wrapped AppImage with dynamic icon extraction
 - **Font rendering**: Direct AppImage execution (bypasses font isolation issues)
 - **Link handling**: Custom xdg-open wrapper with clean Firefox environment
 - **Hardware acceleration**: nixGL provides proper OpenGL context
-- **User experience**: No prompts, proper fonts, working links
+- **Icon management**: Dynamic extraction from AppImage using appimageTools.extract
+- **Desktop integration**: Proper .desktop file with official Viber icon
+- **User experience**: No prompts, proper fonts, working links, brand icon
 - **Fallback**: appimage-run if direct execution fails
-- **Location**: Managed declaratively in home.nix packages
+- **Repository cleanliness**: No binary files stored in git (20KB PNG avoided)
+- **Location**: Managed declaratively in home.nix packages and home.file
 
 ## Architecture Notes
 

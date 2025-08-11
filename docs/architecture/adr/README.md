@@ -15,18 +15,20 @@ We follow the standard ADR format from Michael Nygard's "Documenting Architectur
 
 ## Index
 
-| ADR                                                     | Title                                                      | Status   | Date       |
-|---------------------------------------------------------|------------------------------------------------------------|----------|------------|
-| [0000](./0000-record-architecture-decisions.md)         | Record Architecture Decisions                              | Accepted | 2025-07-27 |
+| ADR                                                     | Title                                                      | Status     | Date       |
+|---------------------------------------------------------|------------------------------------------------------------|------------|------------|
+| [0000](./0000-record-architecture-decisions.md)         | Record Architecture Decisions                              | Accepted   | 2025-07-27 |
 | [0001](./0001-package-manager-consolidation.md)         | Complete Package Manager Consolidation                     | Superseded | 2025-07-27 |
-| [0002](./0002-sway-window-manager-wayland-first.md)     | Sway Window Manager with Wayland-First Desktop Environment | Accepted | 2025-07-27 |
-| [0003](./0003-xdg-directory-compliance.md)              | XDG Base Directory Specification Compliance                | Accepted | 2025-07-27 |
-| [0004](./0004-u2f-hardware-key-authentication.md)       | U2F Hardware Key Authentication                            | Accepted | 2025-07-27 |
-| [0005](./0005-line-length-text-formatting-standards.md) | Line Length and Text Formatting Standards                  | Accepted | 2025-07-27 |
-| [0006](./0006-trailing-whitespace-policy.md)            | Trailing Whitespace Policy                                 | Accepted | 2025-07-27 |
-| [0007](./0007-git-commit-message-standards.md)          | Git Commit Message Standards                               | Accepted | 2025-07-27 |
-| [0008](./0008-viber-appimage-packaging-solution.md)     | Viber AppImage Packaging Solution                          | Accepted | 2025-07-28 |
-| [0009](./0009-complete-guix-elimination.md)             | Complete Guix Package Manager Elimination                 | Accepted | 2025-08-06 |
+| [0002](./0002-sway-window-manager-wayland-first.md)     | Sway Window Manager with Wayland-First Desktop Environment | Accepted   | 2025-07-27 |
+| [0003](./0003-xdg-directory-compliance.md)              | XDG Base Directory Specification Compliance                | Accepted   | 2025-07-27 |
+| [0004](./0004-u2f-hardware-key-authentication.md)       | U2F Hardware Key Authentication                            | Accepted   | 2025-07-27 |
+| [0005](./0005-line-length-text-formatting-standards.md) | Line Length and Text Formatting Standards                  | Accepted   | 2025-07-27 |
+| [0006](./0006-trailing-whitespace-policy.md)            | Trailing Whitespace Policy                                 | Accepted   | 2025-07-27 |
+| [0007](./0007-git-commit-message-standards.md)          | Git Commit Message Standards                               | Accepted   | 2025-07-27 |
+| [0008](./0008-viber-appimage-packaging-solution.md)     | Viber AppImage Packaging Solution                          | Superseded | 2025-07-28 |
+| [0009](./0009-complete-guix-elimination.md)             | Complete Guix Package Manager Elimination                  | Accepted   | 2025-08-06 |
+| [0010](./0010-home-manager-flakes-migration.md)         | Home Manager Flakes Migration                              | Accepted   | 2025-08-11 |
+| [0011](./0011-viber-nixgl-integration.md)               | Viber nixGL Integration and Dynamic Icon Extraction        | Accepted   | 2025-08-11 |
 
 ## ADR Process
 

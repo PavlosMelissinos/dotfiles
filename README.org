@@ -53,11 +53,16 @@ environments and simplified maintenance.
 
 ** Installation
 1. Clone this repository to your home directory
-2. Apply home-manager configuration:
+2. Enable Nix flakes (if not already enabled):
    #+begin_src bash
-   home-manager switch
+   echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
    #+end_src
-3. Reload Sway configuration:
+3. Apply home-manager flake configuration:
+   #+begin_src bash
+   cd ~/.config/home-manager
+   home-manager switch --flake .
+   #+end_src
+4. Reload Sway configuration:
    #+begin_src bash
    swaymsg reload
    #+end_src
@@ -85,7 +90,7 @@ environments and simplified maintenance.
 | Git       | Version control                | Managed via home-manager |
 
 ** Package Management
-- *Primary*: home-manager/Nix (ALL user packages - 95+)
+- *Primary*: home-manager/Nix Flakes (ALL user packages - 95+)
 - *System*: DNF/RPM (kernel, drivers, system services only)
 - *Sandboxed*: Flatpak (platform runtimes only, no user applications)
 
@@ -135,7 +140,14 @@ All applications are configured to respect XDG directories where possible:
 ** Package Management
 #+begin_src bash
 # Install new packages: Edit .config/home-manager/home.nix, then:
-home-manager switch
+cd ~/.config/home-manager
+home-manager switch --flake .
+
+# Update flake inputs (like package updates):
+nix flake update
+
+# Update specific input only:
+nix flake lock --update-input nixpkgs
 
 # System updates (base OS only):
 sudo dnf upgrade --refresh
@@ -147,7 +159,8 @@ ls ~/.nix-profile/bin/ | wc -l  # Count available binaries
 ** Configuration Updates
 #+begin_src bash
 # Apply home-manager changes:
-home-manager switch
+cd ~/.config/home-manager
+home-manager switch --flake .
 
 # Reload Sway:
 swaymsg reload
@@ -182,6 +195,10 @@ All significant architectural decisions are documented in =docs/architecture/adr
 - [[docs/architecture/adr/0005-line-length-text-formatting-standards.md][ADR-0005]]: Line Length and Text Formatting Standards
 - [[docs/architecture/adr/0006-trailing-whitespace-policy.md][ADR-0006]]: Trailing Whitespace Policy
 - [[docs/architecture/adr/0007-git-commit-message-standards.md][ADR-0007]]: Git Commit Message Standards
+- [[docs/architecture/adr/0008-viber-appimage-packaging-solution.md][ADR-0008]]: Viber AppImage Packaging Solution (Superseded)
+- [[docs/architecture/adr/0009-complete-guix-elimination.md][ADR-0009]]: Complete Guix Package Manager Elimination
+- [[docs/architecture/adr/0010-home-manager-flakes-migration.md][ADR-0010]]: Home Manager Flakes Migration
+- [[docs/architecture/adr/0011-viber-nixgl-integration.md][ADR-0011]]: Viber nixGL Integration and Dynamic Icon Extraction
 
 ** Additional Documentation
 - =CLAUDE.md= - Guidance for AI assistant sessions
@@ -209,19 +226,20 @@ All significant architectural decisions are documented in =docs/architecture/adr
 ** Viber Messaging (AppImage)
 - *Package status*: nixpkgs viber package broken due to libxml2 compatibility
   (GitHub Issue #421440)
-- *Solution*: Using official Viber AppImage with launcher script
-- *Notification issues*:
-  - Notifications appear in center of screen instead of configured position
-  - Uses Viber's purple branding/colors instead of system mako theme
-  - Functional but doesn't fully integrate with desktop notification styling
+- *Solution*: nixGL-wrapped AppImage with dynamic icon extraction
+- *Features*:
+  - ✅ Hardware acceleration via nixGL
+  - ✅ Proper font rendering (direct AppImage execution)
+  - ✅ Working links (custom xdg-open wrapper for Firefox)
+  - ✅ Official Viber icon (dynamically extracted from AppImage)
+  - ✅ No binary files stored in git repository
+- *Status*: Fully functional with excellent user experience
 
 ** Package Management Status
-- *Guix elimination incomplete*: 74 packages still installed despite empty manifest
-  (`.config/guix/packages.scm` emptied but packages persist in user profile)
-- *Root cause*: Guix packages remain until explicitly removed with `guix package --remove`
-- *Impact*: Mixed package management creates complexity and potential conflicts
-- *Options*: Either complete removal via `guix package --delete-generations` or 
-  document hybrid approach with clear package boundaries
+- *Guix elimination*: ✅ Completely eliminated as of 2025-08-06 (ADR-0009)
+- *Flakes migration*: ✅ Migrated to modern flakes-based workflow (ADR-0010)
+- *Status*: Clean, unified package management through home-manager/Nix flakes only
+- *Reproducibility*: All dependencies pinned in flake.lock for consistent builds
 
 ** Troubleshooting
 #+begin_src bash
@@ -247,10 +265,10 @@ sudo mount -o remount,size=15G /tmp
 
 * 📈 System Status
 
-*Last major update*: 2025-07-27 - Complete package manager consolidation
-*Packages managed*: 95+ via home-manager/Nix
-*Architecture*: Wayland-first with modern security features
-*Reproducibility*: Complete user environment captured in version control
+*Last major update*: 2025-08-11 - Flakes migration and Viber improvements
+*Packages managed*: 95+ via home-manager/Nix Flakes
+*Architecture*: Wayland-first with modern security features and hardware acceleration
+*Reproducibility*: Complete user environment with locked dependencies (flake.lock)
 
 ---
 
