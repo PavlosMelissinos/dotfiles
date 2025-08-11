@@ -12,13 +12,17 @@ terminal applications, and various GUI tools.
 
 ## Package Management & Configuration
 
-### home-manager (Nix) - SOLE PACKAGE MANAGER
-- Configuration: `.config/home-manager/home.nix`
-- Apply changes: `home-manager switch`
+### home-manager (Nix Flakes) - SOLE PACKAGE MANAGER
+- **Configuration**: Flake-based setup in `.config/home-manager/`
+  - `flake.nix` - Inputs and configuration structure
+  - `home.nix` - Package and service declarations  
+  - `flake.lock` - Pinned package versions for reproducibility
+- **Apply changes**: `home-manager switch --flake .` (from `.config/home-manager/`)
 - **Manages 95+ packages**: ALL development tools, desktop applications,
   Wayland environment, system libraries
+- **nixGL integration** for hardware acceleration in GUI applications
 - Integrated configuration management for git, zsh, emacs, firefox
-- Allows unfree packages (claude-code, spotify, steam)
+- Allows unfree packages (claude-code, spotify, steam, viber)
 - **Complete package management solution - use for ALL package installations**
 
 ### Guix (COMPLETELY ELIMINATED)
@@ -47,24 +51,33 @@ terminal applications, and various GUI tools.
 
 ### System Management
 ```bash
-# Apply home-manager configuration (primary package management)
-home-manager switch
+# Apply home-manager flake configuration (primary package management)
+cd ~/.config/home-manager && home-manager switch --flake .
 
 # System package updates (DNF for base system only)
 sudo dnf update
 
 # Reload Sway configuration
 swaymsg reload
+
+# Update flake inputs (like package updates in traditional package managers)
+cd ~/.config/home-manager && nix flake update
 ```
 
-### Package Management
+### Package Management (Flakes)
 ```bash
-# ONLY package management method (since 2025-07-27)
-# Edit .config/home-manager/home.nix, then:
-home-manager switch
+# Modern flake-based workflow (since 2025-08-11)
+cd ~/.config/home-manager
 
-# Legacy Guix commands (NO LONGER USED)
-# All packages migrated to home-manager - Guix eliminated
+# 1. Edit home.nix to add/remove packages
+# 2. Apply configuration
+home-manager switch --flake .
+
+# 3. Update packages (updates flake.lock)
+nix flake update
+
+# 4. Pin specific inputs if needed  
+nix flake lock --update-input nixpkgs
 ```
 
 ## Authentication & Security
@@ -74,6 +87,25 @@ home-manager switch
 - Key mappings stored in `/etc/u2f_mappings`
 - Supports multiple hardware keys
 - Used with GitHub, GitLab, Porkbun, Namecheap, and Bitwarden
+
+## Hardware Acceleration & Graphics
+
+### nixGL Integration
+- **Purpose**: Provides OpenGL context for GUI applications in Nix
+- **Configuration**: Integrated via flake input in `flake.nix`
+- **Wrapper usage**: `config.lib.nixGL.wrap` for applications needing hardware acceleration
+- **Default wrapper**: Mesa (Intel integrated graphics)
+
+### Application-Specific Solutions
+
+#### Viber (Messaging)
+- **Approach**: nixGL-wrapped AppImage with optimized configuration
+- **Font rendering**: Direct AppImage execution (bypasses font isolation issues)
+- **Link handling**: Custom xdg-open wrapper with clean Firefox environment
+- **Hardware acceleration**: nixGL provides proper OpenGL context
+- **User experience**: No prompts, proper fonts, working links
+- **Fallback**: appimage-run if direct execution fails
+- **Location**: Managed declaratively in home.nix packages
 
 ## Architecture Notes
 
