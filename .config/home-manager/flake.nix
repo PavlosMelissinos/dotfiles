@@ -10,7 +10,7 @@
     };
     nixgl = {
       url = "github:nix-community/nixGL";
-      inputs.nixpkgs.follows = "home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -26,8 +26,8 @@
         # the path to your home.nix.
         modules = [ ./home.nix ];
 
-        # Optionally use extraSpecialArgs
-        # to pass through arguments to home.nix
+        # Pass nixGL to home.nix
+        extraSpecialArgs = { inherit nixgl; };
       };
     };
 }

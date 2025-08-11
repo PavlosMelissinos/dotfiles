@@ -42,7 +42,7 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": [
-          "home-manager"
+          "nixpkgs"
         ]
       },
       "locked": {
