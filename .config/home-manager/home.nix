@@ -188,10 +188,25 @@
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
-  # home.file = {
-  #   # Swaylock config in native format
-  #   ".config/swaylock/config".source = ./configs/swaylock/config;
-  # };
+  home.file = {
+    # Swaylock config in native format
+    # ".config/swaylock/config".source = ./configs/swaylock/config;
+    
+    # Viber desktop entry
+    ".local/share/applications/viber.desktop".text = ''
+      [Desktop Entry]
+      Name=Viber
+      Comment=Free calls, text and picture sharing with anyone, anywhere!
+      Exec=${config.home.profileDirectory}/bin/viber %U
+      Icon=viber
+      Terminal=false
+      Type=Application
+      Categories=Network;InstantMessaging;
+      MimeType=x-scheme-handler/viber;
+      StartupWMClass=ViberPC
+      StartupNotify=true
+    '';
+  };
 
   # Home Manager can also manage your environment variables through
   # 'home.sessionVariables'. These will be explicitly sourced when using a
@@ -736,7 +751,7 @@ EOF
 
       # Social/Communication
       "x-scheme-handler/tootle" = "com.github.bleakgrey.tootle.desktop";
-      "x-scheme-handler/viber" = "viber-appimage.desktop";  # Fixed AppImage integration
+      "x-scheme-handler/viber" = "viber.desktop";
 
       # Archives
       "application/zip" = "libreoffice-startcenter.desktop";
