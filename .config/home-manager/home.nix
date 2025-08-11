@@ -705,7 +705,7 @@ EOF
 
       # Social/Communication
       "x-scheme-handler/tootle" = "com.github.bleakgrey.tootle.desktop";
-      # "x-scheme-handler/viber" = "viber.desktop";  # Disabled - using AppImage
+      "x-scheme-handler/viber" = "viber-appimage.desktop";  # Fixed AppImage integration
 
       # Archives
       "application/zip" = "libreoffice-startcenter.desktop";

@@ -1,15 +1,13 @@
 #!/bin/bash
-# Viber AppImage launcher script
-# Handles environment setup for Sway/Wayland compatibility
+# Viber AppImage launcher with minimal OpenGL bypass
 
-export QT_QPA_PLATFORM=xcb
-export QT_AUTO_SCREEN_SCALE_FACTOR=0
-export QT_SCALE_FACTOR=1
-export QTWEBENGINE_DISABLE_SANDBOX=1
-
-# Force software rendering to avoid GLX issues
-export LIBGL_ALWAYS_SOFTWARE=1
-export QT_OPENGL=software
+# Essential OpenGL bypass for appimage-run compatibility
+export QT_OPENGL=none
+export QT_XCB_GL_INTEGRATION=none
 export QT_QUICK_BACKEND=software
+export LIBGL_ALWAYS_SOFTWARE=1
+
+# Set browser for link opening
+export BROWSER="firefox"
 
 exec appimage-run /home/pavlos/.local/bin/viber.AppImage "$@"

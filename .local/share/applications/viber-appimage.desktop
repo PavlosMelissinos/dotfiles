@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Viber (AppImage)
 Comment=Viber VoIP and messenger
-Exec=/home/pavlos/.local/bin/viber.AppImage %u
+Exec=/home/pavlos/.local/bin/viber %u
 Path=/home/pavlos/.local/bin/
 Icon=viber
 Terminal=false
