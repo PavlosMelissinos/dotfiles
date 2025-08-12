@@ -10,7 +10,7 @@
     "modules-center": ["clock", "custom/weather", "sway/mode"],
     "modules-right": ["idle_inhibitor", "pulseaudio", "backlight", "network",
     //"custom/vpn",
-    "memory", "temperature", "battery",
+    "cpu", "memory", "temperature", "battery",
     "custom/github", "tray", "sway/language", "custom/lockkeys", "custom/power"],
     "sway/workspaces": {
         "disable-scroll": true,
@@ -57,7 +57,7 @@
     "cpu": {
         "format": "{usage}% ",
         "tooltip": true,
-        "on-click": "gnome-system-monitor"
+        "on-click": "alacritty -e btop"
     },
     "memory": {
         //"format": "{percentage}% ",
@@ -66,7 +66,7 @@
         "format-critical": "{percentage}% ",
         "tooltip-format": "RAM: {used:0.1f}G/{total:0.1f}G Swap: {swapUsed:0.1f}G/{swapTotal:0.1f}G",
         "states": {"warning": 80, "critical": 95},
-        "on-click": "gnome-system-monitor"
+        "on-click": "alacritty -e btop"
     },
     "temperature": {
         // "thermal-zone": 2,
@@ -74,7 +74,8 @@
         "critical-threshold": 60,
         "format-critical": "{temperatureC}°C {icon}",
         "format": "{icon}",
-        "format-icons": ["", "", ""]
+        "format-icons": ["", "", ""],
+        "on-click": "alacritty -e btop"
     },
     "disk": {
         "interval": 30,
@@ -114,15 +115,15 @@
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "on-click": "gnome-control-center network",
-        //"format-alt-click": "click-right",
-        "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
+        "on-click": "nm-connection-editor",
+        "format-alt-click": "click-right",
+        "format-ethernet": "{ifname} ",
         "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr}",
         "format-wifi": "{essid:4} {icon}",
         "tooltip-format-wifi": "{essid} ({signalStrength}%)  {ifname}: {ipaddr}/{cidr}",
         "format-linked": "{ifname}: (No IP) ",
         "format-disconnected": "Disconnected ⚠",
-        //"format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
         "format-icons": ["", "", ""]
     },
     "keyboard-state": {
@@ -187,7 +188,7 @@
         "interval": 3600,
         "exec": "$XDG_CONFIG_HOME/waybar/waybar-wttr.py",
         "return-type": "json",
-        "on-click": "gnome-weather",
+        "on-click": "alacritty -e sh -c 'curl wttr.in; read'",
         "max-length": 10
     },
     "custom/github": {

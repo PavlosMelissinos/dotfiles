@@ -96,6 +96,7 @@
     appimage-run
     # azote  # Not in nixpkgs - could create custom package if needed
     blueman
+    btop
     dbeaver-bin
     element-desktop
     evince
@@ -111,8 +112,10 @@
     libreoffice
     lilypond
     mesa
+    mission-center
     mpv
     musescore
+    networkmanagerapplet
     nomacs
     nyxt
     pidgin
