@@ -46,19 +46,6 @@
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
     # '')
-    curl
-    flameshot
-    firefox
-    htop
-    jq  # For location detection in gammastep service
-    logrotate
-    nodejs_22
-    powerline-fonts
-    ripgrep
-    tmux
-    xdg-utils
-    yt-dlp
-    zsh
 
     # Development tools
     awscli2
@@ -74,7 +61,7 @@
     jdk21
     meson
     nix
-    # nixgl.packages.${system}.nixGLIntel
+    nodejs_22
     openssl
     pyright
     (python312.withPackages(ps: with ps; [yapf requests]))
@@ -104,6 +91,7 @@
     dbeaver-bin
     element-desktop
     evince
+    firefox
     font-manager
     godot
     handbrake
@@ -153,8 +141,8 @@
       fi
     ''))
     vlc
+    xfce.thunar
     zathura
-
 
     # Audio/MIDI support
     alsa-lib
@@ -166,15 +154,24 @@
 
     # Remaining packages
     bsdgames
+    curl
+    flameshot
     geoclue2
     gnome-control-center
+    htop
     iftop
+    jq  # For location detection in gammastep service
+    logrotate
     mc
     motion
     pv
     qt6.qtbase
-    xfce.thunar
+    ripgrep
+    tmux
+    xdg-utils
     xorg.xeyes
+    yt-dlp
+    zsh
 
     # System libraries and fonts
     cacert  # replaces nss-certs
@@ -184,6 +181,7 @@
     freefont_ttf  # replaces font-gnu-freefont
     glibcLocales
     liberation_ttf  # replaces font-liberation
+    powerline-fonts
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
