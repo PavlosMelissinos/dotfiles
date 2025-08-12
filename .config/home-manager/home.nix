@@ -48,14 +48,18 @@
     # '')
 
     # Development tools
+    android-tools
     awscli2
     babashka
+    caddy
     cargo
     claude-code
     clojure
     cmake
+    distrobox
     docker-compose
     git
+    go
     guile
     gum
     jdk21
@@ -63,10 +67,12 @@
     nix
     nodejs_22
     openssl
+    pkg-config  # Build tool for development libraries
     pyright
     (python312.withPackages(ps: with ps; [yapf requests]))
     rlwrap
     rustc
+    toolbox
     uv
     vscodium
 
@@ -88,11 +94,14 @@
 
     # Desktop applications
     appimage-run
+    # azote  # Not in nixpkgs - could create custom package if needed
+    blueman
     dbeaver-bin
     element-desktop
     evince
     firefox
     font-manager
+    gedit
     godot
     handbrake
     imagemagick
@@ -108,6 +117,7 @@
     nyxt
     pidgin
     qbittorrent
+    rhythmbox
     signal-desktop
     # slack
     spotify
@@ -167,7 +177,10 @@
     pv
     qt6.qtbase
     ripgrep
+    sqlite  # Database CLI tool and library
     tmux
+    unzip
+    wdisplays  # Display configuration GUI
     xdg-utils
     xorg.xeyes
     yt-dlp
