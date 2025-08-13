@@ -239,6 +239,9 @@
 
     # Boot and system maintenance
     nixos-option
+    
+    # Home Manager for standalone usage
+    home-manager
   ];
 
   # Shell configuration
@@ -248,6 +251,9 @@
       enable = true;
       wrapperFeatures.gtk = true; # GTK applications support
     };
+
+    # Enable home-manager as a NixOS module
+    home-manager.enable = true;
 
     # GPG agent
     gnupg.agent = {
