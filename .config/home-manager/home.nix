@@ -225,7 +225,7 @@
     ".local/share/icons/viber.png".source =
       let
         viberAppImage = builtins.fetchurl {
-          url = "file:///home/pavlos/.local/bin/viber.AppImage";
+          url = "https://download.viber.com/desktop/Linux/viber.AppImage";
           sha256 = "sha256-jwsePK1l/WI+stDNpAD1t2Obr1BwpNDP0nzkIDfGGoA=";
         };
 
