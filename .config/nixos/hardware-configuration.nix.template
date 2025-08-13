@@ -1,0 +1,47 @@
+# DO NOT USE THIS FILE DIRECTLY!
+# This is a reference template showing the structure of hardware-configuration.nix
+# 
+# CRITICAL: hardware-configuration.nix MUST be auto-generated during installation
+# using: nixos-generate-config --root /mnt
+#
+# This ensures:
+# 1. Correct filesystem types matching your actual partitions
+# 2. Proper UUIDs from your specific hardware  
+# 3. Correct kernel modules for your system
+# 4. Proper hardware detection
+#
+# The actual file will be created automatically during NixOS installation.
+
+{ config, lib, pkgs, modulesPath, ... }:
+
+{
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
+
+  # Example structure - actual values will be auto-detected:
+  #
+  # boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "sd_mod" ];
+  # boot.initrd.kernelModules = [ ];
+  # boot.kernelModules = [ "kvm-intel" ];
+  # boot.extraModulePackages = [ ];
+  #
+  # fileSystems."/" = {
+  #   device = "/dev/disk/by-uuid/actual-uuid-here";
+  #   fsType = "ext4";  # or "btrfs", "xfs", etc. - will match your setup
+  # };
+  #
+  # fileSystems."/boot" = {
+  #   device = "/dev/disk/by-uuid/actual-boot-uuid-here";
+  #   fsType = "vfat";
+  #   options = [ "fmask=0022" "dmask=0022" ];
+  # };
+  #
+  # swapDevices = [
+  #   { device = "/dev/disk/by-uuid/actual-swap-uuid-here"; }
+  # ];
+  #
+  # networking.useDHCP = lib.mkDefault true;
+  # nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  # hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+}
