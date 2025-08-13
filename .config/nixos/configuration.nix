@@ -7,7 +7,7 @@
 {
   imports = [
     # Include the results of the hardware scan
-    /mnt/etc/nixos/hardware-configuration.nix
+    /etc/nixos/hardware-configuration.nix
   ];
 
   # Boot loader configuration (GRUB for EFI)
