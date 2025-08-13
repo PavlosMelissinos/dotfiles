@@ -103,21 +103,49 @@ qemu-system-x86_64 \
   -virtfs local,path=/home/pavlos/.config,mount_tag=host_config,security_model=passthrough
 ```
 
-**In VM, test installation**:
+**VM Installation Process** (CRITICAL - prevents boot failures):
+
 ```bash
-# Mount virtual disk directories
-mount /dev/sda2 /mnt
+# STEP 1: Partition the VM disk (UEFI layout)
+parted /dev/sda mklabel gpt
+parted /dev/sda mkpart ESP fat32 1MiB 1GiB
+parted /dev/sda set 1 esp on
+parted /dev/sda mkpart primary ext4 1GiB 100%
+
+# STEP 2: Format partitions with correct filesystem types
+mkfs.vfat -F32 -n BOOT /dev/sda1      # UEFI boot partition
+mkfs.ext4 -L nixos-root /dev/sda2     # Root filesystem
+
+# STEP 3: Create swap (optional but recommended)
+# Alternatively, create swap partition:
+# parted /dev/sda mkpart primary linux-swap -2GiB 100%
+# mkswap /dev/sda3
+
+# STEP 4: Mount partitions in correct order
+mount /dev/sda2 /mnt                  # Root first
 mkdir -p /mnt/boot
-mount /dev/sda1 /mnt/boot
-  
-# Mount host directories
-mkdir -p /mnt/nixos /mnt/home-manager
+mount /dev/sda1 /mnt/boot             # Then boot
+
+# STEP 5: Get UUIDs for hardware-configuration.nix
+blkid /dev/sda1  # Note the UUID for /boot
+blkid /dev/sda2  # Note the UUID for /
+
+# STEP 6: Mount host config and copy templates
+mkdir -p /mnt/host-config
 mount -t 9p -o trans=virtio,version=9p2000.L host_config /mnt/host-config
+mkdir -p /mnt/etc/nixos
+cp -r /mnt/host-config/nixos/* /mnt/etc/nixos/
 
-cp -r /mnt/host-config/nixos /mnt/.config/nixos
+# STEP 7: Update hardware-configuration.nix with actual UUIDs
+# Edit /mnt/etc/nixos/hardware-configuration.nix:
+# Replace REPLACE-WITH-ROOT-UUID with actual root UUID
+# Replace REPLACE-WITH-BOOT-UUID with actual boot UUID
+# Verify fsType matches: "ext4" for root, "vfat" for boot
 
-# Standard NixOS installation with your configs
-nixos-install --root /mnt --flake /mnt/.config/nixos#localhost-nixos --impure
+# STEP 8: Install NixOS
+nixos-install --root /mnt
+# System will prompt to set root password
+# Then create user pavlos with password during setup
 ```
 
 ### 1.3 Critical Validation Tests
@@ -274,6 +302,81 @@ nixos-install --root /mnt --flake /mnt/config/nixos#localhost-nixos
 # 4. Apply user config
 home-manager switch --flake /mnt/config/.config/home-manager
 ```
+
+## Troubleshooting Common Issues
+
+### VM Boot Failures
+
+**Issue: System won't boot after installation**
+- **Cause**: Filesystem type mismatch in hardware-configuration.nix
+- **Solution**: Verify `fsType` matches actual partition format:
+  ```bash
+  lsblk -f  # Check filesystem types
+  blkid /dev/sdaX  # Get UUIDs and types
+  ```
+- **Fix**: Edit `/mnt/etc/nixos/hardware-configuration.nix` before `nixos-install`
+
+**Issue: "Resource exhaustion" during build**
+- **Cause**: Insufficient VM resources (RAM/disk)
+- **Solution**:
+  - Increase VM RAM to minimum 8GB (`-m 8G`)
+  - Ensure disk space is at least 150GB
+  - Add swap if building with limited RAM
+
+**Issue: UEFI boot failures**
+- **Cause**: Missing or incorrect OVMF firmware setup
+- **Solution**:
+  - Verify OVMF firmware files exist: `/usr/share/edk2/ovmf/OVMF_*.fd`
+  - Create writable OVMF vars: `cp OVMF_VARS.fd ovmf_vars.fd`
+  - Use correct QEMU UEFI boot options (see VM command above)
+
+**Issue: "No password set for user" error**
+- **Cause**: Missing user password configuration in configuration.nix
+- **Solution**: Use one of three password options in users.users.pavlos:
+  1. `initialPassword = "temppass123";`
+  2. `hashedPassword = "$6$hash...";` (use `mkpasswd`)
+  3. `passwordFile = "/path/to/password";`
+
+**Issue: Hardware not detected correctly**
+- **Cause**: Incorrect kernel modules or hardware detection
+- **Solution**:
+  - Run `nixos-generate-config` in VM to get proper hardware detection
+  - Update `boot.initrd.availableKernelModules` as needed
+  - Check dmesg for hardware detection issues
+
+### Network Configuration Issues
+
+**Issue: NetworkManager not starting**
+- **Cause**: Conflicting network configuration
+- **Solution**: Ensure only NetworkManager is enabled:
+  ```nix
+  networking.networkmanager.enable = true;
+  networking.useDHCP = false;  # Disable if using NetworkManager
+  ```
+
+**Issue: No internet connectivity in VM**
+- **Cause**: VM networking not configured
+- **Solution**: Add to QEMU command:
+  ```bash
+  -netdev user,id=net0 \
+  -device virtio-net,netdev=net0
+  ```
+
+### Build and Installation Issues
+
+**Issue: Flake evaluation fails**
+- **Cause**: Missing flake.nix or incorrect syntax
+- **Solution**:
+  - Verify flake.nix syntax: `nix flake check`
+  - Ensure all inputs are accessible
+  - Use `--impure` flag if needed for local paths
+
+**Issue: Out of space during build**
+- **Cause**: Insufficient /tmp space or root filesystem full
+- **Solution**:
+  - Increase VM disk size to 150GB+
+  - Clean old build artifacts: `nix-collect-garbage -d`
+  - Mount larger tmpfs for /tmp
 
 ## Risk Mitigation
 
