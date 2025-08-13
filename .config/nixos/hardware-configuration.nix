@@ -25,13 +25,12 @@
   # Filesystem configuration (template - adjust based on actual installation)
   fileSystems."/" = {
     device = "/dev/sda2";
-    fsType = "btrfs";
-    options = [ "subvol=@" "compress=zstd" "noatime" ];
+    fsType = "ext4";
   };
 
   fileSystems."/boot" = {
     device = "/dev/sda1";
-    fsType = "ext4";
+    fsType = "vfat";
   };
 
   # Swap configuration (using zram like current Fedora setup)

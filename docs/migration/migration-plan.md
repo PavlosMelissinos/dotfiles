@@ -69,33 +69,55 @@ Create `flake.nix`:
 
 ### 1.2 VM Testing Environment
 
+**CRITICAL REQUIREMENTS** (learned from troubleshooting):
+- **RAM**: Minimum 8GB for reliable NixOS build process
+- **Disk**: Minimum 20GB for full system build and testing
+- **UEFI**: Must use OVMF firmware for proper boot setup
+
 **Set up QEMU/KVM VM**:
 ```bash
 # Download NixOS ISO (minimal)
 wget https://channels.nixos.org/nixos-25.05/latest-nixos-minimal-x86_64-linux.iso
 
-# Create VM disk (20GB sufficient for testing)
-qemu-img create -f qcow2 nixos-test.qcow2 20G
+# Install OVMF firmware if not available
+sudo dnf install edk2-ovmf  # For Fedora
 
-# Launch VM with your configs mounted
+# Create VM disk (20GB minimum for full build)
+qemu-img create -f qcow2 nixos-test.qcow2 40G
+
+# Create OVMF vars file before first run
+cp /usr/share/edk2/ovmf/OVMF_VARS.fd /home/pavlos/.config/nixos/ovmf_vars.fd
+
+# Launch VM with UEFI firmware and proper resources
 qemu-system-x86_64 \
   -enable-kvm \
-  -m 4G \
+  -m 8G \
+  -cpu host \
+  -smp 4 \
+  -drive if=pflash,format=raw,readonly=on,file=/usr/share/edk2/ovmf/OVMF_CODE.fd \
+  -drive if=pflash,format=raw,file=/home/pavlos/.config/nixos/ovmf_vars.fd \
   -drive file=nixos-test.qcow2,format=qcow2 \
   -cdrom latest-nixos-minimal-x86_64-linux.iso \
-  -virtfs local,path=/home/pavlos/.config/nixos,mount_tag=host0,security_model=passthrough \
-  -virtfs local,path=/home/pavlos/.config/home-manager,mount_tag=host1,security_model=passthrough
+  -netdev user,id=net0 \
+  -device virtio-net,netdev=net0 \
+  -virtfs local,path=/home/pavlos/.config,mount_tag=host_config,security_model=passthrough
 ```
 
 **In VM, test installation**:
 ```bash
+# Mount virtual disk directories
+mount /dev/sda2 /mnt
+mkdir -p /mnt/boot
+mount /dev/sda1 /mnt/boot
+  
 # Mount host directories
 mkdir -p /mnt/nixos /mnt/home-manager
-mount -t 9p -o trans=virtio,version=9p2000.L host0 /mnt/nixos
-mount -t 9p -o trans=virtio,version=9p2000.L host1 /mnt/home-manager
+mount -t 9p -o trans=virtio,version=9p2000.L host_config /mnt/host-config
+
+cp -r /mnt/host-config/nixos /mnt/.config/nixos
 
 # Standard NixOS installation with your configs
-nixos-install --root /mnt --flake /mnt/nixos#localhost-nixos
+nixos-install --root /mnt --flake /mnt/.config/nixos#localhost-nixos --impure
 ```
 
 ### 1.3 Critical Validation Tests

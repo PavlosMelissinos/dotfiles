@@ -10,10 +10,11 @@
     ./hardware-configuration.nix
   ];
 
-  # Boot loader configuration (Legacy GRUB for MBR)
+  # Boot loader configuration (GRUB for EFI)
   boot.loader.grub = {
     enable = true;
-    device = "/dev/sda"; # MBR boot device
+    efiSupport = true;
+    device = "nodev";  # Don't install to a device, use EFI
     # Configure for dual-boot if needed
     # extraEntries = ''
     #   menuentry "Fedora" {
@@ -22,6 +23,8 @@
     #   }
     # '';
   };
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot";
 
   # Kernel parameters for Intel Skylake
   boot.kernelParams = [
@@ -97,7 +100,7 @@
   };
 
   # Audio system (PipeWire)
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -179,10 +182,10 @@
       sudo.u2fAuth = true;
       swaylock.u2fAuth = true;
     };
-    
+
     pam.u2f = {
       enable = true;
-      cue = true; # Show "touch your security key" message
+      settings.cue = true; # Show "touch your security key" message
       # U2F mappings will need to be copied from /etc/u2f_mappings
     };
 
@@ -200,7 +203,7 @@
   users.users.pavlos = {
     isNormalUser = true;
     description = "Pavlos Melissinos";
-    extraGroups = [ 
+    extraGroups = [
       "wheel"          # sudo access
       "networkmanager" # network management
       "audio"          # audio devices
@@ -223,17 +226,17 @@
     pciutils  # lspci
     usbutils  # lsusb
     file
-    
+
     # Network tools
     networkmanagerapplet
-    
+
     # Hardware utilities
     lm_sensors
     smartmontools
-    
+
     # U2F tools
     pam_u2f
-    
+
     # Boot and system maintenance
     nixos-option
   ];
@@ -245,7 +248,7 @@
       enable = true;
       wrapperFeatures.gtk = true; # GTK applications support
     };
-    
+
     # GPG agent
     gnupg.agent = {
       enable = true;
@@ -258,7 +261,7 @@
     # Wayland-first environment
     NIXOS_OZONE_WL = "1"; # Force Electron apps to use Wayland
     MOZ_ENABLE_WAYLAND = "1"; # Force Firefox to use Wayland
-    
+
     # XDG directories (should match home-manager config)
     XDG_CONFIG_HOME = "$HOME/.config";
     XDG_CACHE_HOME = "$HOME/.cache";
@@ -275,7 +278,7 @@
       font-awesome
       powerline-fonts
     ];
-    
+
     fontconfig = {
       defaultFonts = {
         monospace = [ "DejaVu Sans Mono" ];
@@ -290,14 +293,11 @@
     settings = {
       # Enable flakes
       experimental-features = [ "nix-command" "flakes" ];
-      
+
       # Optimize store
       auto-optimise-store = true;
-      
-      # Allow unfree packages (matches home-manager config)
-      allow-unfree = true;
     };
-    
+
     # Garbage collection
     gc = {
       automatic = true;
@@ -305,18 +305,20 @@
       options = "--delete-older-than 30d";
     };
   };
+  # Allow unfree packages (for proprietary software)
+  nixpkgs.config.allowUnfree = true;
 
   # System version (using 25.05 for newer nixpkgs)
   system.stateVersion = "25.05";
 
   # Additional system configuration for compatibility
-  
+
   # Enable D-Bus
   services.dbus.enable = true;
-  
+
   # Enable systemd user services
   systemd.user.services = { };
-  
+
   # Locale settings
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";
