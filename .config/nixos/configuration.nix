@@ -7,7 +7,7 @@
 {
   imports = [
     # Include the results of the hardware scan
-    ./hardware-configuration.nix
+    /mnt/etc/nixos/hardware-configuration.nix
   ];
 
   # Boot loader configuration (GRUB for EFI)
@@ -239,7 +239,7 @@
 
     # Boot and system maintenance
     nixos-option
-    
+
     # Home Manager for standalone usage
     home-manager
   ];
