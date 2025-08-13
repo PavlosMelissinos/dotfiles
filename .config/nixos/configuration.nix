@@ -252,9 +252,6 @@
       wrapperFeatures.gtk = true; # GTK applications support
     };
 
-    # Enable home-manager as a NixOS module
-    home-manager.enable = true;
-
     # GPG agent
     gnupg.agent = {
       enable = true;
