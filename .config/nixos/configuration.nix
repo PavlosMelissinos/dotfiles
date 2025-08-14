@@ -6,8 +6,18 @@
 
 {
   imports = [
-    # Include the results of the hardware scan
-    /etc/nixos/hardware-configuration.nix
+    # Multiple fallback paths for maximum compatibility
+    (let
+      candidates = [
+        ./hardware-configuration.nix           # Local to flake (installation)
+        /etc/nixos/hardware-configuration.nix  # System location (post-install)
+        /mnt/etc/nixos/hardware-configuration.nix  # Just in case
+      ];
+      existing = builtins.filter builtins.pathExists candidates;
+    in
+      if existing != []
+      then builtins.head existing
+      else throw "No hardware-configuration.nix found in any expected location")
   ];
 
   # Boot loader configuration (GRUB for EFI)
