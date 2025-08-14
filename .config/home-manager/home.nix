@@ -666,93 +666,43 @@
   };
 
   # Gammastep service with automatic location detection
-  services.gammastep = {
-    enable = true;
-    provider = "manual";
-    latitude = 40.7;  # Default coordinates (auto-updated)
-    longitude = -74.0;
-    temperature = {
-      day = 5700;
-      night = 3500;
-    };
-    settings = {
-      general = {
-        adjustment-method = "wayland";  # Perfect for your Sway setup
-        fade = 1;
-        brightness-day = "1.0";
-        brightness-night = "0.8";
-      };
-    };
-  };
-
-  # Automatic location detection service
-  systemd.user.services.gammastep-location-update = {
+  systemd.user.services.gammastep = {
     Unit = {
-      Description = "Update gammastep location automatically";
-      After = [ "network-online.target" ];
+      Description = "Blue light filter";
+      After = [ "graphical-session.target" ];
+      PartOf = [ "graphical-session.target" ];
     };
     Service = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.writeShellScript "update-gammastep-location" ''
+      ExecStart = "${pkgs.writeShellScript "gammastep-with-location" ''
         set -euo pipefail
 
-        echo "[$(date)] Updating gammastep location"
+        # Default coordinates (fallback)
+        THESS_LAT="40.6"
+        THESS_LON="22.9"
 
-        if GEOINFO=$(${pkgs.curl}/bin/curl -s --connect-timeout 10 "https://ipapi.co/json/"); then
-          LATITUDE=$(echo "$GEOINFO" | ${pkgs.jq}/bin/jq -r '.latitude // empty')
-          LONGITUDE=$(echo "$GEOINFO" | ${pkgs.jq}/bin/jq -r '.longitude // empty')
-          CITY=$(echo "$GEOINFO" | ${pkgs.jq}/bin/jq -r '.city // empty')
+        # Try to get current location
+        if GEOINFO=$(${pkgs.curl}/bin/curl -s --connect-timeout 5 "https://ipapi.co/json/" 2>/dev/null); then
+          LAT=$(printf '%s\n' "$GEOINFO" | ${pkgs.jq}/bin/jq -r '.latitude // empty' 2>/dev/null)
+          LON=$(printf '%s\n' "$GEOINFO" | ${pkgs.jq}/bin/jq -r '.longitude // empty' 2>/dev/null)
 
-          if [ -n "$LATITUDE" ] && [ -n "$LONGITUDE" ] && [ "$LATITUDE" != "null" ] && [ "$LONGITUDE" != "null" ]; then
-            echo "Detected location: $CITY ($LATITUDE, $LONGITUDE)"
-
-            mkdir -p ${config.home.homeDirectory}/.config/gammastep
-            cat > ${config.home.homeDirectory}/.config/gammastep/config.ini << EOF
-[general]
-temp-day=5500
-temp-night=3700
-adjustment-method=wayland
-fade=1
-
-[manual]
-lat=$LATITUDE
-lon=$LONGITUDE
-EOF
-
-            if systemctl --user is-active --quiet gammastep.service; then
-              systemctl --user restart gammastep.service
-            fi
-
-            echo "Gammastep location updated successfully"
+          if [ -n "$LAT" ] && [ -n "$LON" ] && [ "$LAT" != "null" ] && [ "$LON" != "null" ]; then
+            CITY=$(printf '%s\n' "$GEOINFO" | ${pkgs.jq}/bin/jq -r '.city // "Unknown"' 2>/dev/null)
+            echo "Using detected location: $CITY ($LAT, $LON)"
           else
-            echo "Invalid location data received"
-            exit 1
+            echo "Using fallback location: Thessaloniki ($THESS_LAT, $THESS_LON)"
           fi
         else
-          echo "Failed to fetch location data - using existing configuration"
-          exit 1
+          echo "Location detection failed, using fallback: Thessaloniki ($THESS_LAT, $THESS_LON)"
         fi
+
+        exec ${pkgs.gammastep}/bin/gammastep -l "$LAT:$LON" -t 5500:3700 -m wayland
       ''}";
-      StandardOutput = "journal";
-      StandardError = "journal";
+      Restart = "on-failure";
+      RestartSec = 3;
     };
+    Install.WantedBy = [ "graphical-session.target" ];
   };
 
-  # Weekly location updates (handles travel)
-  systemd.user.timers.gammastep-location-update = {
-    Unit = {
-      Description = "Update location weekly";
-      Requires = [ "gammastep-location-update.service" ];
-    };
-    Timer = {
-      OnCalendar = "weekly";
-      RandomizedDelaySec = "2h";
-      Persistent = true;
-    };
-    Install = {
-      WantedBy = [ "timers.target" ];
-    };
-  };
 
   xdg.mimeApps = {
     enable = true;
