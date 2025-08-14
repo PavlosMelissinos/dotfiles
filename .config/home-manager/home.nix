@@ -109,6 +109,7 @@
     handbrake
     imagemagick
     imv
+    kodi
     libglvnd
     libGL
     libreoffice
