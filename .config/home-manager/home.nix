@@ -109,7 +109,7 @@
     handbrake
     imagemagick
     imv
-    kodi
+    (config.lib.nixGL.wrap kodi)
     libglvnd
     libGL
     libreoffice
@@ -129,7 +129,7 @@
     spotify
     steam
     strawberry
-    stremio
+    (config.lib.nixGL.wrap stremio)
     thunderbird
     # Viber with nixGL and custom link handling
     (let
