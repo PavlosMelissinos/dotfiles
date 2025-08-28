@@ -526,6 +526,8 @@ Examples TODO."
                                  (css        . t)
                                  (dot        . t)
                                  (emacs-lisp . t)
+                                 (java       . t)
+                                 (jshell     . t)
                                  (js         . t)
                                  (perl       . t)
                                  (python     . t)
@@ -985,14 +987,199 @@ Examples TODO."
 ;;; Java
 ;;;========================================
 
-(use-package maven-test-mode
+;; JShell REPL integration for interactive Java development
+(use-package ob-jshell
+  :ensure t
+  :after org
   :config
-  (add-hook 'java-mode-hook 'maven-test-mode))
+  (add-to-list 'org-babel-load-languages '(jshell . t))
+  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages))
 
-;; Gradle integration
-(use-package gradle-mode
+;; Enhanced Java REPL mode
+(defvar jshell-buffer-name "*JShell*"
+  "Name of the JShell buffer.")
+
+(defvar jshell-prompt-regexp "^jshell> "
+  "Regexp for matching JShell prompts.")
+
+(defun jshell-start ()
+  "Start JShell REPL in a buffer."
+  (interactive)
+  (let ((buffer (get-buffer-create jshell-buffer-name)))
+    (unless (get-buffer-process buffer)
+      (with-current-buffer buffer
+        (make-comint-in-buffer "JShell" buffer "jshell" nil)
+        (setq mode-line-process '(":%s"))
+        (comint-mode)
+        (setq comint-prompt-regexp jshell-prompt-regexp)
+        (setq comint-use-prompt-regexp t)))
+    (pop-to-buffer buffer)))
+
+(defun jshell-send-region (start end)
+  "Send region to JShell."
+  (interactive "r")
+  (let ((code (buffer-substring-no-properties start end)))
+    (jshell-send-string code)))
+
+(defun jshell-send-string (string)
+  "Send STRING to JShell process."
+  (let ((proc (get-buffer-process jshell-buffer-name)))
+    (if proc
+        (progn
+          (comint-send-string proc (concat string "\n"))
+          (display-buffer jshell-buffer-name))
+      (message "No JShell process running. Start with C-c M-j"))))
+
+(defun jshell-send-buffer ()
+  "Send entire buffer to JShell."
+  (interactive)
+  (jshell-send-region (point-min) (point-max)))
+
+(defun jshell-eval-last-expression ()
+  "Evaluate the Java expression before point in JShell."
+  (interactive)
+  (let ((end (point))
+        (start (save-excursion
+                 (backward-sexp)
+                 (point))))
+    (jshell-send-region start end)))
+
+(defun jshell-eval-print-last-expression ()
+  "Evaluate and print the Java expression before point."
+  (interactive)
+  (let ((expr (buffer-substring-no-properties
+               (save-excursion (backward-sexp) (point))
+               (point))))
+    (jshell-send-string (concat "System.out.println(" expr ");"))))
+
+(defun java-scratch-buffer ()
+  "Create a Java scratch buffer for quick experimentation."
+  (interactive)
+  (let ((buffer (generate-new-buffer "*Java Scratch*")))
+    (with-current-buffer buffer
+      (java-mode)
+      (insert "// Java Scratch Buffer - Evaluate with C-x C-e\n")
+      (insert "// Start JShell with C-c M-j\n")
+      (insert "// Switch to JShell with C-c C-z\n\n")
+      (insert "import java.util.*;\n")
+      (insert "import java.time.*;\n")
+      (insert "import java.util.stream.*;\n")
+      (insert "import java.nio.file.*;\n")
+      (insert "import java.util.concurrent.*;\n\n")
+      (insert "// Quick examples:\n")
+      (insert "// List.of(1, 2, 3, 4, 5).stream().filter(x -> x % 2 == 0).toList()\n")
+      (insert "// LocalDateTime.now()\n")
+      (insert "// \"Hello World\".chars().mapToObj(c -> (char) c).toList()\n\n"))
+    (pop-to-buffer buffer)))
+
+;; Java REPL utilities for better REPL-driven development
+(defun java-send-defun ()
+  "Send the current Java method or class to JShell."
+  (interactive)
+  (save-excursion
+    (mark-defun)
+    (jshell-send-region (region-beginning) (region-end))
+    (deactivate-mark)))
+
+(defun java-eval-and-replace ()
+  "Evaluate Java expression and replace it with the result."
+  (interactive)
+  (let* ((bounds (bounds-of-thing-at-point 'sexp))
+         (expr (buffer-substring-no-properties (car bounds) (cdr bounds))))
+    (delete-region (car bounds) (cdr bounds))
+    (jshell-send-string expr)))
+
+(defun jshell-clear-buffer ()
+  "Clear JShell buffer."
+  (interactive)
+  (when (get-buffer jshell-buffer-name)
+    (with-current-buffer jshell-buffer-name
+      (let ((inhibit-read-only t))
+        (erase-buffer))
+      (comint-send-string (get-buffer-process jshell-buffer-name) "/reset\n"))))
+
+;; Quick access to Java documentation
+(defun java-search-javadoc ()
+  "Search Java documentation for symbol at point."
+  (interactive)
+  (let ((symbol (thing-at-point 'symbol)))
+    (browse-url (concat "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/"
+                       "java/util/List.html"))))  ; This would need to be enhanced for real symbol lookup
+
+;; Enable which-function-mode for Java method detection
+(add-hook 'java-mode-hook 'which-function-mode)
+
+;; Enhanced Maven integration with REPL-style testing
+(use-package maven-test-mode
+  :ensure t
   :config
-  (add-hook 'java-mode-hook 'gradle-mode))
+  (add-hook 'java-mode-hook 'maven-test-mode)
+  
+  ;; Enhanced test running functions
+  (defun maven-test-single ()
+    "Run single test method at point."
+    (interactive)
+    (let* ((method-name (which-function))
+           (class-name (file-name-sans-extension (file-name-nondirectory (buffer-file-name))))
+           (test-command (format "mvn test -Dtest=%s#%s" class-name method-name)))
+      (compile test-command)))
+  
+  (defun maven-test-file ()
+    "Run all tests in current file."
+    (interactive)
+    (let* ((class-name (file-name-sans-extension (file-name-nondirectory (buffer-file-name))))
+           (test-command (format "mvn test -Dtest=%s" class-name)))
+      (compile test-command)))
+  
+  (defun maven-test-all ()
+    "Run all tests in project."
+    (interactive)
+    (compile "mvn test"))
+  
+  (defun maven-run-main ()
+    "Run main class."
+    (interactive)
+    (let ((main-class (read-string "Main class: ")))
+      (compile (format "mvn exec:java -Dexec.mainClass=%s" main-class))))
+  
+  ;; Auto-compile on save for faster feedback
+  (defun java-auto-compile ()
+    "Automatically compile Java file on save."
+    (when (and (eq major-mode 'java-mode)
+               (buffer-file-name)
+               (string-match "\\.java$" (buffer-file-name)))
+      (let ((compilation-read-command nil))
+        (save-window-excursion
+          (compile "mvn compile -q")))))
+  
+  (add-hook 'after-save-hook 'java-auto-compile))
+
+;; Gradle integration with enhanced features
+(use-package gradle-mode
+  :ensure t
+  :config
+  (add-hook 'java-mode-hook 'gradle-mode)
+  
+  ;; Gradle test running functions
+  (defun gradle-test-single ()
+    "Run single test method at point."
+    (interactive)
+    (let* ((method-name (which-function))
+           (class-name (file-name-sans-extension (file-name-nondirectory (buffer-file-name))))
+           (test-command (format "gradle test --tests %s.%s" class-name method-name)))
+      (compile test-command)))
+  
+  (defun gradle-test-file ()
+    "Run all tests in current file."
+    (interactive)
+    (let* ((class-name (file-name-sans-extension (file-name-nondirectory (buffer-file-name))))
+           (test-command (format "gradle test --tests %s" class-name)))
+      (compile test-command)))
+  
+  (defun gradle-run-main ()
+    "Run main application with Gradle."
+    (interactive)
+    (compile "gradle run")))
 
 ;; XML support for Maven/Gradle files
 (use-package nxml-mode
@@ -1024,6 +1211,30 @@ Examples TODO."
   (setq lsp-keymap-prefix "C-c l")
   :hook ((python-mode . lsp-deferred)
          (java-mode . lsp)
+         (java-mode . (lambda () 
+                        ;; Java REPL-style key bindings (similar to CIDER)
+                        (local-set-key (kbd "C-c M-j") 'jshell-start)          ; like cider-jack-in
+                        (local-set-key (kbd "C-x C-e") 'jshell-eval-last-expression)
+                        (local-set-key (kbd "C-c C-k") 'jshell-send-buffer)
+                        (local-set-key (kbd "C-c C-r") 'jshell-send-region)
+                        (local-set-key (kbd "C-c C-z") (lambda () (interactive) (pop-to-buffer jshell-buffer-name)))
+                        (local-set-key (kbd "C-c C-w") 'java-eval-and-replace)  ; eval and replace like Clojure
+                        (local-set-key (kbd "C-c M-e") 'jshell-eval-print-last-expression)
+                        (local-set-key (kbd "C-c C-d") 'java-send-defun)       ; send function/method
+                        (local-set-key (kbd "C-c s") 'java-scratch-buffer)     ; open scratch buffer
+                        (local-set-key (kbd "C-c M-o") 'jshell-clear-buffer)   ; clear REPL like cider
+                        (local-set-key (kbd "C-c C-h") 'java-search-javadoc)   ; documentation lookup
+                        ;; Test running shortcuts
+                        (local-set-key (kbd "C-c C-t t") 'maven-test-single)
+                        (local-set-key (kbd "C-c C-t f") 'maven-test-file)
+                        (local-set-key (kbd "C-c C-t p") 'maven-test-all)
+                        ;; Build shortcuts
+                        (local-set-key (kbd "C-c C-c") 'compile)               ; compile project
+                        (local-set-key (kbd "C-c C-x") (lambda () (interactive) ; restart/refresh
+                                                          (jshell-clear-buffer)
+                                                          (when (get-buffer-process jshell-buffer-name)
+                                                            (kill-process (get-buffer-process jshell-buffer-name)))
+                                                          (jshell-start)))))
          (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred)
   :bind (:map lsp-mode-map ("M-<RET>" . lsp-execute-code-action))
