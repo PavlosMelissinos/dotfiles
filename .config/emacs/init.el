@@ -336,6 +336,7 @@ Examples TODO."
   (yas-load-directory (concat user-emacs-directory "snippets")))
 
 (use-package yasnippet-snippets
+  :ensure t
   :after yasnippet)
 
 (use-package dockerfile-mode
@@ -527,13 +528,27 @@ Examples TODO."
                                  (dot        . t)
                                  (emacs-lisp . t)
                                  (java       . t)
-                                 (jshell     . t)
                                  (js         . t)
                                  (perl       . t)
                                  (python     . t)
                                  (ruby       . t)
                                  (shell      . t)
                                  (sql        . t)))
+
+  ;; Custom org-babel Java execution via JShell (defined here for org-babel)
+  (defun org-babel-execute:jshell (body params)
+    "Execute Java code in BODY via JShell with PARAMS."
+    (let ((tmp-file (make-temp-file "jshell-" nil ".java")))
+      (with-temp-file tmp-file
+        (insert body))
+      (let ((result (shell-command-to-string
+                     (format "echo 'load(\"%s\")' | jshell -" tmp-file))))
+        (delete-file tmp-file)
+        result)))
+
+  ;; Note: We don't add jshell to org-babel-load-languages because
+  ;; org-babel would try to load ob-jshell.el which doesn't exist
+  ;; The org-babel-execute:jshell function above will be called automatically
 
   ;; (defun sql-to-org-table ()
   ;;   (interactive)
@@ -988,14 +1003,13 @@ Examples TODO."
 ;;;========================================
 
 ;; JShell REPL integration for interactive Java development
-(use-package ob-jshell
-  :ensure t
-  :after org
-  :config
-  (add-to-list 'org-babel-load-languages '(jshell . t))
-  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages))
+;; Note: ob-jshell is not available in MELPA, so we'll use basic Java support
+;; and custom JShell functions instead
+;; (org-babel jshell function defined earlier in org configuration)
 
 ;; Enhanced Java REPL mode
+(require 'comint)  ; Required for JShell REPL functionality
+
 (defvar jshell-buffer-name "*JShell*"
   "Name of the JShell buffer.")
 
@@ -1008,12 +1022,64 @@ Examples TODO."
   (let ((buffer (get-buffer-create jshell-buffer-name)))
     (unless (get-buffer-process buffer)
       (with-current-buffer buffer
-        (make-comint-in-buffer "JShell" buffer "jshell" nil)
+        (let ((classpath (jshell-get-project-classpath)))
+          (if classpath
+              (make-comint-in-buffer "JShell" buffer "jshell" nil
+                                   "--class-path" classpath)
+            (make-comint-in-buffer "JShell" buffer "jshell" nil)))
         (setq mode-line-process '(":%s"))
         (comint-mode)
         (setq comint-prompt-regexp jshell-prompt-regexp)
         (setq comint-use-prompt-regexp t)))
     (pop-to-buffer buffer)))
+
+(defun jshell-get-project-classpath ()
+  "Get project classpath for JShell."
+  (when (buffer-file-name)
+    (let ((project-root (or (locate-dominating-file (buffer-file-name) "pom.xml")
+                           (locate-dominating-file (buffer-file-name) "build.gradle")
+                           (locate-dominating-file (buffer-file-name) "build.gradle.kts"))))
+      (when project-root
+        (cond
+         ;; Maven project - use dependency:build-classpath + target/classes
+         ((file-exists-p (concat project-root "pom.xml"))
+          (let ((cp-file (concat temporary-file-directory "jshell-classpath.txt")))
+            (shell-command (format "cd %s && mvn dependency:build-classpath -Dmdep.outputFile=%s -q" project-root cp-file))
+            (if (file-exists-p cp-file)
+                (let ((dep-classpath (string-trim (with-temp-buffer
+                                                    (insert-file-contents cp-file)
+                                                    (buffer-string)))))
+                  (delete-file cp-file)
+                  (concat dep-classpath ":" project-root "target/classes"))
+              ;; Fallback if dependency command fails
+              (concat project-root "target/classes"))))
+
+         ;; Gradle project - simplified approach
+         ((or (file-exists-p (concat project-root "build.gradle"))
+              (file-exists-p (concat project-root "build.gradle.kts")))
+          (let ((gradle-classes (concat project-root "build/classes/java/main")))
+            (shell-command-to-string (format "cd %s && gradle compileJava -q >/dev/null 2>&1 && echo %s" project-root gradle-classes))))
+
+         ;; Fallback: just return classes directory
+         (t nil))))))
+
+(defun jshell-start-with-project ()
+  "Start JShell with project compilation first."
+  (interactive)
+  (when (buffer-file-name)
+    (let ((project-root (or (locate-dominating-file (buffer-file-name) "pom.xml")
+                            (locate-dominating-file (buffer-file-name) "build.gradle")
+                            (locate-dominating-file (buffer-file-name) "build.gradle.kts"))))
+      (when project-root
+        (message "Compiling project first...")
+        (cond
+         ((file-exists-p (concat project-root "pom.xml"))
+          (shell-command (format "cd %s && mvn compile -q" project-root)))
+         ((or (file-exists-p (concat project-root "build.gradle"))
+              (file-exists-p (concat project-root "build.gradle.kts")))
+          (shell-command (format "cd %s && gradle compileJava -q" project-root))))
+        (message "Project compiled. Starting JShell..."))))
+  (jshell-start))
 
 (defun jshell-send-region (start end)
   "Send region to JShell."
@@ -1114,7 +1180,7 @@ Examples TODO."
   :ensure t
   :config
   (add-hook 'java-mode-hook 'maven-test-mode)
-  
+
   ;; Enhanced test running functions
   (defun maven-test-single ()
     "Run single test method at point."
@@ -1123,25 +1189,25 @@ Examples TODO."
            (class-name (file-name-sans-extension (file-name-nondirectory (buffer-file-name))))
            (test-command (format "mvn test -Dtest=%s#%s" class-name method-name)))
       (compile test-command)))
-  
+
   (defun maven-test-file ()
     "Run all tests in current file."
     (interactive)
     (let* ((class-name (file-name-sans-extension (file-name-nondirectory (buffer-file-name))))
            (test-command (format "mvn test -Dtest=%s" class-name)))
       (compile test-command)))
-  
+
   (defun maven-test-all ()
     "Run all tests in project."
     (interactive)
     (compile "mvn test"))
-  
+
   (defun maven-run-main ()
     "Run main class."
     (interactive)
     (let ((main-class (read-string "Main class: ")))
       (compile (format "mvn exec:java -Dexec.mainClass=%s" main-class))))
-  
+
   ;; Auto-compile on save for faster feedback
   (defun java-auto-compile ()
     "Automatically compile Java file on save."
@@ -1151,7 +1217,7 @@ Examples TODO."
       (let ((compilation-read-command nil))
         (save-window-excursion
           (compile "mvn compile -q")))))
-  
+
   (add-hook 'after-save-hook 'java-auto-compile))
 
 ;; Gradle integration with enhanced features
@@ -1159,7 +1225,7 @@ Examples TODO."
   :ensure t
   :config
   (add-hook 'java-mode-hook 'gradle-mode)
-  
+
   ;; Gradle test running functions
   (defun gradle-test-single ()
     "Run single test method at point."
@@ -1168,14 +1234,14 @@ Examples TODO."
            (class-name (file-name-sans-extension (file-name-nondirectory (buffer-file-name))))
            (test-command (format "gradle test --tests %s.%s" class-name method-name)))
       (compile test-command)))
-  
+
   (defun gradle-test-file ()
     "Run all tests in current file."
     (interactive)
     (let* ((class-name (file-name-sans-extension (file-name-nondirectory (buffer-file-name))))
            (test-command (format "gradle test --tests %s" class-name)))
       (compile test-command)))
-  
+
   (defun gradle-run-main ()
     "Run main application with Gradle."
     (interactive)
@@ -1211,9 +1277,10 @@ Examples TODO."
   (setq lsp-keymap-prefix "C-c l")
   :hook ((python-mode . lsp-deferred)
          (java-mode . lsp)
-         (java-mode . (lambda () 
+         (java-mode . (lambda ()
                         ;; Java REPL-style key bindings (similar to CIDER)
-                        (local-set-key (kbd "C-c M-j") 'jshell-start)          ; like cider-jack-in
+                        (local-set-key (kbd "C-c M-j") 'jshell-start-with-project) ; project-aware jshell
+                        (local-set-key (kbd "C-c j") 'jshell-start)            ; basic jshell
                         (local-set-key (kbd "C-x C-e") 'jshell-eval-last-expression)
                         (local-set-key (kbd "C-c C-k") 'jshell-send-buffer)
                         (local-set-key (kbd "C-c C-r") 'jshell-send-region)
@@ -1250,10 +1317,19 @@ Examples TODO."
         lsp-keep-workspace-alive nil
         lsp-restart 'auto-restart
         lsp-signature-auto-activate nil
-        read-process-output-max (* 1024 1024))
+        read-process-output-max (* 1024 1024)
+
+        ;; LSP workspace management - no blocklists, manual project management
+        lsp-session-folders-blocklist '()  ; Empty blocklist
+        lsp-auto-guess-root t  ; Let LSP find project roots automatically
+
+        ;; Additional LSP workspace configuration
+        lsp-enable-file-watchers t
+        lsp-file-watch-threshold 2000)
   :commands lsp)
 
 (use-package lsp-ui
+  :ensure t
   :commands lsp-ui-mode
   :config
   (setq lsp-ui-doc-enable t
@@ -1267,6 +1343,8 @@ Examples TODO."
         lsp-ui-peek-show-directory t))
 
 (use-package lsp-java
+  :ensure t
+  :after lsp-mode
   :config
   (setq lsp-java-server-install-dir (expand-file-name "~/.config/emacs/eclipse.jdt.ls/server/")
         lsp-java-workspace-dir (expand-file-name "~/.emacs.d/workspace/")
@@ -1282,7 +1360,8 @@ Examples TODO."
         lsp-java-completion-overwrite t
         lsp-java-completion-guess-method-arguments t))
 
-(use-package java-spring-boot)
+;; Note: java-spring-boot package removed due to compatibility issues
+;; Spring Boot support is provided through lsp-java
 
 ;; Debugger
 (use-package dap-mode
@@ -1431,9 +1510,11 @@ Examples TODO."
         ("C-x t M-t" . treemacs-find-tag)))
 
 (use-package treemacs-projectile
+  :ensure t
   :after (treemacs projectile))
 
 (use-package treemacs-magit
+  :ensure t
   :after (treemacs magit))
 
 (use-package ess
