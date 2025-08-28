@@ -304,6 +304,8 @@
       epkgs.magit
     ];
   };
+  xdg.configFile."emacs/init.el".source = ./configs/emacs/init.el;
+
 
   programs.firefox = {
     enable = true;
@@ -311,7 +313,7 @@
 
   programs.git = {
     enable = true;
-    userEmail = "pavlos@baresquare.com";
+    userEmail = "pmelissi@gmail.com";
     aliases.lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
 
     extraConfig = {
@@ -708,7 +710,6 @@
   };
 
 
-  xdg.configFile."emacs/init.el".source = ./configs/emacs/init.el;
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {

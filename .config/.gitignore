@@ -11,8 +11,6 @@
 !flashfocus/*
 #!gammastep/
 #!gammastep/*
-!git/
-!git/*
 !guix/
 !guix/*
 !home-manager/

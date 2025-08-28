@@ -27,3 +27,6 @@ url/
 eclipse.jdt.ls/
 forge-database-*.sql
 projects
+
+# managed via nix
+init.el
