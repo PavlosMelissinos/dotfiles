@@ -65,6 +65,8 @@
     guile
     gum
     jdk21
+    maven
+    gradle
     meson
     nix
     nodejs_22
@@ -251,6 +253,7 @@
             throw "No Viber icon found in AppImage";
       in
         iconPath;
+
   };
 
   # Home Manager can also manage your environment variables through
@@ -705,6 +708,7 @@
   };
 
 
+  xdg.configFile."emacs/init.el".source = ./configs/emacs/init.el;
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
