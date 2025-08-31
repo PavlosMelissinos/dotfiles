@@ -5,8 +5,6 @@
 !alacritty/*
 !clojure/
 !clojure/**
-!emacs/
-!emacs/**
 !flashfocus/
 !flashfocus/*
 #!gammastep/

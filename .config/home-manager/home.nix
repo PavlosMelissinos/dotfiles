@@ -304,7 +304,13 @@
       epkgs.magit
     ];
   };
-  xdg.configFile."emacs/init.el".source = ./configs/emacs/init.el;
+
+  # Complete Emacs configuration management via home-manager
+  xdg.configFile."emacs" = {
+    source = ./configs/emacs;
+    recursive = true;
+  };
+
 
 
   programs.firefox = {

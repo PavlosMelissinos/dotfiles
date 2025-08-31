@@ -1,4 +1,4 @@
-;; init.el --- My Emacs configuration -*- lexical-binding: t -*-
+;;; init.el --- My Emacs configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 
 ;; WIP
@@ -26,21 +26,50 @@ Examples TODO."
     (getenv env)))
 
 (defconst emacs-config-home user-emacs-directory)
-(defconst emacs-cache-home (expand-file-name "emacs/" (or (safe-getenv "XDG_CACHE_HOME") "~/.cache")))
-(defconst emacs-data-home (expand-file-name "emacs/" (or (safe-getenv "XDG_DATA_HOME") "~/.local/share")))
-(defconst emacs-state-home (expand-file-name "emacs/" (or (safe-getenv "XDG_STATE_HOME") "~/.local/state")))
+(defconst emacs-config-home-writable (expand-file-name "~/.config/home-manager/configs/emacs/"))
+(defconst emacs-cache-home (expand-file-name "emacs/" (or (safe-getenv "XDG_CACHE_HOME") "~/.cache/")))
+(defconst emacs-data-home (expand-file-name "emacs/" (or (safe-getenv "XDG_DATA_HOME") "~/.local/share/")))
+(defconst emacs-state-home (expand-file-name "emacs/" (or (safe-getenv "XDG_STATE_HOME") "~/.local/state/")))
 
 ;; other directories
-(setq package-user-dir (concat emacs-cache-home "elpa")) ;; do not litter user-emacs-directory with elpa cache
+
+;; XDG Base Directory compliance for remaining packages
+;; State files (long-term user preferences)
+(setq recentf-save-file (concat emacs-state-home "recentf")
+      abbrev-file-name (concat emacs-state-home "abbrev_defs"))
+
+;; Data files (user-generated content)
+(setq bookmark-default-file (concat emacs-data-home "bookmarks")
+      eshell-history-file-name (concat emacs-data-home "eshell/history")
+      eshell-last-dir-ring-file-name (concat emacs-data-home "eshell/lastdir"))
+
+;; Cache files (performance data, can be regenerated)
+(setq package-user-dir (concat emacs-cache-home "elpa")
+      auto-save-list-file-prefix (concat emacs-cache-home "auto-save-list/.saves-")
+      url-cookie-file (concat emacs-cache-home "url/cookies"))
+
+;; Transient (Magit) - state and cache separation
+(setq transient-history-file (concat emacs-state-home "transient/history.el")
+      transient-levels-file (concat emacs-state-home "transient/levels.el")
+      transient-values-file (concat emacs-state-home "transient/values.el"))
+
+;; Projectile - separate cache and state
+(setq projectile-known-projects-file (concat emacs-state-home "projectile-bookmarks.eld")
+      projectile-cache-file (concat emacs-cache-home "projectile.cache"))
 ;; ========================================
 ;; package
 
 ;;(setq debug-on-error 't)
 
+(defun init-read ()
+  "Read the generated init file."
+  (interactive)
+  (find-file (concat emacs-config-home "init.el")))
+
 (defun init ()
   "Edit your init file."
   (interactive)
-  (find-file (concat emacs-config-home "init.el")))
+  (find-file (concat emacs-config-home-writable "init.el")))
 
 (setq package-archives
       '(("GNU ELPA"  . "https://elpa.gnu.org/packages/")
@@ -633,6 +662,7 @@ Examples TODO."
 
 (use-package org-roam
   :ensure t
+  :defer t
   :custom
   (org-roam-directory "~/notes/roam")
   (org-roam-dailies-directory "daily/")
@@ -658,6 +688,10 @@ Examples TODO."
          (:map org-mode-map
                ("C-<" . org-roam-dailies-goto-previous-note)
                ("C->" . org-roam-dailies-goto-next-note)))
+  :init
+  ;; Suppress native compilation warnings for org-roam
+  (when (and (fboundp 'native-comp-available-p) (native-comp-available-p))
+    (setq native-comp-async-report-warnings-errors 'silent))
   :config
   (org-roam-db-autosync-mode)
   ;; If using org-roam-protocol
@@ -1461,7 +1495,7 @@ Examples TODO."
           treemacs-no-png-images                   nil
           treemacs-no-delete-other-windows         t
           treemacs-project-follow-cleanup          nil
-          treemacs-persist-file                    (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+          treemacs-persist-file                    (f-join emacs-cache-home "treemacs-persist/")
           treemacs-position                        'left
           treemacs-read-string-input               'from-child-frame
           treemacs-recenter-distance               0.1
