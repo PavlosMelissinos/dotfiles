@@ -49,6 +49,7 @@
 
     # Development tools
     android-tools
+    audacity
     awscli2
     babashka
     caddy
