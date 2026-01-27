@@ -17,9 +17,7 @@
   home.stateVersion = "23.11"; # Please read the comment before changing.
 
   # nixGL configuration for hardware acceleration
-  nixGL.packages = nixgl.packages;
-  nixGL.defaultWrapper = "mesa";
-  nixGL.installScripts = [ "mesa" ];
+  targets.genericLinux.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
@@ -111,7 +109,7 @@
     handbrake
     imagemagick
     imv
-    (config.lib.nixGL.wrap kodi)
+    kodi
     libglvnd
     libGL
     libreoffice
@@ -131,7 +129,7 @@
     spotify
     steam
     strawberry
-    (config.lib.nixGL.wrap stremio)
+    stremio
     thunderbird
     # Viber with nixGL and custom link handling
     (let
@@ -147,7 +145,7 @@
           /home/pavlos/.nix-profile/bin/firefox "$@"
       '';
     in
-    config.lib.nixGL.wrap (pkgs.writeShellScriptBin "viber" ''
+    pkgs.writeShellScriptBin "viber" ''
       # Add custom xdg-open to PATH for link handling
       export PATH="${xdg-open-firefox}/bin:$PATH"
       # Try direct AppImage execution first (better fonts)
@@ -157,7 +155,7 @@
         # Fallback to appimage-run if direct execution fails
         exec appimage-run /home/pavlos/.local/bin/viber.AppImage "$@" < /dev/null
       fi
-    ''))
+    '')
     vlc
     xfce.thunar
     zathura
