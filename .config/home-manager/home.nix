@@ -317,10 +317,8 @@
 
   programs.git = {
     enable = true;
-    userEmail = "pmelissi@gmail.com";
-    aliases.lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
-
-    extraConfig = {
+    settings = {
+      aliases.lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
       core = {
         autocrlf = false;
 	      attributesfile = ".gitattributes";
@@ -330,6 +328,7 @@
       init.defaultBranch = "main";
       merge.conflictStyle = "diff3";
       pull.rebase = false;
+      user.email = "pmelissi@gmail.com";
     };
   };
 
