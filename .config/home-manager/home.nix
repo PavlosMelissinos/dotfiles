@@ -99,12 +99,14 @@
     # azote  # Not in nixpkgs - could create custom package if needed
     blueman
     btop
+    darktable
     dbeaver-bin
     element-desktop
     evince
     firefox
     font-manager
     gedit
+    gimp
     godot
     handbrake
     imagemagick
