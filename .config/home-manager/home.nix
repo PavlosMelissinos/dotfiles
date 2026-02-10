@@ -27,8 +27,8 @@
     "steam"
     "steam-unwrapped"
     "steam-run"
-    "stremio-server"
-    "stremio-shell"
+    # "stremio-server"
+    # "stremio-shell"
   ];
 
   # The home.packages option allows you to install Nix packages into your
@@ -139,7 +139,7 @@
     spotify
     steam
     strawberry
-    stremio
+    # stremio
     teams-for-linux
     thunderbird
     # Viber with nixGL and custom link handling
