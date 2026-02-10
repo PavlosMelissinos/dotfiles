@@ -235,6 +235,9 @@
       StartupNotify=true
     '';
 
+    ".local/share/applications/org.qbittorrent.qBittorrent.desktop".text =
+      builtins.readFile "${pkgs.qbittorrent}/share/applications/org.qbittorrent.qBittorrent.desktop";
+
     # Viber icon extracted from AppImage
     ".local/share/icons/viber.png".source =
       let
