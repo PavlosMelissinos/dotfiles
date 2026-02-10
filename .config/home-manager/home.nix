@@ -769,6 +769,9 @@
 
       # Archives
       "application/zip" = "libreoffice-startcenter.desktop";
+
+      # Other
+      "inode/directory" = "thunar.desktop";
     };
 
     associations.added = {
