@@ -22,6 +22,7 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
     "claude-code"
+    "discord"
     "spotify"
     "steam"
     "steam-unwrapped"
@@ -69,6 +70,7 @@
     meson
     nix
     nodejs_22
+    opencode
     openssl
     pkg-config  # Build tool for development libraries
     pyright
@@ -85,12 +87,14 @@
     kanshi
     mako
     playerctl
+    satty
     swappy
     swayidle
     #swaylock
     #swaylock-effects
     waybar
     wf-recorder
+    wleave
     wlogout
     wob
     wofi
@@ -102,6 +106,7 @@
     btop
     darktable
     dbeaver-bin
+    discord
     element-desktop
     evince
     firefox
@@ -112,7 +117,9 @@
     handbrake
     imagemagick
     imv
+    inkscape
     kodi
+    krita
     libglvnd
     libGL
     libreoffice
@@ -133,6 +140,7 @@
     steam
     strawberry
     stremio
+    teams-for-linux
     thunderbird
     # Viber with nixGL and custom link handling
     (let
