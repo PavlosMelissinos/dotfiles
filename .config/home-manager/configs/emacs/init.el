@@ -351,6 +351,7 @@ Examples TODO."
   (defconst projectile-completion-system 'ivy)
   (defconst projectile-remember-window-configs t)
   (defconst projectile-use-git-grep t)
+  (defconst projectile-create-missing-test-files t)
   (projectile-mode nil))
 
 (use-package terraform-mode
@@ -1381,7 +1382,7 @@ Examples TODO."
   :after lsp-mode
   :config
   (setq lsp-java-server-install-dir (expand-file-name "~/.config/emacs/eclipse.jdt.ls/server/")
-        lsp-java-workspace-dir (expand-file-name "~/.emacs.d/workspace/")
+        lsp-java-workspace-dir (expand-file-name "~/.config/emacs/workspace/")
         lsp-java-workspace-cache-dir (expand-file-name "~/.config/emacs/workspace/.metadata/.plugins/org.eclipse.core.resources/.projects/")
         lsp-java-vmargs '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4" "-XX:AdaptiveSizePolicyWeight=90" "-Dsun.zip.disableMemoryMapping=true" "-Xmx4G" "-Xms1G")
         lsp-java-import-maven-enabled t
@@ -1437,12 +1438,12 @@ Examples TODO."
 (use-package vterm
   :ensure t)
 
-;; install claude-code.el
-(use-package claude-code
-  :ensure t
-  :vc (:url "https://github.com/stevemolitor/claude-code.el" :rev :newest)
-  :config (claude-code-mode)
-  :bind-keymap ("C-c c" . claude-code-command-map))
+;;;; install claude-code.el - no longer using claude code
+;; (use-package claude-code
+;;   :ensure t
+;;   :vc (:url "https://github.com/stevemolitor/claude-code.el" :rev :newest)
+;;   :config (claude-code-mode)
+;;   :bind-keymap ("C-c c" . claude-code-command-map))
 
 
 ;;; See https://emacs-lsp.github.io/lsp-mode/ for more info
@@ -1857,8 +1858,8 @@ DIRECTION can be \\='up, \\='down, \\='left, or \\='right."
   (setq-default indent-tabs-mode nil)
   (setq-default default-tab-width 2)
   (setq-default tab-width 2)
-  (setq-default c-basic-offset 3)
-  (setq-default c-indent-level 3)
+  (setq-default c-basic-offset 4)
+  (setq-default c-indent-level 4)
   (setq-default c++-tab-always-indent nil)
   (setq-default js-indent-level 2)
   (setq-default lua-indent-level 2)
