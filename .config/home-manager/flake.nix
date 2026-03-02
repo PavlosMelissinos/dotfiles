@@ -12,8 +12,13 @@
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+#    dotfiles = {
+#      url = "github:PavlosMelissinos/dotfiles";
+#      flake = false;  # Treat as source, not flake
+#    };
   };
 
+  # outputs = { nixpkgs, home-manager, nixgl, dotfiles, ... }:
   outputs = { nixpkgs, home-manager, nixgl, ... }:
     let
       system = "x86_64-linux";
@@ -26,7 +31,8 @@
         # the path to your home.nix.
         modules = [ ./home.nix ];
 
-        # Pass nixGL to home.nix
+        # Pass nixGL and dotfiles to home.nix
+#        extraSpecialArgs = { inherit nixgl dotfiles; };
         extraSpecialArgs = { inherit nixgl; };
       };
     };

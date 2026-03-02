@@ -18,6 +18,7 @@
 
   # nixGL configuration for hardware acceleration
   targets.genericLinux.enable = true;
+  nixpkgs.overlays = [ nixgl.overlay ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
@@ -137,7 +138,9 @@
     signal-desktop
     # slack
     spotify
-    steam
+    (pkgs.writeShellScriptBin "steam" ''
+      exec ${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.steam}/bin/steam "$@"
+    '')
     strawberry
     # stremio
     teams-for-linux
