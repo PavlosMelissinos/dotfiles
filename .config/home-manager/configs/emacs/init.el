@@ -524,6 +524,7 @@ Examples TODO."
      (browse-url
       (concat "https://www.youtube.com/embed/"
               handle)))
+   :export
    (lambda (path desc backend)
      (cl-case backend
        (html (format yt-iframe-format
@@ -984,15 +985,9 @@ Examples TODO."
   :ensure t
   :defer t)
 
-;;; Use poetry to manage packages and when to switch to virtualenvs
-;;; See https://python-poetry.org/ for more info
-;;; See https://python-poetry.org/docs/managing-environments/ for virtual envs management
-(use-package poetry
+(use-package uv-mode
   :ensure t
-  :defer t
-  :config
-  (setq poetry-tracking-strategy 'switch-buffer)
-  (setenv "WORKON_HOME" (expand-file-name "~/.cache/pypoetry/virtualenvs")))
+  :hook (python-mode . uv-mode-auto-activate-hook))
 
 (use-package python-pytest
   :ensure t
@@ -1253,7 +1248,8 @@ Examples TODO."
         (save-window-excursion
           (compile "mvn compile -q")))))
 
-  (add-hook 'after-save-hook 'java-auto-compile))
+  ;;(add-hook 'after-save-hook 'java-auto-compile)
+  )
 
 ;; Gradle integration with enhanced features
 (use-package gradle-mode
@@ -1456,10 +1452,8 @@ Examples TODO."
   (lsp-pyright-auto-import-completions t)
   (lsp-pyright-use-library-code-for-types nil)
   (lsp-pyright-diagnostic-mode "openFilesOnly")
-  (lsp-pyright-venv-path (expand-file-name "~/.cache/pypoetry/virtualenvs"))
   (lsp-completion-enable t)
   :hook ((python-mode . (lambda ()
-			                    (poetry-tracking-mode)
 			                    (require 'lsp-pyright)
 			                    (lsp-deferred)))))
 
@@ -1496,7 +1490,7 @@ Examples TODO."
           treemacs-no-png-images                   nil
           treemacs-no-delete-other-windows         t
           treemacs-project-follow-cleanup          nil
-          treemacs-persist-file                    (f-join emacs-cache-home "treemacs-persist/")
+          treemacs-persist-file                    (f-join emacs-cache-home "treemacs-persist")
           treemacs-position                        'left
           treemacs-read-string-input               'from-child-frame
           treemacs-recenter-distance               0.1
