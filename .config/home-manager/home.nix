@@ -1,4 +1,4 @@
-{ config, pkgs, nixgl, ... }:
+{ config, pkgs, nixgl, opencode-flake, ... }:
 
 
 {
@@ -63,15 +63,16 @@
     docker-compose
     git
     go
+    gradle
     guile
     gum
     jdk21
     maven
-    gradle
     meson
     nix
     nodejs_22
-    opencode
+    # opencode
+    # opencode-flake.packages.${pkgs.system}.default
     openssl
     pkg-config  # Build tool for development libraries
     pyright

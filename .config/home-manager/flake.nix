@@ -12,6 +12,7 @@
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    opencode-flake.url = "github:aodhanhayter/opencode-flake";
 #    dotfiles = {
 #      url = "github:PavlosMelissinos/dotfiles";
 #      flake = false;  # Treat as source, not flake
@@ -19,7 +20,7 @@
   };
 
   # outputs = { nixpkgs, home-manager, nixgl, dotfiles, ... }:
-  outputs = { nixpkgs, home-manager, nixgl, ... }:
+  outputs = { nixpkgs, home-manager, nixgl, opencode-flake, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -33,7 +34,10 @@
 
         # Pass nixGL and dotfiles to home.nix
 #        extraSpecialArgs = { inherit nixgl dotfiles; };
-        extraSpecialArgs = { inherit nixgl; };
+        extraSpecialArgs = {
+          inherit nixgl;
+          inherit opencode-flake;
+        };
       };
     };
 }
