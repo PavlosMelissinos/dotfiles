@@ -221,6 +221,9 @@
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = {
+    ".config/docker/cli-plugins/docker-compose".source =
+      "${pkgs.docker-compose}/bin/docker-compose";
+
     # Swaylock config in native format
     # ".config/swaylock/config".source = ./configs/swaylock/config;
 
@@ -297,6 +300,7 @@
     XDG_STATE_HOME = "$HOME/.local/state";
     TMUX_HOME = "$HOME/.config/tmux"; # used by oh-my-tmux
     NIXOS_OZONE_WL = "1";
+    DOCKER_CONFIG = "$XDG_CONFIG_HOME/docker";
     NIXPKGS_ALLOW_UNFREE = 1;
     LANG="en_US.UTF-8";
     LC_ALL="en_US.UTF-8";
