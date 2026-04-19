@@ -200,9 +200,19 @@ All significant architectural decisions are documented in =docs/architecture/adr
 - [[docs/architecture/adr/0010-home-manager-flakes-migration.md][ADR-0010]]: Home Manager Flakes Migration
 - [[docs/architecture/adr/0011-viber-nixgl-integration.md][ADR-0011]]: Viber nixGL Integration and Dynamic Icon Extraction
 
+** Active Proposals
+- [[docs/proposals/emacs-nix-migration-plan.md][Emacs package management migration]]
+  - Unify Emacs package updates with system updates via nix/home-manager
+  - Add emacs-overlay for fresh MELPA packages
+  - Remove package.el dependency entirely
+  - Bundle trivial modernizations (neotree removal, pixel-scroll-precision-mode,
+    symbol-overlay, exec-path-from-shell removal, dap-mode typo fix,
+    use-package bootstrap removal)
+
 ** Additional Documentation
 - =CLAUDE.md= - Guidance for AI assistant sessions
-- Package reports and migration documentation available in root directory
+- [[docs/MAINTENANCE_GUIDE.md][Maintenance Guide]] - Operational procedures
+- Package reports and migration documentation available in =docs/=
 
 * ⚠️ Known Issues & Workarounds
 
