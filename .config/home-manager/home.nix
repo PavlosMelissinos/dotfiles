@@ -309,6 +309,8 @@
     "$HOME/.nix-profile/bin"           # Nix profile binaries (home-manager packages) - HIGHEST PRIORITY
     "$HOME/.local/bin"                 # Local binaries
     "$PYENV_ROOT/bin"                  # PyEnv
+    "$HOME/.opencode/bin"              # OpenCode
+    # FIXME: find reliable way to install opencode via nix and remove above line
   ];
 
   programs.emacs = {
