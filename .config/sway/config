@@ -77,6 +77,11 @@ set $monitor1 eDP-1
 set $monitor2 "Dell Inc. DELL U2518D 3C4YP88P229L"
 set $monitor3 "Dell Inc. DELL U2311H HV8XP0BN1VFL"
 set $monitor4 "Panasonic Industry Company Panasonic-TV 0x00000000"
+#set $monitor_qhd_right "Lenovo Group Limited LEN L28u-30 U1B50YWY"
+set $monitor_fullhd_right "Samsung Electric Company LS27D300G H1AK500000"
+#set $monitor_full_hd_right "JRY HDMI Unknown"
+set $main_monitor "Samsung Electric Company LS27D300G H1AK500000"
+#set $main_monitor $monitor_qhd_right
 
 output $monitor1 {
     resolution 1920x1080 position 3128 441
@@ -161,16 +166,29 @@ output $monitor4 {
     scale 2
 }
 
+output $monitor_qhd_right {
+    # m1 scale 1.5
+    resolution 4096x2160 position 4729 0
+    scale 1.5
+}
+
+output $monitor_full_hd_right {
+    resolution 1920x1080 position 4729 0
+    scale 1
+}
+
 workspace 1 {
     output $monitor1
 }
 
 workspace 2 {
+    # output $main_monitor
     output $monitor2
     output $monitor1
 }
 
 workspace 3 {
+    output $main_monitor
     output $monitor3
     output $monitor4
     output $monitor2
@@ -178,16 +196,19 @@ workspace 3 {
 }
 
 workspace 4 {
+    output $main_monitor
     output $monitor2
     output $monitor1
 }
 
 workspace 5 {
+    output $main_monitor
     output $monitor3
     output $monitor1
 }
 
 workspace 6 {
+    output $main_monitor
     output $monitor2
     output $monitor1
 }
@@ -269,6 +290,12 @@ exec_always swayidle -w \
         xkb_numlock enable
    }
    input "1:1:AT_Translated_Set_2_keyboard" {
+        xkb_layout "us,gr"
+        xkb_options "grp:win_space_toggle"
+        xkb_numlock enable
+   }
+   #input "16700:8467:Dell_KB216_Wired_Keyboard" {
+   input "1008:26945:SIGMACHIP_HP_Wired_Keyboard" {
         xkb_layout "us,gr"
         xkb_options "grp:win_space_toggle"
         xkb_numlock enable
