@@ -62,6 +62,7 @@
     cmake
     distrobox
     docker-compose
+    git-cliff
     gitFull
     go
     gradle
