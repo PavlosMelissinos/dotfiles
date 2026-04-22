@@ -24,6 +24,7 @@
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
     "claude-code"
     "discord"
+    "microsoft-edge"
     "spotify"
     "steam"
     "steam-unwrapped"
@@ -145,6 +146,7 @@
     strawberry
     # stremio
     teams-for-linux
+    microsoft-edge
     thunderbird
     # Viber with nixGL and custom link handling
     (let
