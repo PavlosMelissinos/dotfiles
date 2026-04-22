@@ -17,6 +17,8 @@
 !mako/*
 !mpv/
 !mpv/*
+!nix/
+!nix/*
 !nixos/
 !nixos/*
 !swappy/
