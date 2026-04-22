@@ -62,7 +62,7 @@
     cmake
     distrobox
     docker-compose
-    git
+    gitFull
     go
     gradle
     guile
@@ -343,6 +343,7 @@
 
   programs.git = {
     enable = true;
+    package = pkgs.gitFull;
     settings = {
       alias = {
         lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
@@ -350,6 +351,7 @@
       core = {
         autocrlf = false;
 	      attributesfile = ".gitattributes";
+        sshCommand = "/usr/bin/ssh";  # just for foreign distro installation
       };
       diff.clojure.xfuncname = "(^\\(.*|\\s*\\(defn.*)";
       include.path = "git/.config";
