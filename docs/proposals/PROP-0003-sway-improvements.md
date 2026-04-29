@@ -1,8 +1,11 @@
-# Sway Configuration Improvements Proposal - 2025
+---
+title: "Sway Configuration Improvements Proposal"
+date: 2025-07-31
+status: Proposed
+category: Sway
+---
 
-**Date**: 2025-07-31
-**Status**: Proposal
-**Priority**: High (Functional Fixes), Medium (Visual Improvements)
+# Sway Configuration Improvements Proposal - 2025
 
 ## Executive Summary
 

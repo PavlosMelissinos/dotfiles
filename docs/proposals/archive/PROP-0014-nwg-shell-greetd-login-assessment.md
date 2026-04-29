@@ -1,9 +1,11 @@
-# nwg-shell and greetd Login Manager Assessment - 2025
+---
+title: "nwg-shell and greetd Login Manager Assessment"
+date: 2025-08-12
+status: Completed
+category: Login Manager
+---
 
-**Date**: 2025-08-12
-**Status**: Assessment Complete
-**Priority**: Medium
-**Scope**: Login Manager Replacement Evaluation
+# nwg-shell and greetd Login Manager Assessment - 2025
 
 ## Executive Summary
 

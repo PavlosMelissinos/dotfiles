@@ -1,3 +1,10 @@
+---
+title: "NixOS + Home-Manager Restructure Implementation Guide"
+date: 2025-08-12
+status: Superseded
+category: NixOS
+---
+
 # NixOS + Home-Manager Restructure Implementation Guide
 
 ## Overview

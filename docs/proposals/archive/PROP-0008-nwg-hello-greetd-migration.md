@@ -1,9 +1,11 @@
-# nwg-hello + greetd Migration Plan (Updated) - 2025
+---
+title: "nwg-hello + greetd Migration Plan (Updated)"
+date: 2025-08-12
+status: Superseded
+category: Login Manager
+---
 
-**Date**: 2025-08-12
-**Status**: Ready for Implementation
-**Priority**: High
-**Update Reason**: greetd now available in Fedora repositories + improved resource analysis
+# nwg-hello + greetd Migration Plan (Updated) - 2025
 
 ## Executive Summary
 

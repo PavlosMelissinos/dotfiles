@@ -1,8 +1,11 @@
-# Emacs Package Management Migration: package.el → home-manager/nix
+---
+title: "Emacs Package Management Migration: package.el → home-manager/nix"
+date: 2026-04-19
+status: Proposed
+category: Emacs
+---
 
-**Date**: 2026-04-19
-**Status**: Proposed
-**Migration Type**: Emacs package.el → home-manager with emacs-overlay
+# Emacs Package Management Migration: package.el → home-manager/nix
 
 ## Goal
 

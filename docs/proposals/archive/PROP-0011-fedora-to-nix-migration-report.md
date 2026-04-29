@@ -1,8 +1,11 @@
-# Fedora to Home-Manager Package Migration Report - 2025
+---
+title: "Fedora to Home-Manager Package Migration Report"
+date: 2025-08-11
+status: Completed
+category: Migration
+---
 
-**Date**: 2025-08-11
-**Status**: Phase 2 Complete 
-**Migration Type**: DNF packages → Home-Manager (Nix)
+# Fedora to Home-Manager Package Migration Report - 2025
 
 ## Executive Summary
 

@@ -1,8 +1,11 @@
-# greetd Installation Research for Fedora - 2025
+---
+title: "greetd Installation Research for Fedora"
+date: 2025-08-12
+status: Superseded
+category: Login Manager
+---
 
-**Date**: 2025-08-12  
-**Status**: Research Phase  
-**Target**: Determine best approach for greetd installation on Fedora
+# greetd Installation Research for Fedora - 2025
 
 ## Commands to Run for Research
 

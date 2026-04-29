@@ -1,9 +1,11 @@
-# Hyprland Migration Analysis - 2025
+---
+title: "Hyprland Migration Analysis"
+date: 2025-08-11
+status: Completed
+category: Window Manager
+---
 
-**Date**: 2025-08-11
-**Status**: Analysis Complete
-**Priority**: High
-**Scope**: Window Manager Migration Evaluation
+# Hyprland Migration Analysis - 2025
 
 ## Executive Summary
 

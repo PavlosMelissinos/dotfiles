@@ -1,7 +1,11 @@
-# greetd Configuration Templates - 2025
+---
+title: "greetd Configuration Templates"
+date: 2025-08-12
+status: In Progress
+category: Login Manager
+---
 
-**Date**: 2025-08-12  
-**Status**: Ready for System Configuration  
+# greetd Configuration Templates - 2025  
 
 ## greetd Configuration Options
 

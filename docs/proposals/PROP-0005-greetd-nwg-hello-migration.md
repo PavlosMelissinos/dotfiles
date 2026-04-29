@@ -1,9 +1,11 @@
-# greetd + nwg-hello Implementation Plan - 2025
+---
+title: "greetd + nwg-hello Login Manager Replacement"
+date: 2025-08-12
+status: In Progress
+category: Login Manager
+---
 
-**Date**: 2025-08-12
-**Status**: Ready for Implementation
-**Priority**: High
-**Target**: Replace unused GDM with lightweight greetd + nwg-hello
+# greetd + nwg-hello Implementation Plan - 2025
 
 ## Current Resource Waste Analysis
 
