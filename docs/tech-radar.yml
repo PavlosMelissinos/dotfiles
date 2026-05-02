@@ -1,0 +1,270 @@
+quadrants:
+  - platforms     # OS, distros, package managers, compositors, container runtimes
+  - tools         # CLI tools, editors, dev tooling, backup, monitoring
+  - techniques    # methodologies, patterns, workflows, standards
+  - services      # self-hosted apps, SaaS, media servers, self-hosted services
+
+rings:
+  - adopt         # proven, currently in use, recommended
+  - trial         # in use but still evaluating fit
+  - assess        # promising, worth exploring, on the watchlist
+  - hold          # rejected, deprecated, or not recommended
+
+entries:
+  # ── ADOPT ─────────────────────────────────────────────────────────────────
+  - name: home-manager (Nix flakes)
+    quadrant: platforms
+    ring: adopt
+    since: 2024
+    tags: [package-management, nix]
+    description: >
+      Declarative package and configuration management for the user environment.
+      All user-space packages and their configs live here. Single source of truth
+      for the entire desktop environment. Flakes provide reproducible builds.
+    links:
+      adr: [0001, 0010]
+
+  - name: Sway (Wayland compositor)
+    quadrant: platforms
+    ring: adopt
+    since: 2025-07
+    tags: [wayland, window-manager]
+    description: >
+      Keyboard-driven, tiling Wayland compositor. Fast, minimal, scriptable.
+      All window management via plain text config. No Electron, no GTK bloat.
+    links:
+      adr: [0002]
+
+  - name: XDG Base Directory compliance
+    quadrant: techniques
+    ring: adopt
+    since: 2025-07
+    tags: [standards, home-cleanup]
+    description: >
+      XDG_CACHE_HOME, XDG_CONFIG_HOME, XDG_DATA_HOME, XDG_STATE_HOME used
+      instead of cluttering $HOME. Emacs, git, and shell configs all respect
+      these. Cleaner home directory, no hidden dotfile sprawl.
+    links:
+      adr: [0003]
+
+  - name: U2F hardware key authentication
+    quadrant: tools
+    ring: adopt
+    since: 2025-07
+    tags: [security, authentication]
+    description: >
+      FIDO2/U2F hardware key (SoloKey) configured for GDM login, sudo, and
+      GitHub/GitLab/Porkbun/Namecheap/Bitwarden 2FA. Physical possession required
+      for privileged actions. Eliminates password-only auth for critical vectors.
+    links:
+      adr: [0004]
+
+  - name: Emacs
+    quadrant: tools
+    ring: adopt
+    since: 2025-08
+    tags: [editor]
+    description: >
+      Primary text editor. Package management via MELPA/GNU ELPA. XDG directories
+      for cache, data, and state. home-manager installs and configures all packages.
+      Main config in .config/emacs/init.el.
+    links: []
+
+  - name: Alacritty
+    quadrant: tools
+    ring: adopt
+    since: 2025-08
+    tags: [terminal]
+    description: >
+      GPU-accelerated terminal emulator. Wayland-native (no Xorg dependency).
+      Minimal latency, simple config in TOML. home-manager manages the package.
+    links: []
+
+  - name: Zsh
+    quadrant: tools
+    ring: adopt
+    since: 2025-08
+    tags: [shell]
+    description: >
+      Interactive shell with custom prompt and plugins. Managed via home-manager
+      rc.plug system. Plain zshrc in .config/zsh/ sourced from home.nix.
+    links: []
+
+  - name: nixGL (Mesa wrapper)
+    quadrant: platforms
+    ring: adopt
+    since: 2025-08
+    tags: [graphics, wayland, nix]
+    description: >
+      Wrapper providing OpenGL context for Nix-packaged GUI apps on Mesa/Intel.
+      Required for hardware-accelerated rendering of Nix apps under Wayland.
+      Uses config.lib.nixGL.wrap in home-manager flake.
+    links:
+      adr: [0011]
+
+  - name: Waybar
+    quadrant: tools
+    ring: adopt
+    since: 2025-07
+    tags: [wayland, status-bar]
+    description: >
+      Sway status bar. Displays workspaces, clock, tray icons, battery, backlight.
+      Known issue: occasionally disappears — restart with nohup waybar &.
+    links: []
+
+  - name: Firefox (Wayland-native)
+    quadrant: services
+    ring: adopt
+    since: 2025-07
+    tags: [browser, wayland]
+    description: >
+      Primary browser. Configured for Wayland (MOZ_ENABLE_WAYLAND=1).
+      Known issue: crashes when reloading sway or returning from sleep.
+    links: []
+
+  # ── TRIAL ─────────────────────────────────────────────────────────────────
+  - name: greetd + nwg-hello
+    quadrant: platforms
+    ring: trial
+    since: 2025-08
+    tags: [login-manager, wayland]
+    description: >
+      Rootless login manager replacing GDM. greetd handles session startup,
+      nwg-hello provides the greeter UI. Active migration in progress.
+      Goal: lighter weight, better integration with Sway, no systemd dependency.
+    links:
+      proposal: [0005, 0006]
+
+  - name: PipeWire
+    quadrant: platforms
+    ring: trial
+    since: 2025-08
+    tags: [audio]
+    description: >
+      Audio/video pipeline daemon. Evaluating for audio stack replacement.
+      Currently in use with PulseAudio fallback path. Monitoring stability.
+    links: []
+
+  - name: Stremio
+    quadrant: services
+    ring: trial
+    since: 2025-08
+    tags: [media]
+    description: >
+      Media streaming application. Hardware acceleration fix in progress
+      (PROP-0009). Trial because Kodi is the long-term goal but Stremio has
+      better content discovery for now.
+    links:
+      proposal: [0009]
+
+  - name: Kodi
+    quadrant: services
+    ring: trial
+    since: 2025-08
+    tags: [media]
+    description: >
+      Full-featured media center. Hardware acceleration issues being debugged
+      (PROP-0009). Trial as end-state for media playback if hardware decoding
+      can be stabilized. Lower power consumption than running a full desktop.
+    links:
+      proposal: [0009]
+
+  # ── ASSESS ─────────────────────────────────────────────────────────────────
+  - name: NixOS (desktop)
+    quadrant: platforms
+    ring: assess
+    since: 2025-08
+    tags: [nixos, future-planning]
+    description: >
+      Would unify system and user configuration declaratively. Watching for
+      desktop hardware compatibility (Intel iGPU, ThinkPad T460s), mature
+      installer experience, and driver support. Trigger: Fedora EOL or
+      kernel config pain driving a migration evaluation.
+    links: []
+
+  - name: Podman
+    quadrant: platforms
+    ring: assess
+    since: 2025-08
+    tags: [containers, security]
+    description: >
+      Rootless container runtime. Could replace any Docker needs entirely.
+      No privileged daemon, better systemd integration, pod concept aligns
+      with compose workflows. Watching for a use case that justifies adoption.
+    links: []
+
+  - name: Immich
+    quadrant: services
+    ring: assess
+    since: 2026-04
+    tags: [photos, self-hosted, nas]
+    description: >
+      Self-hosted photo and video storage solution. Evaluating for Synology
+      DS218+ deployment (PROP-0004). Would replace Google Photos. Requires
+      PostgreSQL, good NAS storage performance, and reverse proxy setup.
+    links:
+      proposal: [0004]
+
+  # ── HOLD ───────────────────────────────────────────────────────────────────
+  - name: Guix
+    quadrant: platforms
+    ring: hold
+    since: 2024
+    moved: -1
+    tags: [package-management]
+    description: >
+      Fully eliminated as of 2025-08-06. PATH priority conflicts with Nix,
+      duplicate binary problem, complex maintenance with multiple managers.
+      All workloads migrated to home-manager/Nix. Empty manifest, clean PATH.
+    links:
+      adr: [0001, 0009]
+
+  - name: Flatpak
+    quadrant: platforms
+    ring: hold
+    since: 2025-07
+    moved: -1
+    tags: [package-management]
+    description: >
+      Eliminated. home-manager/Nix covers all application needs. No remaining
+      Flatpak packages in use. Sandbox model adds complexity without benefit
+      given Nix's declarative approach.
+    links:
+      adr: [0001]
+
+  - name: Swaylock
+    quadrant: tools
+    ring: hold
+    since: 2025-08
+    moved: -1
+    tags: [screen-lock]
+    description: >
+      Disabled. Unlock issues with Nix version of swaylock. screen blanking
+      via swayidle works, but locking is unreliable. User must fall back to
+      other means for physical security.
+    links: []
+
+  - name: Docker Engine
+    quadrant: platforms
+    ring: hold
+    since: 2025-08
+    moved: -1
+    tags: [containers]
+    description: >
+      Never adopted. Rootful daemon model conflicts with systemd integration
+      and security posture goals. Privileged daemon is unnecessary complexity.
+      Podman provides equivalent functionality with rootless architecture.
+    links: []
+
+  - name: Hyprland
+    quadrant: platforms
+    ring: hold
+    since: 2025-08
+    moved: -1
+    tags: [wayland, window-manager]
+    description: >
+      Evaluated and rejected. Chose to stay with Sway. Hyprland has more
+      animations and GPU effects but adds complexity without benefit for
+      keyboard-driven workflow. Sway's simplicity wins.
+    links:
+      proposal: [0013]

@@ -8,7 +8,7 @@ architectural decisions made in this dotfiles repository.
 We follow the standard ADR format from Michael Nygard's "Documenting Architecture Decisions":
 - **Title**: Short noun phrase describing the decision
 - **Date**: When the decision was made
-- **Status**: Proposed, Accepted, Superseded, or Deprecated
+- **Status**: Proposed, Accepted, Superseded, Deprecated, or Watching
 - **Context**: Forces at play, technological and project factors (value-neutral)
 - **Decision**: Response to forces, written in active voice starting with "We will..."
 - **Consequences**: Resulting context after applying the decision (including negative impacts)
@@ -30,11 +30,19 @@ We follow the standard ADR format from Michael Nygard's "Documenting Architectur
 | [0010](./0010-home-manager-flakes-migration.md)         | Home Manager Flakes Migration                              | Accepted   | 2025-08-11 |
 | [0011](./0011-viber-nixgl-integration.md)               | Viber nixGL Integration and Dynamic Icon Extraction        | Accepted   | 2025-08-11 |
 
+## Status Meanings
+
+- **Proposed**: Under consideration, not yet decided
+- **Accepted**: Decision made and implemented
+- **Superseded**: Replaced by a later ADR
+- **Deprecated**: No longer relevant or valid
+- **Watching**: Pre-decisional evaluation; no commitment yet — used for assess-ring entries that benefit from ADR-level documentation
+
 ## ADR Process
 
 1. **Propose**: Create new ADR with "Proposed" status
 2. **Review**: Discuss with stakeholders (if applicable)
-3. **Decide**: Update status to "Accepted", "Superseded", or "Deprecated"
+3. **Decide**: Update status to "Accepted", "Superseded", "Deprecated", or "Watching"
 4. **Implement**: Execute the decision
 5. **Update**: Reflect implementation results in the ADR
 
@@ -46,7 +54,7 @@ Use this template for new ADRs:
 # ADR-XXXX: [Short noun phrase describing the decision]
 
 **Date**: YYYY-MM-DD
-**Status**: [Proposed/Accepted/Superseded/Deprecated]
+**Status**: [Proposed/Accepted/Superseded/Deprecated/Watching]
 
 ## Context
 [Forces at play, technological and project factors - value-neutral description]
