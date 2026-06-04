@@ -1,4 +1,4 @@
-{ config, pkgs, nixgl, opencode-flake, ... }:
+{ config, pkgs, nixgl, opencode-flake, nix-software-center, nixpkgs-unstable, ... }:
 
 
 {
@@ -22,6 +22,7 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+    "beeper"
     "claude-code"
     "discord"
     "microsoft-edge"
@@ -54,7 +55,7 @@
     android-tools
     audacity
     awscli2
-    babashka
+    babashka    # Clojure scripting runtime
     caddy
     cargo
     claude-code
@@ -64,15 +65,22 @@
     docker-compose
     git-cliff
     gitFull
+    glow        # Terminal markdown reader
+    gnome-keyring
     go
     gradle
     guile
-    gum
+    gum         # TUI widget toolkit (Gum)
     jdk21
+    libsecret
+    libvterm
     maven
     meson
+    mise
+    multimarkdown
     nix
     nodejs_22
+    nodePackages.typescript-language-server
     # opencode
     # opencode-flake.packages.${pkgs.system}.default
     openssl
@@ -81,6 +89,7 @@
     (python312.withPackages(ps: with ps; [yapf requests]))
     rlwrap
     rustc
+    tinymist
     toolbox
     uv
     vscodium
@@ -106,6 +115,7 @@
     # Desktop applications
     appimage-run
     # azote  # Not in nixpkgs - could create custom package if needed
+    beeper
     blueman
     btop
     darktable
@@ -129,13 +139,22 @@
     libreoffice
     lilypond
     mesa
+    microsoft-edge
     mission-center
     mpv
     musescore
     networkmanagerapplet
+    nix-software-center.packages.${pkgs.system}.default
     nomacs
     nyxt
     pidgin
+    (pkgs.writeShellScriptBin "publii" ''
+      export LD_LIBRARY_PATH="${pkgs.libsecret}/lib:$LD_LIBRARY_PATH"
+      exec ${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel \
+      ${pkgs.publii}/bin/Publii \
+      --disable-gpu-vsync \
+      "$@"
+    '')
     qbittorrent
     rhythmbox
     signal-desktop
@@ -147,7 +166,7 @@
     strawberry
     # stremio
     teams-for-linux
-    microsoft-edge
+    whatsapp-electron
     thunderbird
     # Viber with nixGL and custom link handling
     (let
@@ -325,10 +344,18 @@
     enable = true;
     package = pkgs.emacs-pgtk;
     extraPackages = epkgs: [
-      epkgs.nix-mode
+      epkgs.eat
       epkgs.magit
+      epkgs.nix-mode
+      epkgs.org-roam
+      epkgs.vterm
     ];
   };
+
+  xdg.configFile."mise/config.toml".text = ''
+  [settings]
+  idiomatic_version_file_enable_tools = ["node", "npm"]
+'';
 
   # Complete Emacs configuration management via home-manager
   xdg.configFile."emacs" = {
@@ -344,10 +371,13 @@
 
   programs.git = {
     enable = true;
+    lfs.enable = true;
     package = pkgs.gitFull;
     settings = {
       alias = {
         lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+        squash-merged = "!f(){ target=\"$\{1:-origin/main}\"; current=$(git branch --show-current); git rev-parse --verify \"$target\" >/dev/null 2>&1 || { echo \"Unknown target branch: $target\" >&2; return 1; }; for b in $(git for-each-ref --format='%(refname:short)' refs/heads/); do case \"$b\" in main|master|develop|\"$current\") continue ;; esac; if [ -z \"$(git cherry \"$target\" \"$b\" | grep '^+')\" ]; then echo \"$b\"; fi; done; }; f";
+        prune-squash-merged = "!f(){ target=\"$\{1:-origin/main}\"; git squash-merged \"$target\" | xargs -r git branch -D; }; f";
       };
       core = {
         autocrlf = false;
@@ -365,6 +395,17 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  programs.mise = {
+    enable = true;
+    enableZshIntegration = true;
+
+    globalConfig = {
+      tools = {
+        terraform = "1.15.3";
+      };
+    };
+  };
 
   # Enable swaylock but manage config file manually via home.file
   # programs.swaylock.enable = true;
@@ -424,6 +465,11 @@
   #   pinentryPackage = pkgs.pinentry;
   #   # pinentryFlavor = "curses";
   # };
+
+  services.gnome-keyring = {
+    enable = true;
+    components = [ "pkcs11" "secrets" "ssh" ];
+  };
 
   # Declarative logrotate configuration managed as home files
   home.file.".config/logrotate/logrotate.conf" = {
