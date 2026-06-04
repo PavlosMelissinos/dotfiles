@@ -196,10 +196,6 @@ git commit -m "[tool] Add feature X to improve Y
 - Reference ADR-XXX if applicable
 - Include rationale for architectural changes
 - Explain why change was needed, not how
-
-🤖 Generated with [Claude Code](https://claude.ai/code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
 
 **Rules:**

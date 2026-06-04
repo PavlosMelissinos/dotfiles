@@ -1,73 +1,18 @@
-# Architecture Decision Records (ADRs)
+# Architecture Decision Records
 
-This directory contains Architecture Decision Records for significant
-architectural decisions made in this dotfiles repository.
+_Generated 2026-05-04_
 
-## ADR Format
-
-We follow the standard ADR format from Michael Nygard's "Documenting Architecture Decisions":
-- **Title**: Short noun phrase describing the decision
-- **Date**: When the decision was made
-- **Status**: Proposed, Accepted, Superseded, Deprecated, or Watching
-- **Context**: Forces at play, technological and project factors (value-neutral)
-- **Decision**: Response to forces, written in active voice starting with "We will..."
-- **Consequences**: Resulting context after applying the decision (including negative impacts)
-
-## Index
-
-| ADR                                                     | Title                                                      | Status     | Date       |
-|---------------------------------------------------------|------------------------------------------------------------|------------|------------|
-| [0000](./0000-record-architecture-decisions.md)         | Record Architecture Decisions                              | Accepted   | 2025-07-27 |
-| [0001](./0001-package-manager-consolidation.md)         | Complete Package Manager Consolidation                     | Superseded | 2025-07-27 |
-| [0002](./0002-sway-window-manager-wayland-first.md)     | Sway Window Manager with Wayland-First Desktop Environment | Accepted   | 2025-07-27 |
-| [0003](./0003-xdg-directory-compliance.md)              | XDG Base Directory Specification Compliance                | Accepted   | 2025-07-27 |
-| [0004](./0004-u2f-hardware-key-authentication.md)       | U2F Hardware Key Authentication                            | Accepted   | 2025-07-27 |
-| [0005](./0005-line-length-text-formatting-standards.md) | Line Length and Text Formatting Standards                  | Accepted   | 2025-07-27 |
-| [0006](./0006-trailing-whitespace-policy.md)            | Trailing Whitespace Policy                                 | Accepted   | 2025-07-27 |
-| [0007](./0007-git-commit-message-standards.md)          | Git Commit Message Standards                               | Accepted   | 2025-07-27 |
-| [0008](./0008-viber-appimage-packaging-solution.md)     | Viber AppImage Packaging Solution                          | Superseded | 2025-07-28 |
-| [0009](./0009-complete-guix-elimination.md)             | Complete Guix Package Manager Elimination                  | Accepted   | 2025-08-06 |
-| [0010](./0010-home-manager-flakes-migration.md)         | Home Manager Flakes Migration                              | Accepted   | 2025-08-11 |
-| [0011](./0011-viber-nixgl-integration.md)               | Viber nixGL Integration and Dynamic Icon Extraction        | Accepted   | 2025-08-11 |
-
-## Status Meanings
-
-- **Proposed**: Under consideration, not yet decided
-- **Accepted**: Decision made and implemented
-- **Superseded**: Replaced by a later ADR
-- **Deprecated**: No longer relevant or valid
-- **Watching**: Pre-decisional evaluation; no commitment yet — used for assess-ring entries that benefit from ADR-level documentation
-
-## ADR Process
-
-1. **Propose**: Create new ADR with "Proposed" status
-2. **Review**: Discuss with stakeholders (if applicable)
-3. **Decide**: Update status to "Accepted", "Superseded", "Deprecated", or "Watching"
-4. **Implement**: Execute the decision
-5. **Update**: Reflect implementation results in the ADR
-
-## Templates
-
-Use this template for new ADRs:
-
-```markdown
-# ADR-XXXX: [Short noun phrase describing the decision]
-
-**Date**: YYYY-MM-DD
-**Status**: [Proposed/Accepted/Superseded/Deprecated/Watching]
-
-## Context
-[Forces at play, technological and project factors - value-neutral description]
-
-## Decision
-We will [response to forces, written in active voice]...
-
-## Consequences
-[Resulting context after applying the decision, including ALL consequences]
-
-**Positive:**
-- [Good outcomes]
-
-**Negative:**
-- [Challenges or trade-offs]
-```
+| # | ADR | Status | Date |
+|---|-----|--------|------|
+| 1 | [ADR-0000: Record Architecture Decisions](0000-record-architecture-decisions) | Accepted | 2025-07-27 |
+| 2 | [ADR-0001: Complete Package Manager Consolidation](0001-package-manager-consolidation) | Superseded by ADR-0009 | 2025-07-27 |
+| 3 | [ADR-0002: Sway Window Manager with Wayland-First Desktop Environment](0002-sway-window-manager-wayland-first) | Accepted | 2025-07-27 |
+| 4 | [ADR-0003: XDG Base Directory Specification Compliance](0003-xdg-directory-compliance) | Accepted | 2025-07-27 |
+| 5 | [ADR-0004: U2F Hardware Key Authentication](0004-u2f-hardware-key-authentication) | Accepted | 2025-07-27 |
+| 6 | [ADR-0005: Line Length and Text Formatting Standards](0005-line-length-text-formatting-standards) | Accepted | 2025-07-27 |
+| 7 | [ADR-0006: Trailing Whitespace Policy](0006-trailing-whitespace-policy) | Accepted | 2025-07-27 |
+| 8 | [ADR-0007: Git Commit Message Standards](0007-git-commit-message-standards) | Accepted | 2025-07-27 |
+| 9 | [ADR-0008: Viber AppImage Packaging Solution](0008-viber-appimage-packaging-solution) | Accepted | 2025-07-28 |
+| 10 | [ADR-0009: Complete Guix Package Manager Elimination](0009-complete-guix-elimination) | Accepted   | 2025-08-06   |
+| 11 | [ADR-0010: Home Manager Flakes Migration](0010-home-manager-flakes-migration) | Accepted | 2025-08-11 |
+| 12 | [ADR-0011: Viber nixGL Integration and Dynamic Icon Extraction](0011-viber-nixgl-integration) | Accepted | 2025-08-11 |
