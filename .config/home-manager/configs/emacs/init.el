@@ -38,14 +38,14 @@ Examples TODO."
 (setq recentf-save-file (concat emacs-state-home "recentf")
       abbrev-file-name (concat emacs-state-home "abbrev_defs"))
 
-;; Data files (user-generated content)
+;; Data files (user-installed packages, user-generated content)
 (setq bookmark-default-file (concat emacs-data-home "bookmarks")
       eshell-history-file-name (concat emacs-data-home "eshell/history")
-      eshell-last-dir-ring-file-name (concat emacs-data-home "eshell/lastdir"))
+      eshell-last-dir-ring-file-name (concat emacs-data-home "eshell/lastdir")
+      package-user-dir (concat emacs-data-home "elpa"))
 
 ;; Cache files (performance data, can be regenerated)
-(setq package-user-dir (concat emacs-cache-home "elpa")
-      auto-save-list-file-prefix (concat emacs-cache-home "auto-save-list/.saves-")
+(setq auto-save-list-file-prefix (concat emacs-cache-home "auto-save-list/.saves-")
       url-cookie-file (concat emacs-cache-home "url/cookies"))
 
 ;; Transient (Magit) - state and cache separation
@@ -337,7 +337,6 @@ Examples TODO."
 (use-package projectile
   :diminish projectile-mode
   :ensure t
-  :no-require t
   :bind (:map projectile-mode-map
               ("C-c p" . 'projectile-command-map))
   :config
@@ -352,7 +351,7 @@ Examples TODO."
   (defconst projectile-remember-window-configs t)
   (defconst projectile-use-git-grep t)
   (defconst projectile-create-missing-test-files t)
-  (projectile-mode nil))
+  (projectile-mode 1))
 
 (use-package terraform-mode
   :ensure t)
@@ -401,7 +400,9 @@ Examples TODO."
         company-selection-wrap-around t
         company-tooltip-align-annotations t
         company-frontends '(company-pseudo-tooltip-frontend
-                           company-echo-metadata-frontend))
+                            company-echo-metadata-frontend))
+        company-backends  '((company-capf :with company-dabbrev-code)
+                            company-dabbrev)
   :bind
   (:map company-active-map
         ("C-n" . company-select-next)
@@ -412,9 +413,7 @@ Examples TODO."
         ("C-n" . company-select-next)
         ("C-p" . company-select-previous))
   :hook ((text-mode . company-mode)
-         (prog-mode . company-mode)
-         (java-mode . company-mode)
-         (python-mode . company-mode))
+         (prog-mode . company-mode))
   ;; :init
   ;; (global-company-mode)
   ;; (setq company-minimum-prefix-length 2)
@@ -773,7 +772,6 @@ Examples TODO."
   (blamer-author-formatter " ✎ %s ")
   :custom-face
   (blamer-face ((t :foreground "#7a88cf"
-                   :background nil
                    :height 0.7
                    :italic t)))
   ;; :config
@@ -931,7 +929,12 @@ Examples TODO."
 (use-package browse-at-remote
   :bind (("C-c g g" . browse-at-remote))
   :ensure t
-  :custom (browse-at-remote-add-line-number-if-no-region-selected t))
+  :custom
+  (browse-at-remote-add-line-number-if-no-region-selected t)
+  :config
+  (add-to-list 'browse-at-remote-remote-type-regexps
+               `(:host ,(rx bol "gitlab.ithaca.ece.uowm.gr" eol)
+                       :type "gitlab")))
 
 (use-package restclient
   :ensure t
@@ -984,6 +987,13 @@ Examples TODO."
 (use-package hide-mode-line
   :ensure t
   :defer t)
+
+(use-package s
+  :ensure t
+  :pin "GNU ELPA")
+
+(use-package pythonic
+  :ensure t)
 
 (use-package uv-mode
   :ensure t
@@ -1306,8 +1316,7 @@ Examples TODO."
   :defines (lsp-keymap-prefix lsp-mode-map)
   :init
   (setq lsp-keymap-prefix "C-c l")
-  :hook ((python-mode . lsp-deferred)
-         (java-mode . lsp)
+  :hook ((java-mode . lsp)
          (java-mode . (lambda ()
                         ;; Java REPL-style key bindings (similar to CIDER)
                         (local-set-key (kbd "C-c M-j") 'jshell-start-with-project) ; project-aware jshell
@@ -1338,7 +1347,6 @@ Examples TODO."
   :bind (:map lsp-mode-map ("M-<RET>" . lsp-execute-code-action))
   :config
   (setq gc-cons-threshold 1600000
-        lsp-auto-guess-root nil
         lsp-completion-enable t
         lsp-completion-enable-additional-text-edit nil
         lsp-eldoc-enable-hover nil
@@ -2082,7 +2090,7 @@ respectively."
 
 (use-package crux
   :ensure t
-  :init
+  :config
   (global-set-key [remap move-beginning-of-line] #'crux-move-beginning-of-line))
 
 (use-package ibuffer
