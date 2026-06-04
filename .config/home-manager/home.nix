@@ -195,6 +195,11 @@
     '')
     vlc
     xfce.thunar
+    xfce.thunar-archive-plugin
+    xfce.thunar-media-tags-plugin
+    gvfs
+    xfce.tumbler
+    ffmpegthumbnailer
     zathura
 
     # Audio/MIDI support
@@ -470,6 +475,15 @@
     enable = true;
     components = [ "pkcs11" "secrets" "ssh" ];
   };
+
+  services.udiskie = {
+    enable = true;
+    automount = true;
+    notify = true;
+    tray = "auto";
+  };
+
+  dbus.packages = [ pkgs.gvfs ];
 
   # Declarative logrotate configuration managed as home files
   home.file.".config/logrotate/logrotate.conf" = {
