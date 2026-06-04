@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tech Radar</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://zalando.github.io/tech-radar/release/radar-0.12.js"></script>
+<style>
+  body { font-family: Arial, Helvetica, sans-serif; margin: 0; }
+  #radar { display: block; margin: 0 auto; }
+</style>
+</head>
+<body>
+<svg id="radar"></svg>
+<script>
+radar_visualization({
+  svg_id: "radar",
+  repo_url: "#",
+  title: "Tech Radar",
+  date: "",
+  width: 1450,
+  height: 1000,
+  scale: 1.0,
+  colors: { background: "#fff", grid: "#bbb", inactive: "#ddd" },
+  font_family: "Arial, Helvetica",
+  print_layout: true,
+  links_in_new_tabs: true,
+  quadrants: [ {
+  "name" : "platforms"
+}, {
+  "name" : "tools"
+}, {
+  "name" : "techniques"
+}, {
+  "name" : "services"
+} ],
+  rings: [ {
+  "name" : "adopt",
+  "color" : "#ccc"
+}, {
+  "name" : "trial",
+  "color" : "#ccc"
+}, {
+  "name" : "assess",
+  "color" : "#ccc"
+}, {
+  "name" : "hold",
+  "color" : "#ccc"
+} ],
+  entries: [ {
+  "label" : "",
+  "quadrant" : 0,
+  "ring" : "adopt",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/clojure.lang.LazySeq@3e8"
+}, {
+  "label" : "",
+  "quadrant" : 0,
+  "ring" : "adopt",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/clojure.lang.LazySeq@21"
+}, {
+  "label" : "",
+  "quadrant" : 2,
+  "ring" : "adopt",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/clojure.lang.LazySeq@22"
+}, {
+  "label" : "",
+  "quadrant" : 1,
+  "ring" : "adopt",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/clojure.lang.LazySeq@23"
+}, {
+  "label" : "",
+  "quadrant" : 1,
+  "ring" : "adopt",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/"
+}, {
+  "label" : "",
+  "quadrant" : 1,
+  "ring" : "adopt",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/"
+}, {
+  "label" : "",
+  "quadrant" : 1,
+  "ring" : "adopt",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/"
+}, {
+  "label" : "",
+  "quadrant" : 0,
+  "ring" : "adopt",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/clojure.lang.LazySeq@28"
+}, {
+  "label" : "",
+  "quadrant" : 1,
+  "ring" : "adopt",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/"
+}, {
+  "label" : "",
+  "quadrant" : 3,
+  "ring" : "adopt",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/"
+}, {
+  "label" : "",
+  "quadrant" : 0,
+  "ring" : "trial",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/clojure.lang.LazySeq@462"
+}, {
+  "label" : "",
+  "quadrant" : 0,
+  "ring" : "trial",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/"
+}, {
+  "label" : "",
+  "quadrant" : 3,
+  "ring" : "trial",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/clojure.lang.LazySeq@168c28"
+}, {
+  "label" : "",
+  "quadrant" : 3,
+  "ring" : "trial",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/clojure.lang.LazySeq@168c28"
+}, {
+  "label" : "",
+  "quadrant" : 0,
+  "ring" : "assess",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/"
+}, {
+  "label" : "",
+  "quadrant" : 0,
+  "ring" : "assess",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/"
+}, {
+  "label" : "",
+  "quadrant" : 3,
+  "ring" : "assess",
+  "moved" : 0,
+  "link" : "/home/pavlos/docs/clojure.lang.LazySeq@23"
+}, {
+  "label" : "",
+  "quadrant" : 0,
+  "ring" : "hold",
+  "moved" : -1,
+  "link" : "/home/pavlos/docs/clojure.lang.LazySeq@168fe9"
+}, {
+  "label" : "",
+  "quadrant" : 0,
+  "ring" : "hold",
+  "moved" : -1,
+  "link" : "/home/pavlos/docs/clojure.lang.LazySeq@20"
+}, {
+  "label" : "",
+  "quadrant" : 1,
+  "ring" : "hold",
+  "moved" : -1,
+  "link" : "/home/pavlos/docs/"
+}, {
+  "label" : "",
+  "quadrant" : 0,
+  "ring" : "hold",
+  "moved" : -1,
+  "link" : "/home/pavlos/docs/"
+}, {
+  "label" : "",
+  "quadrant" : 0,
+  "ring" : "hold",
+  "moved" : -1,
+  "link" : "/home/pavlos/docs/clojure.lang.LazySeq@2a"
+} ]
+});
+</script>
+</body>
+</html>
