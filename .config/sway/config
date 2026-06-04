@@ -76,11 +76,15 @@ exec_always {
 set $monitor1 eDP-1
 set $monitor2 "Dell Inc. DELL U2518D 3C4YP88P229L"
 set $monitor3 "Dell Inc. DELL U2311H HV8XP0BN1VFL"
-set $monitor4 "Panasonic Industry Company Panasonic-TV 0x00000000"
+set $monitor4k_up "Panasonic Industry Company Panasonic-TV 0x00000000"
 #set $monitor_qhd_right "Lenovo Group Limited LEN L28u-30 U1B50YWY"
-set $monitor_fullhd_right "Samsung Electric Company LS27D300G H1AK500000"
+#set $monitor_fullhd_right "Samsung Electric Company LS27D300G H1AK500000"
+set $monitor_fullhd_right "Dell Inc. DELL P2423DE H09XNR3"
 #set $monitor_full_hd_right "JRY HDMI Unknown"
+#set $monitor_qhd_right "Dell Inc. DELL P2423DE H09XNR3"
 set $main_monitor "Samsung Electric Company LS27D300G H1AK500000"
+#set $main_monitor "JRY HDMI Unknown4"
+#set $main_monitor "Dell Inc. DELL P2423DE H09XNR3"
 #set $main_monitor $monitor_qhd_right
 
 output $monitor1 {
@@ -102,7 +106,7 @@ output $monitor3 {
     transform 270
 }
 
-output $monitor4 {
+output $monitor4k_up {
     # m1 scale 1.5
     resolution 4096x2160 position 0 120
     scale 2
@@ -132,7 +136,7 @@ workspace 2 {
 workspace 3 {
     output $main_monitor
     output $monitor3
-    output $monitor4
+    output $monitor4k_up
     output $monitor2
     output $monitor1
 }
@@ -155,12 +159,15 @@ workspace 6 {
     output $monitor1
 }
 
-assign [app_id="emacs"] workspace 4
-assign [app_id="Kodi"] workspace 6
-for_window [app_id="firefox"] move to workspace 3, split vertical, resize set height 100ppt
-for_window [app_id="signal"] move to workspace 3, split horizontal, layout tabbed
-for_window [instance="Viber"] move to workspace 3, split horizontal, layout tabbed
 assign [app_id="Alacritty" title=".*main-term.*"] workspace 2
+assign [app_id="emacs"] workspace 4
+assign [app_id="firefox"] workspace 3
+assign [app_id="signal"] workspace 3
+assign [app_id="teams-for-linux"] workspace 3
+assign [app_id="Beeper"] workspace 3
+assign [instance="Viber"] workspace 3
+assign [app_id="thunderbird"] workspace 5
+assign [app_id="Kodi"] workspace 6
 
 # Make Signal compatible with xdg-open
 exec systemctl --user import-environment WAYLAND_DISPLAY XDG_SESSION_TYPE PATH
@@ -218,30 +225,12 @@ exec_always swayidle -w \
 #       middle_emulation enabled
    }
 
-  # Workaround for firefox bug:
-  # https://teddit.net/r/swaywm/comments/q1514z/can_i_avoid_crashing_firefox_on_sway_reload/
-  # NOTE: Avoid `input *`, consider replacing with input device id (didn't work)
-   # input * {
-   #      xkb_layout "us,gr"
-   #      xkb_options "grp:win_space_toggle"
-   #      xkb_numlock enable
-   # }
-   input "9494:26:CM_Storm_Keyboard_--_QuickFire_XT" {
+   input * {
         xkb_layout "us,gr"
         xkb_options "grp:win_space_toggle"
         xkb_numlock enable
    }
-   input "1:1:AT_Translated_Set_2_keyboard" {
-        xkb_layout "us,gr"
-        xkb_options "grp:win_space_toggle"
-        xkb_numlock enable
-   }
-   #input "16700:8467:Dell_KB216_Wired_Keyboard" {
-   input "1008:26945:SIGMACHIP_HP_Wired_Keyboard" {
-        xkb_layout "us,gr"
-        xkb_options "grp:win_space_toggle"
-        xkb_numlock enable
-   }
+
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
@@ -291,7 +280,7 @@ bindsym --to-code {
 
     # Exit sway (logs you out of your Wayland session)
     #$mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
-    $mod+Shift+e exec wlogout
+    $mod+Shift+e exec wleave
 
     # Lock screen
     $mod+Alt+l exec swaylock -f
