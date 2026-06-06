@@ -1,7 +1,7 @@
 ---
 title: "Emacs Configuration Modernization"
 date: 2026-04-19
-status: In Progress
+status: Accepted
 category: Emacs
 ---
 
@@ -58,13 +58,13 @@ drop-in replacement with identical keybindings (`C-,` / `C-.`).
 
 ## Tasks
 
-- [ ] Remove `use-package` bootstrap guard (lines 92-96)
-- [ ] Fix `dsp-step-out` → `dap-step-out` typo (line 1428)
-- [ ] Remove `exec-path-from-shell` block, simplify `safe-getenv`
-- [ ] Remove `neotree` use-package block + `doom-themes-neotree-config` call
-- [ ] Switch `pixel-scroll-mode` → `pixel-scroll-precision-mode`
-- [ ] Replace `highlight-symbol` → `symbol-overlay` (add to home.nix)
-- [ ] `home-manager switch --flake .` and verify Emacs loads cleanly
+- [x] Remove `use-package` bootstrap guard (lines 92-96)
+- [x] Fix `dsp-step-out` → `dap-step-out` typo (line 1428)
+- [x] Remove `exec-path-from-shell` block, simplify `safe-getenv`
+- [x] Remove `neotree` use-package block + `doom-themes-neotree-config` call
+- [x] Switch `pixel-scroll-mode` → `pixel-scroll-precision-mode`
+- [x] Replace `highlight-symbol` → `symbol-overlay` (add to home.nix)
+- [x] `home-manager switch --flake .` and verify Emacs loads cleanly
 
 ## Risk assessment
 
@@ -78,3 +78,4 @@ drop-in replacement with identical keybindings (`C-,` / `C-.`).
 |------------|-------------|-------|
 | 2026-04-19 | Proposed    | Original migration + modernization proposal |
 | 2026-06-06 | In Progress | Task checklist added; scope split — migration moved to PROP-0017 |
+| 2026-06-06 | Accepted    | All 7 tasks completed; Emacs 30.2 loads cleanly |

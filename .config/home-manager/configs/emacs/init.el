@@ -17,19 +17,11 @@
 (setq save-abbrevs 'silently)
 
 ;; ENV VARIABLES
-(defun safe-getenv (env)
-  "Provides a safe way to retrieve environment variables from ENV.
-
-Examples TODO."
-  (if (bound-and-true-p exec-path-from-shell-getenv)
-    (exec-path-from-shell-getenv env)
-    (getenv env)))
-
 (defconst emacs-config-home user-emacs-directory)
 (defconst emacs-config-home-writable (expand-file-name "~/.config/home-manager/configs/emacs/"))
-(defconst emacs-cache-home (expand-file-name "emacs/" (or (safe-getenv "XDG_CACHE_HOME") "~/.cache/")))
-(defconst emacs-data-home (expand-file-name "emacs/" (or (safe-getenv "XDG_DATA_HOME") "~/.local/share/")))
-(defconst emacs-state-home (expand-file-name "emacs/" (or (safe-getenv "XDG_STATE_HOME") "~/.local/state/")))
+(defconst emacs-cache-home (expand-file-name "emacs/" (or (getenv "XDG_CACHE_HOME") "~/.cache/")))
+(defconst emacs-data-home (expand-file-name "emacs/" (or (getenv "XDG_DATA_HOME") "~/.local/share/")))
+(defconst emacs-state-home (expand-file-name "emacs/" (or (getenv "XDG_STATE_HOME") "~/.local/state/")))
 
 ;; other directories
 
@@ -89,12 +81,6 @@ Examples TODO."
 (unless (bound-and-true-p package--initialized)
   (package-initialize))
 
-;; Make sure `use-package' is available.
-
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
 (eval-when-compile
   (require 'use-package))
 (require 'bind-key)                ;; if you use any :bind variant
@@ -107,11 +93,6 @@ Examples TODO."
 ;; ========================================
 ;; Modes
 
-(use-package exec-path-from-shell
-  :ensure t
-  :config
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
 
 (use-package all-the-icons
   :ensure t)
@@ -140,12 +121,6 @@ Examples TODO."
                      (javascript-mode  "{" "}" "/[*/]" nil)))))
 
 
-(use-package neotree
-  :bind (:map neotree-mode-map
-         ("^" . neotree-select-up-node))
-  :ensure t
-  :config
-  (define-key neotree-mode-map "^" 'neotree-select-up-node))
 
 (use-package emacs-lisp-mode
   :no-require t
@@ -817,37 +792,15 @@ Examples TODO."
 	      (kill-buffer buffer)))
 	  (buffer-list))))
 
-(use-package highlight-symbol
-  :diminish highlight-symbol-mode
-  :ensure t
-  ;;:no-require t
-  ;; :hook ((lisp-mode . highlight-symbol-mode)
-  ;;        (emacs-lisp-mode . highlight-symbol-mode)
-  ;;        (scheme-mode . highlight-symbol-mode)
-  ;;        (cider-repl-mode . highlight-symbol-mode)
-  ;;        (clojure-mode . highlight-symbol-mode)
-  ;;        (python-mode . highlight-symbol-mode))
+(use-package symbol-overlay
+  :diminish symbol-overlay-mode
   :init
-  (global-set-key (kbd "C-,") 'highlight-symbol-prev)
-  (global-set-key (kbd "C-.") 'highlight-symbol-next)
+  (global-set-key (kbd "C-,") 'symbol-overlay-put)
+  (global-set-key (kbd "C-.") 'symbol-overlay-switch)
   :config
-  (setq highlight-symbol-mode t)
-  (setq highlight-symbol-idle-delay 1)
-  (setq highlight-symbol-on-navigation-p 't)
-  (setq highlight-symbol-occurrence-message (quote (explicit)))
   (custom-set-faces
-   '(highlight-symbol-face ((t (:foreground "gray100" :background "#9c7618" :weight semi-bold)))))
-
-  (add-hook 'find-file-hook 'my-hls-hook)
-
-  (defun highlight-symbol-count (&optional symbol)
-    "(Do not) Print the number of occurrences of symbol at point."
-    (interactive))
-
-  (defun my-hls-hook ()
-    (when (featurep 'highlight-symbol)
-      (highlight-symbol-mode t)
-      (highlight-symbol-nav-mode t))))
+   '(symbol-overlay-default-face ((t (:foreground "gray100" :background "#9c7618" :weight semi-bold)))))
+  (add-hook 'prog-mode-hook 'symbol-overlay-mode))
 
 (use-package windmove
   :init
@@ -1425,7 +1378,7 @@ Examples TODO."
   ("C-c d b" . dap-breakpoint-toggle)
   ("C-c d n" . dap-next)
   ("C-c d s" . dap-step-in)
-  ("C-c d o" . dsp-step-out)
+  ("C-c d o" . dap-step-out)
   ("C-c d c" . dap-continue)
   ("C-c d e" . dap-eval-region)
   ("C-c d q" . dap-disconnect))
@@ -1932,8 +1885,6 @@ DIRECTION can be \\='up, \\='down, \\='left, or \\='right."
           (set-face-foreground 'vertical-border "#525070")))
     ;;Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
-    ;; Enable custom neotree theme (all-the-icons must be installed!)
-    (doom-themes-neotree-config)
     (doom-themes-org-config))
 
   (defun remove-vowels (string)
@@ -1967,11 +1918,7 @@ DIRECTION can be \\='up, \\='down, \\='left, or \\='right."
     (interactive "r")
     (shell-command-on-region start end "jq -r ." nil 't))
 
-  (pixel-scroll-mode)
-  (defvar pixel-dead-time 0) ; Never go back to the old scrolling behaviour.
-  (defvar pixel-resolution-fine-flag t) ; Scroll by number of pixels instead of lines (t = frame-char-height pixels).
-  (setq mouse-wheel-scroll-amount '(1)) ; Distance in pixel-resolution to scroll each mouse wheel event.
-  (setq mouse-wheel-progressive-speed nil)
+  (pixel-scroll-precision-mode)
 
   ;;(require 'flycheck-joker)
 

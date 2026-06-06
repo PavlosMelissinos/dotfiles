@@ -353,6 +353,7 @@
       epkgs.magit
       epkgs.nix-mode
       epkgs.org-roam
+      epkgs.symbol-overlay
       epkgs.vterm
     ];
   };
