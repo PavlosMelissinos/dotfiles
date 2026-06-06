@@ -1,7 +1,7 @@
 ---
 title: "Emacs TypeScript/JavaScript LSP Support via typescript-language-server"
 date: 2026-04-29
-status: Proposed
+status: Accepted
 category: Emacs
 ---
 
@@ -196,13 +196,30 @@ This work resolves multiple errors visible in the Emacs startup Messages buffer:
 - `⛔ Error (use-package): Cannot load eat`
 - `⛔ Error (use-package): Cannot load vterm` (vterm's compile prompt)
 
-## Todo
+## Tasks
 
-- [ ] Apply tree-sitter fallback to `init.el`
-- [ ] Extend `lsp-mode` `:hook` with TS/JS modes
-- [ ] Add `lsp-javascript` and `lsp-typescript` use-package blocks
-- [ ] Defer vterm loading
-- [ ] Enable NonGNU ELPA archive
-- [ ] Run `home-manager switch --flake .`
-- [ ] Verify LSP connects for TypeScript files
-- [ ] Confirm no tree-sitter errors in Messages buffer
+- [x] Apply tree-sitter fallback to `init.el`
+- [x] Extend `lsp-mode` `:hook` with TS/JS modes
+- [x] Defer vterm loading with `:defer t`
+- [x] Add Nix tree-sitter grammar gap note (Option A: fallback)
+- [x] Run `home-manager switch --flake .`
+- [x] Verify LSP connects for TypeScript files
+- [x] Confirm no tree-sitter errors in Messages buffer
+
+## Notes
+
+- `lsp-javascript` and `lsp-typescript` packages not included — they are
+  not packaged in nixpkgs and are optional (lsp-mode's built-in `ts-ls`
+  client provides full functionality without them).
+- Tree-sitter grammars for TS/TSX are omitted (Nix does not package
+  standalone grammars for built-in Emacs modes). LSP provides semantic
+  highlighting as a substitute.
+- `eat` package is already nix-managed via `extraPackages` — NonGNU ELPA
+  not needed.
+
+## Status History
+
+| Date       | Status   | Notes |
+|------------|----------|-------|
+| 2026-04-29 | Proposed | Initial analysis |
+| 2026-06-06 | Accepted | Tree-sitter fallback, lsp hooks, vterm deferral; lsp-javascript/typescript skipped (not in nixpkgs) |

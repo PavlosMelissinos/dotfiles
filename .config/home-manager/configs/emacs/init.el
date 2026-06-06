@@ -16,6 +16,25 @@
 (setq-default fill-column 80)
 (setq save-abbrevs 'silently)
 
+;; Nix does not package standalone tree-sitter grammars for built-in
+;; Emacs modes (there is no emacsPackages entry to declare the dep).
+;; Attempting to load libtree-sitter-typescript.so / libtree-sitter-tsx.so
+;; on .ts/.tsx files produces file-missing errors at startup.
+;;
+;; Workaround: remove TS/TSX from the language source alist so Emacs
+;; falls back to traditional font-lock. LSP (typescript-language-server)
+;; provides semantic highlighting via lsp-mode, making the tree-sitter
+;; grammar loss negligible.
+;;
+;; If full tree-sitter support is needed later, options are:
+;;   (a) Build the grammar .so via a custom Nix derivation
+;;   (b) Use treesit-install-language-grammar at Emacs runtime
+;;       (requires git + network, breaks Nix reproducibility)
+(setq treesit-language-source-alist
+      (assq-delete-all 'typescript treesit-language-source-alist))
+(setq treesit-language-source-alist
+      (assq-delete-all 'tsx treesit-language-source-alist))
+
 ;; ENV VARIABLES
 (defconst emacs-config-home user-emacs-directory)
 (defconst emacs-config-home-writable (expand-file-name "~/.config/home-manager/configs/emacs/"))
@@ -1295,7 +1314,11 @@
                                                           (when (get-buffer-process jshell-buffer-name)
                                                             (kill-process (get-buffer-process jshell-buffer-name)))
                                                           (jshell-start)))))
-         (lsp-mode . lsp-enable-which-key-integration))
+          (typescript-mode . lsp-deferred)
+          (tsx-tsx-mode . lsp-deferred)
+          (javascript-mode . lsp-deferred)
+          (js-jsx-mode . lsp-deferred)
+          (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred)
   :bind (:map lsp-mode-map ("M-<RET>" . lsp-execute-code-action))
   :config
@@ -1393,7 +1416,8 @@
 
 ;; for vterm terminal backend:
 (use-package vterm
-  :ensure t)
+  :ensure t
+  :defer t)
 
 ;;;; install claude-code.el - no longer using claude code
 ;; (use-package claude-code
