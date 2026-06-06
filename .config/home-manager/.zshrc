@@ -4,6 +4,10 @@ if [[ -d "$PYENV_ROOT" ]] && command -v pyenv >/dev/null 2>&1; then
     eval "$(pyenv virtualenv-init -)"
 fi
 
+if [[ -z "$SSH_AUTH_SOCK" ]]; then
+    eval "$(ssh-agent -s)" > /dev/null
+fi
+
 # Guix profile sourcing removed - migrated to home-manager
 
 # tab completion
