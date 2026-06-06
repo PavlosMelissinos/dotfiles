@@ -786,7 +786,6 @@
 ;; Navigation
 
 (use-package dired
-  ;;:bind (("<^>" . (lambda () (find-alternate-file "..")))) ;;TODO
   :demand t
   :custom
   (dired-dwim-target t)

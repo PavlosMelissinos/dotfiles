@@ -45,6 +45,8 @@ gaps inner 5
 #for_window [class=".*"] opacity $opacity
 #for_window [app_id=".*"] opacity $opacity
 
+exec ssh-agent -a $XDG_RUNTIME_DIR/ssh-agent.sock -D
+
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)

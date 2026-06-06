@@ -5,10 +5,8 @@ if [[ -d "$PYENV_ROOT" ]] && command -v pyenv >/dev/null 2>&1; then
 fi
 
 if [[ -z "$SSH_AUTH_SOCK" ]]; then
-    eval "$(ssh-agent -s)" > /dev/null
+    export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.sock"
 fi
-
-# Guix profile sourcing removed - migrated to home-manager
 
 # tab completion
 fpath=($ZDOTDIR/zfunc $fpath)
@@ -81,7 +79,5 @@ promptinit
 
 # source $XDG_CONFIG_HOME/zsh/scripts/theme-and-appearance.zsh # for coloured output
 # source $XDG_CONFIG_HOME/zsh/theme-agnosterp.zsh # stripped down version of agnosterj
-# source $HOME/.guix-profile/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-# source $HOME/.guix-profile/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # eval "$(starship init zsh)"
