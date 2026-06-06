@@ -16,6 +16,10 @@ why this proposal exists.]
 
 [What we will do, written in active voice.]
 
+## Tasks
+
+- [ ] [First task]
+
 ## Consequences
 
 **Positive:**

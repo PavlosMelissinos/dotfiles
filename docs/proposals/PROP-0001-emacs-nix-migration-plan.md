@@ -1,7 +1,7 @@
 ---
 title: "Emacs Package Management Migration: package.el → home-manager/nix"
 date: 2026-04-19
-status: Proposed
+status: In Progress
 category: Emacs
 ---
 
@@ -225,6 +225,24 @@ calls. Deserves its own focused session.
 project.el has caught up significantly in Emacs 29/30, but projectile still
 offers `clojure-jump-to-test` and project-wide replace. Defer for now.
 
+## Tasks
+
+### Phase 1: Package management unification
+- [ ] Add emacs-overlay flake input
+- [ ] Expand extraPackages in home.nix (65 packages)
+- [ ] Remove `:ensure t` from all `use-package` blocks (~67 occurrences)
+- [ ] Remove package.el initialization boilerplate (lines 74-103)
+- [ ] `home-manager switch --flake .` and verify Emacs loads
+- [ ] Clean up `~/.cache/emacs/elpa`
+
+### Phase 2: Trivial modernizations (bundle with Phase 1)
+- [ ] Remove `use-package` bootstrap guard
+- [ ] Fix `dsp-step-out` → `dap-step-out` typo (line 1427)
+- [ ] Remove `exec-path-from-shell`
+- [ ] Remove `neotree` + `doom-themes-neotree-config`
+- [ ] Switch `pixel-scroll-mode` → `pixel-scroll-precision-mode`
+- [ ] Replace `highlight-symbol` → `symbol-overlay`
+
 ## Future workflow
 
 ```bash
@@ -245,3 +263,10 @@ cd ~/.config/home-manager && nix flake update && home-manager switch --flake .
   locally
 - **Rollback**: `home-manager generations` provides instant rollback if
   anything breaks
+
+## Status History
+
+| Date       | Status      | Notes |
+|------------|-------------|-------|
+| 2026-04-19 | Proposed    |       |
+| 2026-06-06 | In Progress | Task checklist added; implementation started |

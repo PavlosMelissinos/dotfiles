@@ -75,14 +75,34 @@ This directory contains proposals for changes to this dotfiles repository.
 {archived_rows}
 ## Workflow
 
+### Creating a new proposal
+
 ```bash
-# Create a new proposal
 cp TEMPLATE.md PROP-NNNN-slug.md
-emacs PROP-NNNN-slug.md           # fill in title, date, status, category
+$EDITOR PROP-NNNN-slug.md       # fill frontmatter, decompose into tasks
 python3 gen-index.py            # auto-rebuild README.md
 git add PROP-NNNN-slug.md       # README.md is gitignored
 git commit -m "[docs] Add proposal: <title>"
 ```
+
+### Tracking progress
+
+Every proposal contains a ``## Tasks`` section with granular markdown
+checklists (``- [ ]`` / ``- [x]``). The status lifecycle is:
+
+```
+Proposed → In Progress → Accepted (done)
+                ↓
+            Rejected / Superseded
+```
+
+1. **Pick up a proposal**: change frontmatter ``status: Proposed`` →
+   ``status: In Progress``, add a ``## Tasks`` checklist if missing.
+2. **Work**: commit each completed task, checking ``- [ ]`` → ``- [x]``.
+3. **Finish**: when all tasks are checked, change status to ``Accepted`` and
+   run ``python3 gen-index.py`` (moves it to the archive section).
+4. **Discard**: if rejected or superseded, set the terminal status and
+   regenerate the index.
 """
 
 
