@@ -1,7 +1,7 @@
 ---
 title: "Fix Bluetooth br-connection-key-missing for Paired Headsets"
 date: 2026-05-12
-status: Proposed
+status: Accepted
 category: Operations
 ---
 
@@ -91,6 +91,18 @@ recurrence.
 - Link key backup contains sensitive cryptographic material (must stay
   local, not committed to public repos)
 
+## Tasks
+
+### Immediate fix
+- [x] Remove stale pairing: `bluetoothctl remove 84:AC:60:F8:4B:94`
+- [x] Re-pair and trust the headset
+- [x] Verify connection succeeds
+
+### Preventative
+- [x] Add `bt-backup-keys` script via `writeShellScriptBin` in home.nix
+- [x] Verify `/var/lib/bluetooth/` is on persistent btrfs root
+- [x] Add `bluetuith` to home.nix packages (replaces ad-hoc nix-shell)
+
 ## Alternatives Considered
 
 | Alternative | Reason Not Chosen |
@@ -105,3 +117,4 @@ recurrence.
 | Date       | Status   | Notes |
 |------------|----------|-------|
 | 2026-05-12 | Proposed | Initial analysis of br-connection-key-missing error |
+| 2026-06-06 | Accepted | Headset re-paired; bluetuith + bt-backup-keys added to home.nix |

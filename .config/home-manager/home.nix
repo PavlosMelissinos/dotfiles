@@ -117,6 +117,26 @@
     # azote  # Not in nixpkgs - could create custom package if needed
     beeper
     blueman
+    bluetuith
+    (pkgs.writeShellScriptBin "bt-backup-keys" ''
+      set -euo pipefail
+      BACKUP_DIR="''${XDG_CONFIG_HOME:-$HOME}/.config/bluetooth/keys-backup"
+      BLUEZ_DIR="/var/lib/bluetooth"
+
+      if [ ! -d "$BLUEZ_DIR" ]; then
+          echo "ERROR: $BLUEZ_DIR not found"
+          exit 1
+      fi
+
+      mkdir -p "$BACKUP_DIR"
+
+      echo "Backing up Bluetooth link keys from $BLUEZ_DIR to $BACKUP_DIR..."
+      sudo cp -a "$BLUEZ_DIR"/* "$BACKUP_DIR/"
+      sudo chown -R "$(whoami):$(whoami)" "$BACKUP_DIR"
+
+      echo "Done. Backup saved to $BACKUP_DIR"
+      echo "NOTE: Contains cryptographic keys. Do not commit to public repos."
+    '')
     btop
     darktable
     dbeaver-bin
