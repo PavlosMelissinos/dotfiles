@@ -131,6 +131,7 @@ in
     pkg-config  # Build tool for development libraries
     pyright
     (python312.withPackages(ps: with ps; [yapf requests]))
+    rclone
     rlwrap
     rustc
     tinymist
