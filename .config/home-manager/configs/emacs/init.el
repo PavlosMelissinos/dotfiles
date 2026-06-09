@@ -803,8 +803,8 @@
 (use-package symbol-overlay
   :diminish symbol-overlay-mode
   :init
-  (global-set-key (kbd "C-,") 'symbol-overlay-put)
-  (global-set-key (kbd "C-.") 'symbol-overlay-switch)
+  (global-set-key (kbd "C-,") 'symbol-overlay-jump-prev)
+  (global-set-key (kbd "C-.") 'symbol-overlay-jump-next)
   :config
   (custom-set-faces
    '(symbol-overlay-default-face ((t (:foreground "gray100" :background "#9c7618" :weight semi-bold)))))
