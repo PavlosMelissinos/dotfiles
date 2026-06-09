@@ -115,7 +115,12 @@
     # Desktop applications
     appimage-run
     # azote  # Not in nixpkgs - could create custom package if needed
-    beeper
+    (beeper.overrideAttrs (oldAttrs: {
+      buildCommand = builtins.replaceStrings
+        ["--set APPIMAGE beeper"]
+        ["--set TZ \"Europe/Athens\" --set APPIMAGE beeper"]
+        oldAttrs.buildCommand;
+    }))
     blueman
     bluetuith
     (pkgs.writeShellScriptBin "bt-backup-keys" ''
