@@ -46,7 +46,7 @@ gaps inner 5
 #for_window [app_id=".*"] opacity $opacity
 
 exec systemctl --user start graphical-session.target
-exec ssh-agent -a $XDG_RUNTIME_DIR/ssh-agent.sock -D
+exec_always ssh-agent -a $XDG_RUNTIME_DIR/ssh-agent.sock
 
 ### Output configuration
 #
