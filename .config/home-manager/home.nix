@@ -567,6 +567,13 @@ in
 
   dbus.packages = [ pkgs.gvfs ];
 
+  xdg.configFile."systemd/user/graphical-session.target.d/override.conf".text = ''
+    [Unit]
+    RefuseManualStart=no
+    RefuseManualStop=no
+    StopWhenUnneeded=no
+  '';
+
   # Declarative logrotate configuration managed as home files
   home.file.".config/logrotate/logrotate.conf" = {
     text = ''
