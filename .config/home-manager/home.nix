@@ -66,10 +66,15 @@ in
     "microsoft-edge"
     "spotify"
     "steam"
+    "ventoy"
     "steam-unwrapped"
     "steam-run"
     # "stremio-server"
     # "stremio-shell"
+  ];
+
+  nixpkgs.config.permittedInsecurePackages = [
+    "ventoy-1.1.12"
   ];
 
   # The home.packages option allows you to install Nix packages into your
@@ -292,6 +297,7 @@ in
     sqlite  # Database CLI tool and library
     tmux
     unzip
+    ventoy
     wdisplays  # Display configuration GUI
     xdg-utils
     xeyes
