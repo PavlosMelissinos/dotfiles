@@ -441,10 +441,19 @@ in
     recursive = true;
   };
 
-
-
   programs.firefox = {
     enable = true;
+    configPath = "${config.xdg.configHome}/mozilla/firefox";
+    profiles.default = {
+      name = "default-release";
+      path = "6uzd7b50.default-release-1746201938386";
+      isDefault = true;
+      settings = {
+        "gfx.webrender.software" = true;
+        "media.hardware-video-decoding.enabled" = false;
+        "webgl.disabled" = true;
+      };
+    };
   };
 
   programs.git = {
