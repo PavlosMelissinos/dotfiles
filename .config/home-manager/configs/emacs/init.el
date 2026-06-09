@@ -16,24 +16,14 @@
 (setq-default fill-column 80)
 (setq save-abbrevs 'silently)
 
-;; Nix does not package standalone tree-sitter grammars for built-in
-;; Emacs modes (there is no emacsPackages entry to declare the dep).
-;; Attempting to load libtree-sitter-typescript.so / libtree-sitter-tsx.so
-;; on .ts/.tsx files produces file-missing errors at startup.
-;;
-;; Workaround: remove TS/TSX from the language source alist so Emacs
-;; falls back to traditional font-lock. LSP (typescript-language-server)
-;; provides semantic highlighting via lsp-mode, making the tree-sitter
-;; grammar loss negligible.
-;;
-;; If full tree-sitter support is needed later, options are:
-;;   (a) Build the grammar .so via a custom Nix derivation
-;;   (b) Use treesit-install-language-grammar at Emacs runtime
-;;       (requires git + network, breaks Nix reproducibility)
-(setq treesit-language-source-alist
-      (assq-delete-all 'typescript treesit-language-source-alist))
-(setq treesit-language-source-alist
-      (assq-delete-all 'tsx treesit-language-source-alist))
+
+;; Tree-sitter grammars are managed by home-manager.
+;; The grammars are installed as Nix packages and exposed via
+;; the EMACS_TREESIT_GRAMMAR_PATH environment variable.
+(require 'treesit)
+(let ((grammar-dir (getenv "EMACS_TREESIT_GRAMMAR_PATH")))
+  (when (and grammar-dir (file-directory-p grammar-dir))
+    (add-to-list 'treesit-extra-load-path grammar-dir)))
 
 ;; ENV VARIABLES
 (defconst emacs-config-home user-emacs-directory)

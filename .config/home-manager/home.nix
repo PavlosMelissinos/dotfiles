@@ -1,6 +1,44 @@
 { config, pkgs, nixgl, opencode-flake, nix-software-center, nixpkgs-unstable, ... }:
 
 
+let
+  # Tree-sitter grammars for Emacs: rename parser -> libtree-sitter-LANG.so
+  # that Emacs' treesit-extra-load-path expects.
+  emacs-treesit-grammars = pkgs.symlinkJoin {
+    name = "emacs-treesit-grammars";
+    paths =
+      let
+        makeGrammar = lang: pkg: pkgs.runCommand "libtree-sitter-${lang}" {} ''
+          mkdir -p $out
+          ln -s ${pkg}/parser $out/libtree-sitter-${lang}.so
+        '';
+      in
+        builtins.attrValues (builtins.mapAttrs makeGrammar {
+          bash        = pkgs.tree-sitter-grammars.tree-sitter-bash;
+          cmake       = pkgs.tree-sitter-grammars.tree-sitter-cmake;
+          cpp         = pkgs.tree-sitter-grammars.tree-sitter-cpp;
+          css         = pkgs.tree-sitter-grammars.tree-sitter-css;
+          dockerfile  = pkgs.tree-sitter-grammars.tree-sitter-dockerfile;
+          go          = pkgs.tree-sitter-grammars.tree-sitter-go;
+          hcl         = pkgs.tree-sitter-grammars.tree-sitter-hcl;
+          html        = pkgs.tree-sitter-grammars.tree-sitter-html;
+          java        = pkgs.tree-sitter-grammars.tree-sitter-java;
+          javascript  = pkgs.tree-sitter-grammars.tree-sitter-javascript;
+          json        = pkgs.tree-sitter-grammars.tree-sitter-json;
+          make        = pkgs.tree-sitter-grammars.tree-sitter-make;
+          markdown    = pkgs.tree-sitter-grammars.tree-sitter-markdown;
+          markdown_inline = pkgs.tree-sitter-grammars.tree-sitter-markdown-inline;
+          python      = pkgs.tree-sitter-grammars.tree-sitter-python;
+          rust        = pkgs.tree-sitter-grammars.tree-sitter-rust;
+          sql         = pkgs.tree-sitter-grammars.tree-sitter-sql;
+          toml        = pkgs.tree-sitter-grammars.tree-sitter-toml;
+          tsx         = pkgs.tree-sitter-grammars.tree-sitter-tsx;
+          typescript  = pkgs.tree-sitter-grammars.tree-sitter-typescript;
+          xml         = pkgs.tree-sitter-grammars.tree-sitter-xml;
+          yaml        = pkgs.tree-sitter-grammars.tree-sitter-yaml;
+        });
+  };
+in
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -38,6 +76,7 @@
   # environment.
   home.shellAliases.pip = "noglob pip";
   home.packages = with pkgs; [
+    emacs-treesit-grammars
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
@@ -346,6 +385,7 @@
   home.sessionVariables = {
     BROWSER = "firefox";
     EDITOR = "emacs";
+    EMACS_TREESIT_GRAMMAR_PATH = "${emacs-treesit-grammars}";
     XDG_CONFIG_HOME = "$HOME/.config";
     XDG_CACHE_HOME = "$HOME/.cache";
     XDG_DATA_HOME = "$HOME/.local/share";
