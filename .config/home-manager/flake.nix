@@ -3,10 +3,10 @@
 
   inputs = {
     # Specify the source of Home Manager and Nixpkgs.
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixgl = {
@@ -27,10 +27,9 @@
   # outputs = { nixpkgs, home-manager, nixgl, dotfiles, ... }:
   outputs = { nixpkgs, home-manager, nixgl, opencode-flake, nix-software-center, nixpkgs-unstable, ... }:
     let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = nixpkgs.legacyPackages."x86_64-linux";
       unstable-pkgs = import nixpkgs-unstable {
-        inherit system;
+        system = "x86_64-linux";
         config.allowUnfreePredicate = pkg:
           builtins.elem (pkgs.lib.getName pkg) ["beeper"];
       };

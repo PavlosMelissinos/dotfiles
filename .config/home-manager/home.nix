@@ -119,7 +119,7 @@ in
     multimarkdown
     nix
     nodejs_22
-    nodePackages.typescript-language-server
+    typescript-language-server
     # opencode
     # opencode-flake.packages.${pkgs.system}.default
     openssl
@@ -258,11 +258,11 @@ in
       fi
     '')
     vlc
-    xfce.thunar
-    xfce.thunar-archive-plugin
-    xfce.thunar-media-tags-plugin
+    thunar
+    thunar-archive-plugin
+    thunar-media-tags-plugin
     gvfs
-    xfce.tumbler
+    tumbler
     ffmpegthumbnailer
     zathura
 
@@ -294,7 +294,7 @@ in
     unzip
     wdisplays  # Display configuration GUI
     xdg-utils
-    xorg.xeyes
+    xeyes
     yt-dlp
     zsh
 
