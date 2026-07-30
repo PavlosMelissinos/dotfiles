@@ -34,28 +34,58 @@
           builtins.elem (pkgs.lib.getName pkg) ["beeper"];
       };
     in {
-      homeConfigurations."pavlos" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+      homeConfigurations = {
+        pavlos = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
 
-        # Specify your home configuration modules here, for example,
-        # the path to your home.nix.
-        modules = [
-          ({ ... }: {
-            nixpkgs.overlays = [
-              (final: prev: {
-                beeper = unstable-pkgs.beeper;
-              })
-            ];
+          # Specify your home configuration modules here, for example,
+          # the path to your home.nix.
+          modules = [
+            ({ ... }: {
+              nixpkgs.overlays = [
+                (final: prev: {
+                  beeper = unstable-pkgs.beeper;
+                })
+              ];
+            })
+            ./home.nix
+          ];
+
+          # Pass nixGL and dotfiles to home.nix
+          extraSpecialArgs = {
+            inherit nixgl;
+            inherit opencode-flake;
+            # inherit dotfiles;
+            inherit nix-software-center;
+          };
+        };
+        pmelissinos = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs; 
+    
+          modules = [
+            ({ ... }: {
+              nixpkgs.overlays = [
+                (final: prev: {
+                  beeper = unstable-pkgs.beeper;
+                })
+              ];
+            })
+
+            ./home.nix # Use pavlos home.nix as a base
+
+            ({ lib, ... }: {
+            home.username = lib.mkForce "pmelissinos";
+            home.homeDirectory = lib.mkForce "/home/pmelissinos";
           })
-      ./home.nix
-    ];
+         ];
 
-        # Pass nixGL and dotfiles to home.nix
-#        extraSpecialArgs = { inherit nixgl dotfiles; };
-        extraSpecialArgs = {
-          inherit nixgl;
-          inherit opencode-flake;
-          inherit nix-software-center;
+          # Pass nixGL and dotfiles to home.nix
+          extraSpecialArgs = {
+            inherit nixgl;
+            inherit opencode-flake;
+            # inherit dotfiles;
+            inherit nix-software-center;
+          };
         };
       };
     };

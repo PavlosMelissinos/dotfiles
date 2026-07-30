@@ -118,6 +118,7 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     jack.enable = true; # For professional audio if needed
+    wireplumber.enable = true;
   };
 
   # Display manager and desktop environment

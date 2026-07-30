@@ -248,19 +248,19 @@ in
           DISPLAY="$DISPLAY" \
           WAYLAND_DISPLAY="$WAYLAND_DISPLAY" \
           XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
-          PATH="/home/pavlos/.nix-profile/bin:/usr/bin:/bin" \
-          /home/pavlos/.nix-profile/bin/firefox "$@"
+          PATH="$HOME/.nix-profile/bin:/usr/bin:/bin" \
+          $HOME/.nix-profile/bin/firefox "$@"
       '';
     in
     pkgs.writeShellScriptBin "viber" ''
       # Add custom xdg-open to PATH for link handling
       export PATH="${xdg-open-firefox}/bin:$PATH"
       # Try direct AppImage execution first (better fonts)
-      if /home/pavlos/.local/bin/viber.AppImage "$@" < /dev/null; then
+      if $HOME/.local/bin/viber.AppImage "$@" < /dev/null; then
         exit 0
       else
         # Fallback to appimage-run if direct execution fails
-        exec appimage-run /home/pavlos/.local/bin/viber.AppImage "$@" < /dev/null
+        exec appimage-run $HOME/.local/bin/viber.AppImage "$@" < /dev/null
       fi
     '')
     vlc
@@ -348,7 +348,7 @@ in
       let
         viberAppImage = builtins.fetchurl {
           url = "https://download.viber.com/desktop/Linux/viber.AppImage";
-          sha256 = "sha256-jwsePK1l/WI+stDNpAD1t2Obr1BwpNDP0nzkIDfGGoA=";
+          sha256 = "sha256-cgBf5Di0WQLGSEXNv86aqa5omgfyIO1Mlwawa64Nrs8=";
         };
 
         extracted = pkgs.appimageTools.extract {
@@ -469,7 +469,7 @@ in
       core = {
         autocrlf = false;
 	      attributesfile = ".gitattributes";
-        sshCommand = "/usr/bin/ssh";  # just for foreign distro installation
+        #sshCommand = "/usr/bin/ssh";  # just for foreign distro installation
       };
       diff.clojure.xfuncname = "(^\\(.*|\\s*\\(defn.*)";
       include.path = "git/.config";
