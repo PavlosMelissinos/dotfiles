@@ -189,16 +189,16 @@
   security = {
     # U2F hardware key support
     pam.services = {
-      login.u2fAuth = true;
-      sudo.u2fAuth = true;
-      swaylock.u2fAuth = true;
+      # login.u2fAuth = true;
+      # sudo.u2fAuth = true;
+      # swaylock.u2fAuth = true;
     };
 
-    pam.u2f = {
-      enable = true;
-      settings.cue = true; # Show "touch your security key" message
-      # U2F mappings will need to be copied from /etc/u2f_mappings
-    };
+    # pam.u2f = {
+    #   enable = true;
+    #   settings.cue = true; # Show "touch your security key" message
+    #   # U2F mappings will need to be copied from /etc/u2f_mappings
+    # };
 
     # Sudo configuration
     sudo = {
