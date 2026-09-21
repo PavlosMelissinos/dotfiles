@@ -106,7 +106,7 @@ in
     clojure
     cmake
     distrobox
-    docker-compose
+    docker-client
     git-cliff
     gitFull
     glow        # Terminal markdown reader
@@ -138,6 +138,7 @@ in
     toolbox
     uv
     vscodium
+    zsh-completions
 
     # Wayland/Sway desktop environment components
     brightnessctl
@@ -433,6 +434,8 @@ in
     ];
   };
 
+  xdg.cacheFile."zsh/zcompcache/.keep".text = "";
+
   xdg.configFile."mise/config.toml".text = ''
   [settings]
   idiomatic_version_file_enable_tools = ["node", "npm"]
@@ -534,28 +537,49 @@ in
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = lib.mkMerge [
+    settings = lib.mkMerge [
       {
+        "gitlab.ithaca.ece.uowm.gr" = {
+          IdentityFile = "${config.home.homeDirectory}/.ssh/id_ed25519_metamind";
+          PreferredAuthentications = "publickey";
+        };
+        "91.99.221.110 kraken-1" = {
+          HostName = "91.99.221.110";
+          IdentityFile = [
+            "${config.home.homeDirectory}/.ssh/id_ed25519_hetzner"
+            "${config.home.homeDirectory}/.ssh/id_ed25519_deploy"
+          ];
+          User = "pavlos";
+        };
+        "testserver" = {
+          Hostname = "testserver.innovationsprint.eu";
+          User = "pmelissinos";
+          LocalForward = [
+            {bind.port = 8122; host.address = "10.10.10.122"; host.port = 80; }
+          ];
+        };
         "*" = {
-          forwardAgent = false;
-          addKeysToAgent = "no";
-          compression = false;
-          serverAliveInterval = 0;
-          serverAliveCountMax = 3;
-          hashKnownHosts = false;
-          userKnownHostsFile = "~/.ssh/known_hosts";
-          controlMaster = "no";
-          controlPath = "~/.ssh/master-%r@%n:%p";
-          controlPersist = "no";
+          ForwardAgent = false;
+          AddKeysToAgent = "yes";
+          Compression = false;
+          ServerAliveInterval = 20;
+          ServerAliveCountMax = 3;
+          HashKnownHosts = false;
+          UserKnownHostsFile = "~/.ssh/known_hosts";
+          ControlMaster = "no";
+          ControlPath = "~/.ssh/master-%r@%n:%p";
+          ControlPersist = "no";
+          IdentityAgent = "/run/use/1000/ssh-agent.sock";
+          TCPKeepAlive = "no";
         };
       }
       (lib.mkIf
         (builtins.pathExists "${config.home.homeDirectory}/.ssh/id_ed25519_github_worklegion")
         {
           "github.com" = {
-            hostname = "github.com";
-            identityFile = "${config.home.homeDirectory}/.ssh/id_ed25519_github_worklegion";
-            identitiesOnly = true;
+            Hostname = "github.com";
+            IdentityFile = "${config.home.homeDirectory}/.ssh/id_ed25519_github_worklegion";
+            IdentitiesOnly = true;
           };
         }
       )
@@ -596,22 +620,6 @@ in
         name = "theme-agnosterp";
         file = "theme-agnosterp.zsh";
         src = ./configs/zsh;
-      }
-      {
-        name = "zsh-syntax-highlighting";
-        file = "zsh-syntax-highlighting.zsh";
-        src = builtins.fetchGit {
-          url = "https://github.com/zsh-users/zsh-syntax-highlighting";
-          rev = "e0165eaa730dd0fa321a6a6de74f092fe87630b0";
-        };
-      }
-      {
-        name = "zsh-autosuggestions";
-        file = "zsh-autosuggestions.zsh";
-        src = builtins.fetchGit {
-          url = "https://github.com/zsh-users/zsh-autosuggestions";
-          rev = "c3d4e576c9c86eac62884bd47c01f6faed043fc5";
-        };
       }
     ];
     initContent = (builtins.readFile ./.zshrc);

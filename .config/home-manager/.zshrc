@@ -11,7 +11,7 @@ fi
 # tab completion
 fpath=($ZDOTDIR/zfunc $fpath)
 zmodload -i zsh/complist
-autoload -Uz compinit && compinit
+# compinit is run by home-manager's programs.zsh.enableCompletion
 
 # Some great examples of zstyle from Micah Elliott:
 # https://unix.stackexchange.com/a/214699

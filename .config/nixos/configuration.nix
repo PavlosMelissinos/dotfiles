@@ -140,6 +140,12 @@
     };
   };
 
+  services.openssh = {
+    enable = true;
+    openFirewall = true;                 # firewall is enabled; this opens TCP 22
+    settings.PasswordAuthentication = true;
+  };
+
   # XDG Desktop Portal for Wayland
   xdg.portal = {
     enable = true;
