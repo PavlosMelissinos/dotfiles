@@ -226,6 +226,21 @@
     shell = pkgs.zsh; # Set Zsh as default shell
   };
 
+  users.users.pmelissinos = {
+    isNormalUser = true;
+    description = "Pavlos Melissinos";
+    extraGroups = [
+      "wheel"          # sudo access
+      "networkmanager" # network management
+      "audio"          # audio devices
+      "video"          # video devices
+      "input"          # input devices
+      "storage"        # storage management
+      "power"          # power management
+    ];
+    shell = pkgs.zsh; # Set Zsh as default shell
+  };
+
   # System packages (minimal - user packages managed by home-manager)
   environment.systemPackages = with pkgs; [
     # Essential system tools
@@ -237,6 +252,7 @@
     pciutils  # lspci
     usbutils  # lsusb
     file
+    polkit_gnome
 
     # Network tools
     networkmanagerapplet
@@ -253,6 +269,10 @@
 
     # Home Manager for standalone usage
     home-manager
+
+    # userspace but common
+    foot
+    wl-clipboard
   ];
 
   # Shell configuration

@@ -8,7 +8,7 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term alacritty
+set $term foot
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
@@ -50,12 +50,9 @@ exec_always ssh-agent -a $XDG_RUNTIME_DIR/ssh-agent.sock
 
 ### Output configuration
 #
-# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-#output * bg /usr/share/backgrounds/default.png fill
-exec_always $XDG_CONFIG_HOME/azotebg
+# Default wallpaper (more resolutions are available in /run/current-system/sw/share/backgrounds/sway/)
+output * bg /run/current-system/sw/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 
-#exec_always /usr/libexec/geoclue-2.0/demos/agent
-exec_always ~/.guix-profile/libexec/geoclue-2.0/demos/agent
 exec gammastep-indicator
 
 exec_always export XCURSOR_SIZE=24
@@ -69,14 +66,16 @@ exec_always export GDK_BACKEND=wayland
 
 exec_always {
     mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob
-    flashfocus
+    # TODO(xdg): add flashfocus (not installed) and restore the exec below
+    # flashfocus
     systemctl --user start mako
     gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
     gsettings set org.gnome.desktop.interface cursor-size 24
     gsettings set org.gnome.desktop.interface scaling-factor 1
 }
 
-set $monitor1 eDP-1
+set $panel_home "Chimei Innolux Corporation 0x14D2 Unknown"
+set $panel_work "California Institute of Technology 0x1628 0x00006000"
 set $monitor2 "Dell Inc. DELL U2518D 3C4YP88P229L"
 set $monitor3 "Dell Inc. DELL U2311H HV8XP0BN1VFL"
 set $monitor4k_up "Panasonic Industry Company Panasonic-TV 0x00000000"
@@ -89,77 +88,56 @@ set $main_monitor "Samsung Electric Company LS27D300G H1AK500000"
 #set $main_monitor "JRY HDMI Unknown4"
 #set $main_monitor "Dell Inc. DELL P2423DE H09XNR3"
 #set $main_monitor $monitor_qhd_right
+set $monitor_4k_right "Lenovo Group Limited LEN L28u-30 U1B560FG"
 
-output $monitor1 {
-    resolution 1920x1080 position 3128 441
-    #resolution 1920x1080 position 400 1200
-    #resolution 1920x1080 position 3128 800
-    scale 1.2
-}
-
-output $monitor2 {
-    # m1 scale 1.2 - layout home
-    resolution 2560x1440 position 1080 200
-    scale 1.25
-}
-
-output $monitor3 {
-    # m1 scale 1.5, m2 scale 1.25
-    resolution 1080x1920 position 0 0
-    transform 270
-}
-
-output $monitor4k_up {
-    # m1 scale 1.5
-    resolution 4096x2160 position 0 120
-    scale 2
-}
-
-output $monitor_qhd_right {
-    # m1 scale 1.5
-    resolution 4096x2160 position 4729 0
-    scale 1.5
-}
-
-output $monitor_full_hd_right {
-    resolution 1920x1080 position 4729 0
-    scale 1
-}
+# Output layout is chosen per laptop by the MONITOR_PROFILE environment
+# variable (set it in the session env, e.g. the NixOS host config). Falls back
+# to "work" when unset. Layouts live in outputs-home.conf / outputs-work.conf.
+include ~/.config/sway/outputs-${MONITOR_PROFILE:-work}.conf
 
 workspace 1 {
-    output $monitor1
+    output $panel_work
+    output $panel_home
 }
 
 workspace 2 {
     # output $main_monitor
     output $monitor2
-    output $monitor1
+    output $panel_work
+    output $panel_home
 }
 
 workspace 3 {
     output $main_monitor
     output $monitor3
     output $monitor4k_up
+    output $monitor_4k_right
     output $monitor2
-    output $monitor1
+    output $panel_work
+    output $panel_home
 }
 
 workspace 4 {
+    output $monitor_4k_right
     output $main_monitor
     output $monitor2
-    output $monitor1
+    output $panel_work
+    output $panel_home
 }
 
 workspace 5 {
     output $main_monitor
     output $monitor3
-    output $monitor1
+    output $panel_work
+    output $panel_home
 }
 
 workspace 6 {
-    output $main_monitor
     output $monitor2
-    output $monitor1
+    output $monitor_4k_right
+    output $main_monitor
+    output $panel_work
+    output $panel_home
 }
 
 assign [app_id="Alacritty" title=".*main-term.*"] workspace 2
@@ -226,6 +204,10 @@ exec_always swayidle -w \
    input "2:7:SynPS/2_Synaptics_TouchPad" {
        natural_scroll enabled
 #       middle_emulation enabled
+   }
+
+   input "1267:12928:ELAN06FA:00_04F3:3280_Touchpad" {
+       natural_scroll enabled
    }
 
    input * {
