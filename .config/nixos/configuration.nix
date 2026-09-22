@@ -122,11 +122,8 @@
   };
 
   # Display manager and desktop environment
-  services.xserver = {
-    enable = true;
-    displayManager.gdm.enable = false; # Disable GDM - user wants to remove it
-    # Alternative: services.greetd for Wayland greeter
-  };
+  services.displayManager.gdm.enable = false; # Disable GDM - user wants to remove it
+  # Alternative: services.greetd for Wayland greeter
 
   # Wayland-first environment
   services.greetd = {
@@ -145,6 +142,8 @@
     openFirewall = true;                 # firewall is enabled; this opens TCP 22
     settings.PasswordAuthentication = true;
   };
+
+  environment.etc."sudo.conf".text = "Set group_source dynamic";
 
   # XDG Desktop Portal for Wayland
   xdg.portal = {
@@ -279,6 +278,7 @@
     # userspace but common
     foot
     wl-clipboard
+    openvpn
   ];
 
   # Shell configuration

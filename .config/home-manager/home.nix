@@ -99,6 +99,7 @@ in
     android-tools
     audacity
     awscli2
+    azure-cli
     babashka    # Clojure scripting runtime
     caddy
     cargo
