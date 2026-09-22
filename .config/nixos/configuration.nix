@@ -67,7 +67,6 @@
         General = {
           Enable = "Source,Sink,Media,Socket";
           ControllerMode = "dual"; # classic BR/EDR + BLE
-          Experimental = true;     # enable LE Audio/BAP in BlueZ
         };
       };
     };
@@ -138,8 +137,6 @@
             "hfp_ag"
             "hsp_hs"
             "hsp_ag"
-            "bap_sink"
-            "bap_source"
           ];
         };
       };
