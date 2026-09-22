@@ -66,6 +66,8 @@
       settings = {
         General = {
           Enable = "Source,Sink,Media,Socket";
+          ControllerMode = "dual"; # classic BR/EDR + BLE
+          Experimental = true;     # enable LE Audio/BAP in BlueZ
         };
       };
     };
@@ -118,7 +120,30 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     jack.enable = true; # For professional audio if needed
-    wireplumber.enable = true;
+    wireplumber = {
+      enable = true;
+      # Prefer high-quality A2DP (SBC-XQ/AAC) for playback and mSBC for
+      # mic/duplex. Disabling hardware volume avoids a known class of
+      # A2DP<->HFP switch hangs (e.g. after Teams calls).
+      extraConfig."51-bluetooth" = {
+        "monitor.bluez.properties" = {
+          "bluez5.enable-sbc-xq" = true;
+          "bluez5.enable-msbc" = true;
+          "bluez5.enable-hw-volume" = false;
+          "bluez5.codecs" = [ "sbc_xq" "aac" "sbc" ];
+          "bluez5.roles" = [
+            "a2dp_sink"
+            "a2dp_source"
+            "hfp_hf"
+            "hfp_ag"
+            "hsp_hs"
+            "hsp_ag"
+            "bap_sink"
+            "bap_source"
+          ];
+        };
+      };
+    };
   };
 
   # Display manager and desktop environment
@@ -154,6 +179,9 @@
 
   # System services
   services = {
+    # Persist journals across reboots to inspect a freeze after a call.
+    journald.extraConfig = "Storage=persistent";
+
     # Time synchronization
     chrony.enable = true;
 
