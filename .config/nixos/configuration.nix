@@ -224,6 +224,12 @@
       # swaylock.u2fAuth = true;
     };
 
+    # Real-time scheduling for PipeWire/JACK (needs the audio group).
+    pam.loginLimits = [
+      { domain = "@audio"; item = "memlock"; value = "unlimited"; }
+      { domain = "@audio"; item = "rtprio"; value = "95"; }
+    ];
+
     # pam.u2f = {
     #   enable = true;
     #   settings.cue = true; # Show "touch your security key" message
