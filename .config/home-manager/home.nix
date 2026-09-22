@@ -112,6 +112,7 @@ in
     gitFull
     glow        # Terminal markdown reader
     gnome-keyring
+    gnumake
     go
     gradle
     guile
@@ -149,6 +150,7 @@ in
     playerctl
     polkit_gnome
     satty
+    slurp
     swappy
     swayidle
     #swaylock
