@@ -13,7 +13,6 @@
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    opencode-flake.url = "github:aodhanhayter/opencode-flake";
     nix-software-center = {
       url = "github:PavlosMelissinos/nix-software-center";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -25,13 +24,13 @@
   };
 
   # outputs = { nixpkgs, home-manager, nixgl, dotfiles, ... }:
-  outputs = { nixpkgs, home-manager, nixgl, opencode-flake, nix-software-center, nixpkgs-unstable, ... }:
+  outputs = { nixpkgs, home-manager, nixgl, nix-software-center, nixpkgs-unstable, ... }:
     let
       pkgs = nixpkgs.legacyPackages."x86_64-linux";
       unstable-pkgs = import nixpkgs-unstable {
         system = "x86_64-linux";
         config.allowUnfreePredicate = pkg:
-          builtins.elem (pkgs.lib.getName pkg) ["beeper"];
+          builtins.elem (pkgs.lib.getName pkg) ["beeper" "claude-code"];
       };
     in {
       homeConfigurations = {
@@ -45,6 +44,8 @@
               nixpkgs.overlays = [
                 (final: prev: {
                   beeper = unstable-pkgs.beeper;
+                  claude-code = unstable-pkgs.claude-code;
+                  opencode = unstable-pkgs.opencode;
                 })
               ];
             })
@@ -54,7 +55,6 @@
           # Pass nixGL and dotfiles to home.nix
           extraSpecialArgs = {
             inherit nixgl;
-            inherit opencode-flake;
             # inherit dotfiles;
             inherit nix-software-center;
           };
@@ -67,6 +67,8 @@
               nixpkgs.overlays = [
                 (final: prev: {
                   beeper = unstable-pkgs.beeper;
+                  claude-code = unstable-pkgs.claude-code;
+                  opencode = unstable-pkgs.opencode;
                 })
               ];
             })
@@ -82,7 +84,6 @@
           # Pass nixGL and dotfiles to home.nix
           extraSpecialArgs = {
             inherit nixgl;
-            inherit opencode-flake;
             # inherit dotfiles;
             inherit nix-software-center;
           };

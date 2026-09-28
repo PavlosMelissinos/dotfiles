@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nixgl, opencode-flake, nix-software-center, nixpkgs-unstable, ... }:
+{ config, lib, pkgs, nixgl, nix-software-center, ... }:
 
 
 let
@@ -127,8 +127,7 @@ in
     nix
     nodejs_22
     typescript-language-server
-    # opencode
-    # opencode-flake.packages.${pkgs.system}.default
+    opencode
     openssl
     pkg-config  # Build tool for development libraries
     pyright
@@ -420,8 +419,6 @@ in
     "$HOME/.nix-profile/bin"           # Nix profile binaries (home-manager packages) - HIGHEST PRIORITY
     "$HOME/.local/bin"                 # Local binaries
     "$PYENV_ROOT/bin"                  # PyEnv
-    "$HOME/.opencode/bin"              # OpenCode
-    # FIXME: find reliable way to install opencode via nix and remove above line
   ];
 
   programs.emacs = {
