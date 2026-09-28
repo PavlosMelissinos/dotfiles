@@ -17,3 +17,8 @@ text-color=#d9d8d8
 [urgency=high]
 border-color=#ee2e24
 ignore-timeout=1
+
+# Toggle with `makoctl mode -t do-not-disturb` (bound to $mod+Shift+n).
+# invisible=1 keeps notifications from being drawn, e.g. while screen sharing.
+[mode=do-not-disturb]
+invisible=1

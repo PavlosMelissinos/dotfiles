@@ -291,6 +291,9 @@ bindsym --to-code {
     XF86AudioNext exec playerctl next
     XF86AudioPrev exec playerctl previous
 
+    # Toggle mako do-not-disturb for screen sharing
+bindsym $mod+Shift+n exec $XDG_CONFIG_HOME/waybar/notifications.sh toggle
+
     #
     # Moving around:
     #

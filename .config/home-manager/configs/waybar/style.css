@@ -61,7 +61,7 @@ window menu menuitem:hover {
 #idle_inhibitor, #clock, #battery, #cpu, #memory, #network,
 #pulseaudio, #temperature, #backlight, #custom-spotify,
 #tray, #mode, #custom-github, #custom-vpn, #custom-power,
-#custom-layout, #custom-lockkeys {
+#custom-layout, #custom-lockkeys, #custom-notifications {
     padding: 0 0px;
     margin: 0 5px;
 }
@@ -177,4 +177,12 @@ window menu menuitem:hover {
     /*Cmargin: 0px 10px 1.5px 20px;*/
     font-size: 0.85rem;
     /*text-shadow: 0px 2px 3px black;*/
+}
+
+#custom-notifications.enabled {
+    color: #d9d8d8;
+}
+
+#custom-notifications.dnd {
+    color: #ee2e24;
 }

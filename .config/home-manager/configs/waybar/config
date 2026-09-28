@@ -8,7 +8,7 @@
     //, "custom/media"
     ],
     "modules-center": ["clock", "custom/weather", "sway/mode"],
-    "modules-right": ["idle_inhibitor", "pulseaudio", "backlight", "network",
+    "modules-right": ["idle_inhibitor", "custom/notifications", "pulseaudio", "backlight", "network",
     //"custom/vpn",
     "cpu", "memory", "temperature", "battery",
     "custom/github", "tray", "sway/language", "custom/lockkeys", "custom/power"],
@@ -197,6 +197,16 @@
         "interval": 60,
         "exec": "$XDG_CONFIG_HOME/waybar/github.sh",
         "on-click": "xdg-open https://github.com/notifications"
+    },
+    "custom/notifications": {
+        "format": "{}",
+        "exec": "$XDG_CONFIG_HOME/waybar/notifications.sh",
+        "return-type": "json",
+        "signal": 8,
+        "exec-on-event": false,
+        "on-click": "$XDG_CONFIG_HOME/waybar/notifications.sh toggle",
+        "on-click-right": "makoctl dismiss -a",
+        "tooltip": true
     },
     "custom/power": {
         "format": "",
