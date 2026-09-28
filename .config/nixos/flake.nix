@@ -7,17 +7,13 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixgl = {
-      url = "github:nix-community/nixGL";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     dotfiles = {
       url = "github:PavlosMelissinos/dotfiles";
       flake = false;  # Treat as source, not flake
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixgl, dotfiles }: {
+  outputs = { self, nixpkgs, home-manager, dotfiles }: {
     nixosConfigurations.localhost-nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
@@ -27,7 +23,7 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.pavlos = import ../home-manager/home.nix;
-          home-manager.extraSpecialArgs = { inherit nixgl dotfiles; };
+          home-manager.extraSpecialArgs = { inherit dotfiles; };
         }
       ];
     };
