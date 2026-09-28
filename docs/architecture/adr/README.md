@@ -12,7 +12,8 @@ _Generated 2026-05-04_
 | 6 | [ADR-0005: Line Length and Text Formatting Standards](0005-line-length-text-formatting-standards) | Accepted | 2025-07-27 |
 | 7 | [ADR-0006: Trailing Whitespace Policy](0006-trailing-whitespace-policy) | Accepted | 2025-07-27 |
 | 8 | [ADR-0007: Git Commit Message Standards](0007-git-commit-message-standards) | Accepted | 2025-07-27 |
-| 9 | [ADR-0008: Viber AppImage Packaging Solution](0008-viber-appimage-packaging-solution) | Accepted | 2025-07-28 |
+| 9 | [ADR-0008: Viber AppImage Packaging Solution](0008-viber-appimage-packaging-solution) | Superseded by ADR-0012 | 2025-07-28 |
 | 10 | [ADR-0009: Complete Guix Package Manager Elimination](0009-complete-guix-elimination) | Accepted   | 2025-08-06   |
 | 11 | [ADR-0010: Home Manager Flakes Migration](0010-home-manager-flakes-migration) | Accepted | 2025-08-11 |
-| 12 | [ADR-0011: Viber nixGL Integration and Dynamic Icon Extraction](0011-viber-nixgl-integration) | Accepted | 2025-08-11 |
+| 12 | [ADR-0011: Viber nixGL Integration and Dynamic Icon Extraction](0011-viber-nixgl-integration) | Superseded by ADR-0012 | 2025-08-11 |
+| 13 | [ADR-0012: Native Viber Package and nixGL Removal on NixOS](0012-native-viber-and-nixgl-removal) | Accepted | 2026-09-28 |

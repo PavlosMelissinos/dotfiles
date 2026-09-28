@@ -90,18 +90,6 @@ entries:
       rc.plug system. Plain zshrc in .config/zsh/ sourced from home.nix.
     links: []
 
-  - name: nixGL (Mesa wrapper)
-    quadrant: platforms
-    ring: adopt
-    since: 2025-08
-    tags: [graphics, wayland, nix]
-    description: >
-      Wrapper providing OpenGL context for Nix-packaged GUI apps on Mesa/Intel.
-      Required for hardware-accelerated rendering of Nix apps under Wayland.
-      Uses config.lib.nixGL.wrap in home-manager flake.
-    links:
-      adr: [0011]
-
   - name: Waybar
     quadrant: tools
     ring: adopt
@@ -268,3 +256,17 @@ entries:
       keyboard-driven workflow. Sway's simplicity wins.
     links:
       proposal: [0013]
+
+  - name: nixGL (Mesa wrapper)
+    quadrant: platforms
+    ring: hold
+    since: 2025-08
+    moved: -1
+    tags: [graphics, wayland, nix]
+    description: >
+      Eliminated after the Fedora to NixOS migration. nixGL bridged Nix-built
+      GUI apps to a foreign graphics stack; NixOS provides Mesa/VAAPI directly,
+      making the wrapper unnecessary. Replaced by native packages (e.g. Viber)
+      and the system graphics stack.
+    links:
+      adr: [0012]

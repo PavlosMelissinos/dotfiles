@@ -198,7 +198,8 @@ All significant architectural decisions are documented in =docs/architecture/adr
 - [[docs/architecture/adr/0008-viber-appimage-packaging-solution.md][ADR-0008]]: Viber AppImage Packaging Solution (Superseded)
 - [[docs/architecture/adr/0009-complete-guix-elimination.md][ADR-0009]]: Complete Guix Package Manager Elimination
 - [[docs/architecture/adr/0010-home-manager-flakes-migration.md][ADR-0010]]: Home Manager Flakes Migration
-- [[docs/architecture/adr/0011-viber-nixgl-integration.md][ADR-0011]]: Viber nixGL Integration and Dynamic Icon Extraction
+- [[docs/architecture/adr/0011-viber-nixgl-integration.md][ADR-0011]]: Viber nixGL Integration and Dynamic Icon Extraction (Superseded)
+- [[docs/architecture/adr/0012-native-viber-and-nixgl-removal.md][ADR-0012]]: Native Viber Package and nixGL Removal on NixOS
 
 ** Active Proposals
 - [[docs/proposals/emacs-nix-migration-plan.md][Emacs package management migration]]
@@ -233,17 +234,18 @@ All significant architectural decisions are documented in =docs/architecture/adr
 - *Alternative*: Currently relying on system-level screen locking only
 - *Status*: Investigating alternative screen lock solutions
 
-** Viber Messaging (AppImage)
-- *Package status*: nixpkgs viber package broken due to libxml2 compatibility
-  (GitHub Issue #421440)
-- *Solution*: nixGL-wrapped AppImage with dynamic icon extraction
+** Viber Messaging (native package)
+- *Package status*: nixpkgs viber package fixed and no longer broken
+  (libxml2 compatibility resolved upstream)
+- *Solution*: native =pkgs.viber= from nixpkgs (no AppImage, no nixGL)
 - *Features*:
-  - ✅ Hardware acceleration via nixGL
-  - ✅ Proper font rendering (direct AppImage execution)
-  - ✅ Working links (custom xdg-open wrapper for Firefox)
-  - ✅ Official Viber icon (dynamically extracted from AppImage)
+  - ✅ Graphics via the NixOS Mesa stack (nixGL removed)
+  - ✅ Proper font rendering (package-provided)
+  - ✅ Working links via the package's desktop entry
+  - ✅ Official Viber icon shipped by the package
   - ✅ No binary files stored in git repository
-- *Status*: Fully functional with excellent user experience
+- *Rendering*: runs via XWayland (=QT_QPA_PLATFORM=xcb=)
+- *Status*: Fully functional (ADR-0012)
 
 ** Package Management Status
 - *Guix elimination*: ✅ Completely eliminated as of 2025-08-06 (ADR-0009)
@@ -275,9 +277,9 @@ sudo mount -o remount,size=15G /tmp
 
 * 📈 System Status
 
-*Last major update*: 2025-08-11 - Flakes migration and Viber improvements
+*Last major update*: 2026-09-28 - Native Viber package and nixGL removal
 *Packages managed*: 95+ via home-manager/Nix Flakes
-*Architecture*: Wayland-first with modern security features and hardware acceleration
+*Architecture*: Wayland-first with modern security features and native hardware acceleration
 *Reproducibility*: Complete user environment with locked dependencies (flake.lock)
 
 ---

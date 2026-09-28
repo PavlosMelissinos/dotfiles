@@ -1,7 +1,7 @@
 # ADR-0008: Viber AppImage Packaging Solution
 
 **Date**: 2025-07-28
-**Status**: Accepted
+**Status**: Superseded by ADR-0012
 
 ## Context
 

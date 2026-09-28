@@ -20,7 +20,8 @@ terminal applications, and various GUI tools.
 - **Apply changes**: `home-manager switch --flake .` (from `.config/home-manager/`)
 - **Manages 95+ packages**: ALL development tools, desktop applications,
   Wayland environment, system libraries
-- **nixGL integration** for hardware acceleration in GUI applications
+- **No nixGL**: NixOS provides the graphics stack directly; nixGL was removed
+  after the migration from Fedora (see ADR-0012)
 - Integrated configuration management for git, zsh, emacs, firefox
 - Allows unfree packages (claude-code, spotify, steam, viber)
 - **Complete package management solution - use for ALL package installations**
@@ -90,25 +91,23 @@ nix flake lock --update-input nixpkgs
 
 ## Hardware Acceleration & Graphics
 
-### nixGL Integration
-- **Purpose**: Provides OpenGL context for GUI applications in Nix
-- **Configuration**: Integrated via flake input in `flake.nix`
-- **Wrapper usage**: `config.lib.nixGL.wrap` for applications needing hardware acceleration
-- **Default wrapper**: Mesa (Intel integrated graphics)
+NixOS provides the graphics stack (Mesa, VAAPI) directly. nixGL was previously
+used on Fedora to bridge Nix-built GUI applications to the host graphics
+drivers. It was removed after the migration to NixOS. See
+[ADR-0012](docs/architecture/adr/0012-native-viber-and-nixgl-removal.md).
 
 ### Application-Specific Solutions
 
 #### Viber (Messaging)
-- **Approach**: nixGL-wrapped AppImage with dynamic icon extraction
-- **Font rendering**: Direct AppImage execution (bypasses font isolation issues)
-- **Link handling**: Custom xdg-open wrapper with clean Firefox environment
-- **Hardware acceleration**: nixGL provides proper OpenGL context
-- **Icon management**: Dynamic extraction from AppImage using appimageTools.extract
-- **Desktop integration**: Proper .desktop file with official Viber icon
-- **User experience**: No prompts, proper fonts, working links, brand icon
-- **Fallback**: appimage-run if direct execution fails
-- **Repository cleanliness**: No binary files stored in git (20KB PNG avoided)
-- **Location**: Managed declaratively in home.nix packages and home.file
+- **Approach**: native `pkgs.viber` package from nixpkgs
+- **Font rendering**: provided by the package (no font isolation issues)
+- **Link handling**: standard xdg-open via the package's desktop entry
+- **Graphics**: NixOS Mesa stack directly (no nixGL wrapper)
+- **Icon management**: official icon shipped by the package
+- **Desktop integration**: package-provided .desktop file and MIME handler
+- **Rendering**: runs via XWayland (`QT_QPA_PLATFORM=xcb`)
+- **Repository cleanliness**: no binary files or AppImage in git
+- **Location**: declared in `home.nix` packages
 
 ## Architecture Notes
 

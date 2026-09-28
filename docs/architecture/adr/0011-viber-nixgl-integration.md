@@ -1,7 +1,7 @@
 # ADR-0011: Viber nixGL Integration and Dynamic Icon Extraction
 
 **Date**: 2025-08-11
-**Status**: Accepted
+**Status**: Superseded by ADR-0012
 **Supersedes**: ADR-0008 (Viber AppImage Packaging Solution)
 
 ## Context
