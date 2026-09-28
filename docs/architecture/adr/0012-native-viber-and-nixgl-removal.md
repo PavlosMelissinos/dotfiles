@@ -74,12 +74,22 @@ Use the native `pkgs.viber` package and remove all nixGL infrastructure.
   (`assign [instance="Viber"] workspace 3`); the Wayland/X11 app id should be
   re-verified at runtime after the switch.
 
+## Implementation Notes
+
+Viber 24.9.0.3 mis-renders letter and digit spacing when the Noto Color Emoji
+font is visible to fontconfig. The package is therefore wrapped with a
+Viber-scoped `FONTCONFIG_FILE` that rejects that font, and the package's
+desktop entry is pointed at the wrapper so the setting applies regardless of
+how Viber is launched. Emoji remain available to other applications.
+
 ## References
 
 - [nixpkgs PR #396195: fix libxml2 breakage in viber][pr396195]
+- [Viber font-spacing fix (Linux Mint forums)][viberfont]
 - [ADR-0011: Viber nixGL Integration][adr0011]
 - [ADR-0008: Viber AppImage Packaging Solution][adr0008]
 
 [pr396195]: https://github.com/NixOS/nixpkgs/pull/396195
+[viberfont]: https://forums.linuxmint.com/viewtopic.php?t=449978
 [adr0011]: 0011-viber-nixgl-integration.md
 [adr0008]: 0008-viber-appimage-packaging-solution.md

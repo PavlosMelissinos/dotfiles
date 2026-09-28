@@ -105,6 +105,8 @@ drivers. It was removed after the migration to NixOS. See
 - **Graphics**: NixOS Mesa stack directly (no nixGL wrapper)
 - **Icon management**: official icon shipped by the package
 - **Desktop integration**: package-provided .desktop file and MIME handler
+- **Font workaround**: a Viber-scoped fontconfig rejects Noto Color Emoji,
+  which breaks spacing in Viber's QtWebEngine UI (see ADR-0012)
 - **Rendering**: runs via XWayland (`QT_QPA_PLATFORM=xcb`)
 - **Repository cleanliness**: no binary files or AppImage in git
 - **Location**: declared in `home.nix` packages

@@ -38,6 +38,38 @@ let
           yaml        = pkgs.tree-sitter-grammars.tree-sitter-yaml;
         });
   };
+
+  # Viber's QtWebEngine mis-renders spacing (especially digits) when Noto
+  # Color Emoji is visible to fontconfig. Reject it for Viber only, keeping
+  # emoji available elsewhere. See:
+  # https://forums.linuxmint.com/viewtopic.php?t=449978
+  viber-fontconfig = pkgs.writeText "viber-fontconfig.conf" ''
+    <?xml version="1.0"?>
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+    <fontconfig>
+      <include ignore_missing="yes">/etc/fonts/fonts.conf</include>
+      <selectfont>
+        <rejectfont>
+          <pattern>
+            <patelt name="family">
+              <string>Noto Color Emoji</string>
+            </patelt>
+          </pattern>
+        </rejectfont>
+      </selectfont>
+    </fontconfig>
+  '';
+
+  # Apply the Viber-specific fontconfig and make the desktop entry go
+  # through the wrapper so the setting always takes effect.
+  viber = pkgs.viber.overrideAttrs (old: {
+    postFixup = (old.postFixup or "") + ''
+      wrapProgram $out/bin/viber \
+        --set FONTCONFIG_FILE ${viber-fontconfig}
+      substituteInPlace $out/share/applications/viber.desktop \
+        --replace-fail "$out/opt/viber/Viber" "$out/bin/viber"
+    '';
+  });
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
