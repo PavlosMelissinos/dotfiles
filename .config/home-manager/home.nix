@@ -106,6 +106,7 @@ in
     claude-code
     clojure
     cmake
+    deskflow
     distrobox
     docker-client
     git-cliff
