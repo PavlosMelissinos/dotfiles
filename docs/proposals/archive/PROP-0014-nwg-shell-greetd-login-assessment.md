@@ -368,7 +368,7 @@ Instead of full migration, improve current GDM setup:
 
 ```nix
 # Optimize GDM configuration
-services.xserver.displayManager.gdm = {
+services.displayManager.gdm = {
   enable = true;
   wayland = true;
   autoSuspend = false;

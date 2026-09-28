@@ -198,7 +198,6 @@ in
     discord
     element-desktop
     evince
-    firefox
     font-manager
     foot
     gedit
@@ -552,7 +551,7 @@ in
           User = "pavlos";
         };
         "testserver" = {
-          Hostname = "testserver.innovationsprint.eu";
+          HostName = "testserver.innovationsprint.eu";
           User = "pmelissinos";
           LocalForward = [
             {bind.port = 8122; host.address = "10.10.10.122"; host.port = 80; }
@@ -569,7 +568,7 @@ in
           ControlMaster = "no";
           ControlPath = "~/.ssh/master-%r@%n:%p";
           ControlPersist = "no";
-          IdentityAgent = "/run/use/1000/ssh-agent.sock";
+          IdentityAgent = "/run/user/1000/ssh-agent.sock";
           TCPKeepAlive = "no";
         };
       }
@@ -577,7 +576,7 @@ in
         (builtins.pathExists "${config.home.homeDirectory}/.ssh/id_ed25519_github_worklegion")
         {
           "github.com" = {
-            Hostname = "github.com";
+            HostName = "github.com";
             IdentityFile = "${config.home.homeDirectory}/.ssh/id_ed25519_github_worklegion";
             IdentitiesOnly = true;
           };
