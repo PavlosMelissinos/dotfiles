@@ -212,7 +212,13 @@
     thermald.enable = true; # Intel thermal management
 
     # Firmware updates
-    fwupd.enable = true;
+    # fwupd.enable = true;
+  };
+
+  # Docker daemon (the CLI is provided by home-manager's docker-client)
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = true;
   };
 
   # Security and authentication
@@ -258,6 +264,7 @@
       "input"          # input devices
       "storage"        # storage management
       "power"          # power management
+      "docker"         # docker daemon access
     ];
     shell = pkgs.zsh; # Set Zsh as default shell
   };
@@ -273,6 +280,7 @@
       "input"          # input devices
       "storage"        # storage management
       "power"          # power management
+      "docker"         # docker daemon access
     ];
     shell = pkgs.zsh; # Set Zsh as default shell
   };
