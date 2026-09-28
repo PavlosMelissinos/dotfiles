@@ -9,10 +9,6 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixgl = {
-      url = "github:nix-community/nixGL";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nix-software-center = {
       url = "github:PavlosMelissinos/nix-software-center";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,8 +19,7 @@
 #    };
   };
 
-  # outputs = { nixpkgs, home-manager, nixgl, dotfiles, ... }:
-  outputs = { nixpkgs, home-manager, nixgl, nix-software-center, nixpkgs-unstable, ... }:
+  outputs = { nixpkgs, home-manager, nix-software-center, nixpkgs-unstable, ... }:
     let
       pkgs = nixpkgs.legacyPackages."x86_64-linux";
       unstable-pkgs = import nixpkgs-unstable {
@@ -52,9 +47,8 @@
             ./home.nix
           ];
 
-          # Pass nixGL and dotfiles to home.nix
+          # Pass nix-software-center and dotfiles to home.nix
           extraSpecialArgs = {
-            inherit nixgl;
             # inherit dotfiles;
             inherit nix-software-center;
           };
@@ -81,9 +75,8 @@
           })
          ];
 
-          # Pass nixGL and dotfiles to home.nix
+          # Pass nix-software-center and dotfiles to home.nix
           extraSpecialArgs = {
-            inherit nixgl;
             # inherit dotfiles;
             inherit nix-software-center;
           };

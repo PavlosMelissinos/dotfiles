@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nixgl, nix-software-center, ... }:
+{ config, lib, pkgs, nix-software-center, ... }:
 
 
 let
@@ -54,10 +54,6 @@ in
   # release notes.
   home.stateVersion = "23.11"; # Please read the comment before changing.
 
-  # nixGL configuration for hardware acceleration
-  targets.genericLinux.enable = true;
-  nixpkgs.overlays = [ nixgl.overlay ];
-
   # Allow unfree packages
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
     "beeper"
@@ -69,6 +65,7 @@ in
     "ventoy"
     "steam-unwrapped"
     "steam-run"
+    "viber"
     # "stremio-server"
     # "stremio-shell"
   ];
@@ -164,7 +161,6 @@ in
     wofi
 
     # Desktop applications
-    appimage-run
     # azote  # Not in nixpkgs - could create custom package if needed
     (beeper.overrideAttrs (oldAttrs: {
       buildCommand = builtins.replaceStrings
@@ -226,8 +222,7 @@ in
     pidgin
     (pkgs.writeShellScriptBin "publii" ''
       export LD_LIBRARY_PATH="${pkgs.libsecret}/lib:$LD_LIBRARY_PATH"
-      exec ${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel \
-      ${pkgs.publii}/bin/Publii \
+      exec ${pkgs.publii}/bin/Publii \
       --disable-gpu-vsync \
       "$@"
     '')
@@ -236,39 +231,13 @@ in
     signal-desktop
     # slack
     spotify
-    (pkgs.writeShellScriptBin "steam" ''
-      exec ${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel ${pkgs.steam}/bin/steam "$@"
-    '')
+    steam
     strawberry
     # stremio
     teams-for-linux
     whatsapp-electron
     thunderbird
-    # Viber with nixGL and custom link handling
-    (let
-      xdg-open-firefox = pkgs.writeShellScriptBin "xdg-open" ''
-        # Clean environment for Firefox to avoid library conflicts
-        exec env -i \
-          HOME="$HOME" \
-          USER="$USER" \
-          DISPLAY="$DISPLAY" \
-          WAYLAND_DISPLAY="$WAYLAND_DISPLAY" \
-          XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
-          PATH="$HOME/.nix-profile/bin:/usr/bin:/bin" \
-          $HOME/.nix-profile/bin/firefox "$@"
-      '';
-    in
-    pkgs.writeShellScriptBin "viber" ''
-      # Add custom xdg-open to PATH for link handling
-      export PATH="${xdg-open-firefox}/bin:$PATH"
-      # Try direct AppImage execution first (better fonts)
-      if $HOME/.local/bin/viber.AppImage "$@" < /dev/null; then
-        exit 0
-      else
-        # Fallback to appimage-run if direct execution fails
-        exec appimage-run $HOME/.local/bin/viber.AppImage "$@" < /dev/null
-      fi
-    '')
+    viber
     vlc
     thunar
     thunar-archive-plugin
@@ -331,51 +300,8 @@ in
     # Swaylock config in native format
     # ".config/swaylock/config".source = ./configs/swaylock/config;
 
-    # Viber desktop entry
-    ".local/share/applications/viber.desktop".text = ''
-      [Desktop Entry]
-      Name=Viber
-      Comment=Free calls, text and picture sharing with anyone, anywhere!
-      Exec=${config.home.profileDirectory}/bin/viber %U
-      Icon=${config.home.homeDirectory}/.local/share/icons/viber.png
-      Terminal=false
-      Type=Application
-      Categories=Network;InstantMessaging;
-      MimeType=x-scheme-handler/viber;
-      StartupWMClass=ViberPC
-      StartupNotify=true
-    '';
-
     ".local/share/applications/org.qbittorrent.qBittorrent.desktop".text =
       builtins.readFile "${pkgs.qbittorrent}/share/applications/org.qbittorrent.qBittorrent.desktop";
-
-    # Viber icon extracted from AppImage
-    ".local/share/icons/viber.png".source =
-      let
-        viberAppImage = builtins.fetchurl {
-          url = "https://download.viber.com/desktop/Linux/viber.AppImage";
-          sha256 = "sha256-cgBf5Di0WQLGSEXNv86aqa5omgfyIO1Mlwawa64Nrs8=";
-        };
-
-        extracted = pkgs.appimageTools.extract {
-          src = viberAppImage;
-          pname = "viber";
-          version = "1.0";
-        };
-
-        # Search the extracted directory for a matching PNG
-        iconCandidates =
-          builtins.filter
-            (p: builtins.match ".*[Vv]iber.*\\.png" p != null)
-            (builtins.attrNames (builtins.readDir extracted));
-
-        iconPath =
-          if iconCandidates != [] then
-            "${extracted}/${builtins.head iconCandidates}"
-          else
-            throw "No Viber icon found in AppImage";
-      in
-        iconPath;
 
   };
 
