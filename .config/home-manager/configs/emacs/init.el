@@ -1332,6 +1332,14 @@
         ;; Additional LSP workspace configuration
         lsp-enable-file-watchers t
         lsp-file-watch-threshold 2000)
+  ;; nixpkgs' typescript-language-server locates tsserver itself (the
+  ;; project's node_modules first, then a bundled Nix fallback).
+  ;; lsp-mode insists on finding a `tsserver' executable on the Emacs
+  ;; side first and errors ("Unable to find tsserver") when there isn't
+  ;; one on PATH, so hand ts-ls a null path and let it resolve on its
+  ;; own instead.
+  (with-eval-after-load 'lsp-javascript
+    (advice-add 'lsp-clients-typescript-server-path :override #'ignore))
   :commands lsp)
 
 (use-package lsp-ui
