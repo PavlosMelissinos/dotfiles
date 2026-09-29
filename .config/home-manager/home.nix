@@ -72,6 +72,10 @@ let
   });
 in
 {
+  imports = [
+    ./modules/claude-code.nix
+  ];
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "pavlos";
@@ -132,7 +136,6 @@ in
     babashka    # Clojure scripting runtime
     caddy
     cargo
-    claude-code
     clojure
     cmake
     deskflow

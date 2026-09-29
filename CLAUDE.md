@@ -47,6 +47,16 @@ terminal applications, and various GUI tools.
   - Package management through MELPA/GNU ELPA
 - **Terminal**: Alacritty configured as default terminal
 - **Shell**: Zsh with custom configuration
+- **Claude Code**: managed via `.config/home-manager/modules/claude-code.nix`
+  (`configDir = ~/.config/claude`, see
+  [ADR-0013](docs/architecture/adr/0013-claude-code-xdg-config.md)).
+  `configs/claude/settings.json` (and future `agents/`, `commands/`,
+  `skills/`, etc.) deploy as **writable** files, so `/config`, `/model`,
+  and plugins work normally. Run `claude-config-capture` to pull an
+  approved live change back into the repo (`git diff` it, then commit);
+  `claude-config-check` reports drift without changing anything. Runtime
+  state (credentials, history, transcripts, auto-memory) lives alongside it
+  in `~/.config/claude/` but is never touched by this mechanism.
 
 ## Common Development Commands
 
