@@ -16,14 +16,20 @@
 (setq-default fill-column 80)
 (setq save-abbrevs 'silently)
 
+;; Suppress native compilation warning popups (e.g. for MELPA packages like
+;; expand-region/browse-at-remote that reference functions from modes not
+;; yet loaded at compile time). Set early so it covers async compilation
+;; that starts before any specific package's :init form runs.
+(when (and (fboundp 'native-comp-available-p) (native-comp-available-p))
+  (setq native-comp-async-report-warnings-errors 'silent))
 
-;; Tree-sitter grammars are managed by home-manager.
-;; The grammars are installed as Nix packages and exposed via
-;; the EMACS_TREESIT_GRAMMAR_PATH environment variable.
+;; Tree-sitter grammars are installed by home-manager into Emacs' own
+;; package lib dir (programs.emacs.extraPackages in home.nix), which is
+;; already on treesit-extra-load-path via the Emacs wrapper. No extra
+;; env var or load-path wiring is needed here.
 (require 'treesit)
-(let ((grammar-dir (getenv "EMACS_TREESIT_GRAMMAR_PATH")))
-  (when (and grammar-dir (file-directory-p grammar-dir))
-    (add-to-list 'treesit-extra-load-path grammar-dir)))
+(add-to-list 'auto-mode-alist '("\\.ts\\'"  . typescript-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
 
 ;; ENV VARIABLES
 (defconst emacs-config-home user-emacs-directory)
@@ -673,10 +679,6 @@
          (:map org-mode-map
                ("C-<" . org-roam-dailies-goto-previous-note)
                ("C->" . org-roam-dailies-goto-next-note)))
-  :init
-  ;; Suppress native compilation warnings for org-roam
-  (when (and (fboundp 'native-comp-available-p) (native-comp-available-p))
-    (setq native-comp-async-report-warnings-errors 'silent))
   :config
   (org-roam-db-autosync-mode)
   ;; If using org-roam-protocol
@@ -1303,8 +1305,8 @@
                                                           (when (get-buffer-process jshell-buffer-name)
                                                             (kill-process (get-buffer-process jshell-buffer-name)))
                                                           (jshell-start)))))
-          (typescript-mode . lsp-deferred)
-          (tsx-tsx-mode . lsp-deferred)
+          (typescript-ts-mode . lsp-deferred)
+          (tsx-ts-mode . lsp-deferred)
           (javascript-mode . lsp-deferred)
           (js-jsx-mode . lsp-deferred)
           (lsp-mode . lsp-enable-which-key-integration))
