@@ -2,8 +2,43 @@
 # Generated for Fedora to NixOS migration
 # Compatible with existing home-manager setup
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
+let
+  greeterWallpaper =
+    "${pkgs.sway}/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png";
+
+  # Blurred/dimmed copy of the wallpaper, baked in at build time so both
+  # the ReGreet screen and the idle laptop panel show the same faded
+  # image without any runtime filtering.
+  greeterWallpaperFaded = pkgs.runCommand "greeter-wallpaper"
+    { nativeBuildInputs = [ pkgs.imagemagick ]; } ''
+      mkdir -p $out
+      magick ${greeterWallpaper} -blur 0x12 -modulate 55 \
+        $out/wallpaper.png
+    '';
+
+  # Minimal, greeter-only sway session: puts the Dell monitor on the
+  # left (matching the normal session layout in
+  # configs/sway/outputs-work.conf) and shows the faded wallpaper on
+  # whichever output ReGreet isn't using. Focusing the Dell before
+  # launching ReGreet puts its window there; if the Dell isn't
+  # connected the focus command just fails and ReGreet opens on the
+  # laptop panel instead.
+  greeterSwayConfig = pkgs.writeText "greeter-sway.conf" ''
+    output * bg ${greeterWallpaperFaded}/wallpaper.png fill
+    output "Dell Inc. DELL U2518D 3C4YP88P229L" position 0 0 scale 1.25
+    output eDP-1 position 2048 241
+
+    default_border none
+    hide_edge_borders both
+
+    exec "swaymsg focus output 'Dell Inc. DELL U2518D 3C4YP88P229L'; \
+          ${pkgs.dbus}/bin/dbus-run-session \
+          ${lib.getExe config.programs.regreet.package}; \
+          swaymsg exit"
+  '';
+in
 {
   imports = [
     # Multiple fallback paths for maximum compatibility
@@ -147,15 +182,35 @@
   services.displayManager.gdm.enable = false; # Disable GDM - user wants to remove it
   # Alternative: services.greetd for Wayland greeter
 
-  # Wayland-first environment
+  # Wayland-first environment. The greetd module normally runs ReGreet
+  # directly under cage (one output, extended across both monitors with
+  # no control over placement or background), so we override the
+  # session command to launch a minimal sway session instead -- see
+  # greeterSwayConfig above for the output layout and wallpaper.
   services.greetd = {
     enable = true;
-    settings = rec {
-      initial_session = {
-        command = "${pkgs.sway}/bin/sway";
-        user = "pavlos";
+    settings.default_session = {
+      user = "greeter";
+      command = "${pkgs.dbus}/bin/dbus-run-session "
+        + "${pkgs.sway}/bin/sway --config ${greeterSwayConfig}";
+    };
+  };
+
+  # ReGreet greeter; the programs.regreet module manages the
+  # config/CSS, greeter user, and accounts-daemon dependency, but is
+  # launched from greeterSwayConfig above (under sway) instead of its
+  # default cage session.
+  programs.regreet = {
+    enable = true;
+    settings = {
+      background = {
+        path = "${greeterWallpaperFaded}/wallpaper.png";
+        fit = "Cover";
       };
-      default_session = initial_session;
+      commands = {
+        reboot = [ "loginctl" "reboot" ];
+        poweroff = [ "loginctl" "poweroff" ];
+      };
     };
   };
 
