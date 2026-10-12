@@ -78,6 +78,19 @@ in
     "i915.enable_psr=1"            # Panel self-refresh for power saving
   ];
 
+  # acpi_call: lets us pulse an ACPI power resource (e.g. the CNVi
+  # Bluetooth core's _OFF/_ON methods) from userspace when the Intel
+  # Bluetooth controller hangs and falls off the USB bus.
+  boot.extraModulePackages = [ config.boot.kernelPackages.acpi_call ];
+  boot.kernelModules = [ "acpi_call" ];
+
+  # Intel CNVi Bluetooth has been observed dropping off the USB bus
+  # after a "reset full-speed device" error. USB autosuspend is the
+  # most common trigger for this on Intel btusb controllers.
+  boot.extraModprobeConfig = ''
+    options btusb enable_autosuspend=0
+  '';
+
   # Hardware support
   hardware = {
     # CPU microcode updates
@@ -100,7 +113,6 @@ in
       powerOnBoot = true;
       settings = {
         General = {
-          Enable = "Source,Sink,Media,Socket";
           ControllerMode = "dual"; # classic BR/EDR + BLE
         };
       };
