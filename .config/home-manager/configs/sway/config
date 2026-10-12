@@ -292,7 +292,7 @@ bindsym --to-code {
     XF86AudioPrev exec playerctl previous
 
     # Toggle mako do-not-disturb for screen sharing
-bindsym $mod+Shift+n exec $XDG_CONFIG_HOME/waybar/notifications.sh toggle
+    $mod+Shift+n exec $XDG_CONFIG_HOME/waybar/notifications.sh toggle
 
     #
     # Moving around:
@@ -381,7 +381,8 @@ bindsym $mod+Shift+n exec $XDG_CONFIG_HOME/waybar/notifications.sh toggle
     $mod+a focus parent
 
     # Flash current focus
-    $mod+n exec flash_window
+    # TODO(xdg): re-enable once flashfocus is packaged
+    #$mod+n exec flash_window
 
     #
     # Scratchpad:
