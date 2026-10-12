@@ -382,7 +382,7 @@ bindsym --to-code {
 
     # Flash current focus
     # TODO(xdg): re-enable once flashfocus is packaged
-    #$mod+n exec flash_window
+    $mod+n exec flash_window
 
     #
     # Scratchpad:
