@@ -123,6 +123,7 @@ in
     nodejs_22
     typescript-language-server
     opencode
+    opencode-claude-auth
     openssl
     pkg-config  # Build tool for development libraries
     pyright
@@ -158,6 +159,7 @@ in
     wofi
 
     # Desktop applications
+    affine
     # azote  # Not in nixpkgs - could create custom package if needed
     (beeper.overrideAttrs (oldAttrs: {
       buildCommand = builtins.replaceStrings
