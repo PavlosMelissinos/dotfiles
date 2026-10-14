@@ -121,7 +121,13 @@ in
 
   # Networking configuration
   networking = {
-    hostName = "localhost-nixos"; # Define your hostname
+    # This file is shared, unmodified, across both the work and home
+    # machines (see flake.nix's hostPrimaryUser table, which wires the
+    # right home-manager profile per host). "legion" is the default
+    # here since that's this (work) machine; the home machine
+    # overrides it with a plain assignment (higher priority than
+    # mkDefault) in its own host-specific hardware-configuration.nix.
+    hostName = lib.mkDefault "legion";
     networkmanager = {
       enable = true;
       wifi.powersave = false; # Disable WiFi power saving for better performance
@@ -453,6 +459,12 @@ in
   };
   # Allow unfree packages (for proprietary software)
   nixpkgs.config.allowUnfree = true;
+
+  # home-manager.useGlobalPkgs = true (flake.nix) means home.nix's own
+  # nixpkgs.config.permittedInsecurePackages (for ventoy) is ignored --
+  # it only applies when home-manager builds its own pkgs. Mirror it
+  # here so the shared pkgs instance actually allows it.
+  nixpkgs.config.permittedInsecurePackages = [ "ventoy-1.1.12" ];
 
   # System version (using 25.05 for newer nixpkgs)
   system.stateVersion = "25.05";
