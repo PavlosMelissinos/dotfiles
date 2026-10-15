@@ -46,7 +46,13 @@ XWayland when necessary.
 
 **Negative:**
 - Some legacy applications may have compatibility issues with XWayland
-- Screen sharing in some applications requires specific Wayland protocols
+- Screen sharing requires `XDG_CURRENT_DESKTOP=sway` in the
+  `xdg-desktop-portal` process environment, so it reads NixOS's generated
+  `sway-portals.conf` and routes `ScreenCast`/`Screenshot` to
+  `xdg-desktop-portal-wlr` instead of falling back to the gtk portal
+  (which has no capture implementation); fixed by including
+  `/etc/sway/config.d/*` in the sway config
+  ([PROP-0018](../../proposals/PROP-0018-teams-screen-share-portal-fix.md))
 - Debugging tools for Wayland are less mature than X11
 - Some niche applications may not support Wayland properly
 - Firefox-wayland occasionally crashes when reloading sway/returning from sleep

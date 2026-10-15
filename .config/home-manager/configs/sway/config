@@ -45,7 +45,12 @@ gaps inner 5
 #for_window [class=".*"] opacity $opacity
 #for_window [app_id=".*"] opacity $opacity
 
-exec systemctl --user start graphical-session.target
+# NixOS-generated session glue: pushes DISPLAY/WAYLAND_DISPLAY/SWAYSOCK/
+# XDG_CURRENT_DESKTOP to systemd + D-Bus activation (xdg-desktop-portal
+# needs XDG_CURRENT_DESKTOP to route screen-share requests to wlr instead
+# of falling back to the gtk portal, which can't capture at all) and
+# manages sway-session.target.
+include /etc/sway/config.d/*
 exec_always ssh-agent -a $XDG_RUNTIME_DIR/ssh-agent.sock
 
 ### Output configuration

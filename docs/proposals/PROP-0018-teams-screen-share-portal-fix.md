@@ -88,11 +88,11 @@ protocols" limitation note with the actual mechanism and fix.
 
 ## Tasks
 
-- [ ] Add `include /etc/sway/config.d/*` to
+- [x] Add `include /etc/sway/config.d/*` to
       `.config/home-manager/configs/sway/config`
-- [ ] Remove the redundant `exec systemctl --user start
+- [x] Remove the redundant `exec systemctl --user start
       graphical-session.target` line
-- [ ] Update ADR-0002's screen-sharing note
+- [x] Update ADR-0002's screen-sharing note
 - [ ] `home-manager switch --flake .`
 - [ ] Verify per the steps below, then confirm with a real Teams call
 
