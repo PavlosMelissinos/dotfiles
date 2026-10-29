@@ -340,7 +340,7 @@ in
 
   # Clean PATH management through home-manager
   home.sessionPath = [
-    "$HOME/.nix-profile/bin"           # Nix profile binaries (home-manager packages) - HIGHEST PRIORITY
+    "/etc/profiles/per-user/${config.home.username}/bin" # home-manager packages - HIGHEST PRIORITY
     "$HOME/.local/bin"                 # Local binaries
     "$PYENV_ROOT/bin"                  # PyEnv
   ];
@@ -390,11 +390,6 @@ in
   };
 
   xdg.cacheFile."zsh/zcompcache/.keep".text = "";
-
-  xdg.configFile."mise/config.toml".text = ''
-  [settings]
-  idiomatic_version_file_enable_tools = ["node", "npm"]
-'';
 
   # Complete Emacs configuration management via home-manager
   xdg.configFile."emacs" = {
@@ -549,6 +544,9 @@ in
     enableZshIntegration = true;
 
     globalConfig = {
+      settings = {
+        idiomatic_version_file_enable_tools = [ "node" "npm" ];
+      };
       tools = {
         terraform = "1.15.3";
       };
