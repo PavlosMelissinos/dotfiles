@@ -139,6 +139,12 @@ drivers. It was removed after the migration to NixOS. See
 - Firefox-wayland crashes when reloading sway/returning from sleep
 - Waybar occasionally disappears (restart with `nohup waybar &`)
 - Some applications don't respect XDG directories (Firefox, Thunderbird, Kodi)
+- Apps (Viber, GNOME/GTK apps) wrongly report "no internet" after a Wi-Fi
+  drop even though the network works: NetworkManager's connectivity check
+  got stuck on a stale guess. Fixed generally by enabling
+  `networking.networkmanager.settings.connectivity` in
+  `.config/nixos/configuration.nix`; `nmcli networking connectivity check`
+  forces an immediate recheck if it recurs.
 
 ## Architecture Decisions & Process
 

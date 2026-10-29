@@ -131,6 +131,20 @@ in
     networkmanager = {
       enable = true;
       wifi.powersave = false; # Disable WiFi power saving for better performance
+
+      # NixOS leaves NetworkManager's connectivity check disabled by
+      # default (no probe URI), so it never verifies its own
+      # Connectivity state and a wrong guess (e.g. "limited" after a
+      # Wi-Fi drop) sticks until something forces a recheck
+      # (`nmcli networking connectivity check`). Apps that trust that
+      # D-Bus property (Viber, GNOME/GTK apps) then wrongly report "no
+      # internet" even when the network is fine. Enabling the probe
+      # lets NetworkManager self-correct.
+      settings.connectivity = {
+        uri = "http://nmcheck.gnome.org/check_network_status.txt";
+        response = "NetworkManager is online";
+        interval = 300; # seconds; also re-probes on link changes
+      };
     };
 
     # Disable the global useDHCP flag as it's deprecated
