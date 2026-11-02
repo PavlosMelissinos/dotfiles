@@ -59,6 +59,8 @@ exec_always ssh-agent -a $XDG_RUNTIME_DIR/ssh-agent.sock
 output * bg /run/current-system/sw/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 
 exec gammastep-indicator
+exec nm-applet
+exec polkit-gnome-agent
 
 exec_always export XCURSOR_SIZE=24
 exec_always export XCURSOR_THEME=Adwaita

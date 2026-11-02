@@ -131,6 +131,7 @@ in
     networkmanager = {
       enable = true;
       wifi.powersave = false; # Disable WiFi power saving for better performance
+      plugins = [ pkgs.networkmanager-openvpn ]; # lets NM import/run .ovpn profiles; see ADR-0015
 
       # NixOS leaves NetworkManager's connectivity check disabled by
       # default (no probe URI), so it never verifies its own
@@ -166,6 +167,9 @@ in
     # Name resolution
     nameservers = [ "8.8.8.8" "8.8.4.4" ]; # Fallback DNS
   };
+
+  # Per-link DNS failover for the work VPN. See ADR-0014.
+  services.resolved.enable = true;
 
   # Time zone and locale
   time.timeZone = "Europe/Athens";

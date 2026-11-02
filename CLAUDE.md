@@ -145,6 +145,9 @@ drivers. It was removed after the migration to NixOS. See
   `networking.networkmanager.settings.connectivity` in
   `.config/nixos/configuration.nix`; `nmcli networking connectivity check`
   forces an immediate recheck if it recurs.
+- Same "no internet" symptom while the work VPN is connected has a different
+  cause: DNS stalls ~13s per lookup because the tunnel doesn't replace the
+  dead Wi-Fi-supplied resolvers. See ADR-0014.
 
 ## Architecture Decisions & Process
 

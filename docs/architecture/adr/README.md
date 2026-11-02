@@ -18,3 +18,5 @@ _Generated 2026-05-04_
 | 12 | [ADR-0011: Viber nixGL Integration and Dynamic Icon Extraction](0011-viber-nixgl-integration) | Superseded by ADR-0012 | 2025-08-11 |
 | 13 | [ADR-0012: Native Viber Package and nixGL Removal on NixOS](0012-native-viber-and-nixgl-removal) | Accepted | 2026-09-28 |
 | 14 | [ADR-0013: Manage Claude Code via home-manager XDG configDir](0013-claude-code-xdg-config) | Accepted | 2026-09-29 |
+| 15 | [ADR-0014: systemd-resolved for VPN DNS Failover](0014-systemd-resolved-for-vpn-dns) | Accepted | 2026-10-31 |
+| 16 | [ADR-0015: NetworkManager-Managed VPN Instead of Raw OpenVPN](0015-networkmanager-managed-vpn) | Accepted | 2026-11-02 |

@@ -144,6 +144,12 @@ in
     mako
     playerctl
     polkit_gnome
+    # polkit_gnome's agent binary lives under libexec/, which isn't on
+    # $PATH, so sway (a plain text file, not Nix-templated) can't exec it
+    # by store path directly. Wrap it under a stable name instead.
+    (pkgs.writeShellScriptBin "polkit-gnome-agent" ''
+      exec ${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1
+    '')
     satty
     slurp
     swappy
