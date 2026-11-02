@@ -8,8 +8,8 @@
     //, "custom/media"
     ],
     "modules-center": ["clock", "custom/weather", "sway/mode"],
-    "modules-right": ["idle_inhibitor", "custom/notifications", "pulseaudio", "backlight", "network",
-    //"custom/vpn",
+    "modules-right": ["idle_inhibitor", "custom/notifications", "pulseaudio", "backlight",
+    "custom/vpn",
     "cpu", "memory", "temperature", "battery",
     "custom/github", "tray", "sway/language", "custom/lockkeys", "custom/power"],
     "sway/workspaces": {
@@ -113,19 +113,6 @@
         "format-full": "",
         "format-icons": ["", "", "", "", ""]
     },
-    "network": {
-        // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "on-click": "nm-connection-editor",
-        "format-alt-click": "click-right",
-        "format-ethernet": "{ifname} ",
-        "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr}",
-        "format-wifi": "{essid:4} {icon}",
-        "tooltip-format-wifi": "{essid} ({signalStrength}%)  {ifname}: {ipaddr}/{cidr}",
-        "format-linked": "{ifname}: (No IP) ",
-        "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}",
-        "format-icons": ["", "", ""]
-    },
     "keyboard-state": {
         "numlock": true,
         "capslock": true,
@@ -140,14 +127,6 @@
         "tooltip-format": "{long} {variant}",
         "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
         "on-click-right": "gnome-control-center region"
-    },
-    "custom/vpn": {
-        "format": "VPN ",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}",
-        "exec": "echo '{\"class\": \"connected\"}'",
-        "exec-if": "test -d /proc/sys/net/ipv4/conf/tun0",
-        "return-type": "json",
-        "interval": 5
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
@@ -197,6 +176,12 @@
         "interval": 60,
         "exec": "$XDG_CONFIG_HOME/waybar/github.sh",
         "on-click": "xdg-open https://github.com/notifications"
+    },
+    "custom/vpn": {
+        "format": "{}",
+        "return-type": "json",
+        "interval": 5,
+        "exec": "$XDG_CONFIG_HOME/waybar/vpn.sh"
     },
     "custom/notifications": {
         "format": "{}",

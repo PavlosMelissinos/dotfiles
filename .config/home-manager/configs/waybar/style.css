@@ -155,6 +155,14 @@ window menu menuitem:hover {
     background: #cc3300;
 }
 
+#custom-vpn.connected {
+    background: #2d8f2d;
+}
+
+#custom-vpn.disconnected {
+    background: #cc3300;
+}
+
 #pulseaudio {
 }
 
